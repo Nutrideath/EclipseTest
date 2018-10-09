@@ -1,0 +1,123 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="breadcrumb">
+        <li><p:link outcome="/createNewCustomer">Create New Customer</p:link></li>
+    </ui:define>
+
+    <ui:define name="content">
+      <h:form>
+      <div class="ui-fluid">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card card-w-title">
+                    <h1>Create New Customer</h1>
+                   
+                    <p:focus context="mainPanelGrid" />
+                    <p:panelGrid id="mainPanelGrid" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+
+					
+ 					<p:outputLabel for="firstName" value="Name"/>
+							
+						<h:panelGroup />
+						<h:panelGroup styleClass="md-inputfield">
+							<p:inputText id="firstName" value="#{customerBean.firstName}" required="true" label="firstName"/>
+            				<label>First</label>  
+            				<p:message for="firstName" />          				
+            			</h:panelGroup>
+            			            			
+     					<h:panelGroup styleClass="md-inputfield">
+							<p:inputText id="lastName" value="#{customerBean.lastName}" required="true" label="Last Name"/>
+            				<label>Last</label> 
+            				<p:message for="lastName" />   
+            		 	</h:panelGroup>
+            	
+            			
+            			<p:outputLabel for="email" value="Email Address" />
+            			<h:panelGroup styleClass="md-inputfield">            				
+            				<p:inputText id="email" value="#{customerBean.email}" required="true" label="email" validatorMessage="Invalid email address format">
+            					<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+            					<f:ajax event="blur" render="email, msgEmail" />  
+            				</p:inputText> 
+            				<label>email</label> 
+            				<p:message id="msgEmail" for="email" />          				
+            			</h:panelGroup>
+            			
+            			
+            			
+            			<p:outputLabel for="phoneNumber" value="Phone" />
+            			<h:panelGroup styleClass="md-inputfield">            				
+            				<p:inputMask id="phoneNumber" value="#{customerBean.phoneNumber}" label="phoneNumber" mask="(999)999-9999? x9999"/> 
+            				<label>Phone Number</label>           				
+            			</h:panelGroup>
+            			            			
+            		
+            			<p:outputLabel for="rowKey" value="Company" />
+            			<h:panelGroup styleClass="md-inputfield">            				
+            				<p:inputText id="rowKey" value="#{customerBean.rowKey}" required="true" label="rowKey" > 
+            					<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^]+$" /> 
+                    			<f:ajax event="keyup" render="rowKey, msgRowKey" />
+            				</p:inputText>
+            				<label>Company/Residential</label>
+            				<p:message id="msgRowKey" for="rowKey" />           				
+            			</h:panelGroup>
+            			            			 
+            			
+            			<p:outputLabel for="addr_Line1" value="Address" />
+            			<h:panelGroup styleClass="md-inputfield">            				
+            				<p:inputText id="addr_Line1" value="#{customerBean.addr_Line1}" label="addr_Line1" /> 
+            				<label>Street Address</label>           				
+            			</h:panelGroup>
+            			
+            			
+            			<h:panelGroup />
+            			<h:panelGroup styleClass="md-inputfield">            				
+            				<p:inputText id="addr_Line2" value="#{customerBean.addr_Line2}" label="addr_Line2" /> 
+            				<label>Suite/Apt</label>           				
+            			</h:panelGroup>
+            			
+            		
+            			
+                    	<p:outputLabel for="addr_City" value="City" />
+            			<h:panelGroup styleClass="md-inputfield">            				
+            				<p:inputText id="addr_City" value="#{customerBean.addr_City}" label="addr_City" /> 
+            				<label>City</label>
+            			</h:panelGroup>
+            				
+            			
+            			<p:outputLabel for="addr_State" value="State" />
+            			<h:panelGroup styleClass="md-inputfield">	
+            				<p:inputText id="addr_State" value="#{customerBean.addr_State}" label="addr_State" /> 
+            				<label>State</label>	
+            			</h:panelGroup>
+            			
+            			
+            		
+            			<p:outputLabel for="addr_Zip" value="Zipcode" />
+            			<h:panelGroup styleClass="md-inputfield">	
+            				<p:inputMask id="addr_Zip" value="#{customerBean.addr_Zip}" label="addr_Zip" mask="99999?-9999" /> 
+            				<label>Zip</label>	
+            			</h:panelGroup>
+            		
+            			
+            			
+            			
+                    
+                    </p:panelGrid>
+                    
+                    <br /><br />
+                    <br />
+                    <p:commandButton value="Save" actionListener="#{customerBean.saveToCustomerTable}" validateClient="true" ajax="false" action="dashboard"/>
+                    
+                </div>
+            </div>
+        </div>
+        </div>
+      </h:form>  
+    </ui:define>
+
+</ui:composition>
