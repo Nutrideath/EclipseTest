@@ -1,0 +1,190 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="breadcrumb">
+        <li><p:link outcome="/createNewJob">Create New Job</p:link></li>
+    </ui:define>
+
+    <ui:define name="content">
+      <h:form>
+      <div class="ui-fluid">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card card-w-title">
+                    <h1>Create New Job</h1>
+                    
+                   <ui:remove> CreateNewJob form
+                   Collects required data to create a new job, and saves to database.
+                   Subsequent calls to interact with job will use a different form.               
+                   
+                   </ui:remove>
+                   
+                    <p:panelGrid columns="6" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+						
+						<p:outputLabel for="jobType" value="Select Job Type" />						
+						<h:panelGroup>
+						<p:selectOneRadio id="jobType" value="#{jobBean.jobType}" required="true" style="margin-bottom:10px;" layout="pageDirection" >                            
+                            <f:selectItem itemLabel="Corporate" itemValue="Corporate" />
+                            <f:selectItem itemLabel="Residential" itemValue="Residential" />                            
+                        </p:selectOneRadio>		
+                        <p:message for="jobType" />				 
+						</h:panelGroup>  
+						<h:panelGroup />
+ 											
+            			<p:outputLabel for="callInDate" value="Call-In Date" />          			
+     					<h:panelGroup styleClass="md-inputfield">
+							<p:calendar id="callInDate" value="#{jobBean.callInDate}" required="true" mode="popup" 
+										showOn="button" effect="slide" showButtonPanel="true" pattern="MM/dd/yyyy" title="Defaults to today" />	
+            				<label>Call-In Date</label>   
+            			<p:message for="callInDate" />	          				 
+            		 	</h:panelGroup>  
+            		 	<h:panelGroup />
+            		 	            	
+            			
+            			<p:outputLabel for="jobMake" value="Select Job Make" />
+            			<h:panelGroup>
+            			<p:selectOneRadio id="jobMake" value="#{jobBean.jobMake}" required="true" style="margin-bottom:10px;" layout="pageDirection">                           
+                            <f:selectItem itemLabel="Rails" itemValue="Rails" />
+                            <f:selectItem itemLabel="Mailbox" itemValue="Mailbox" />
+                            <f:selectItem itemLabel="Custom" itemValue="Custom" />
+                        </p:selectOneRadio>
+						<p:message for="jobMake" />
+						</h:panelGroup>  
+						<h:panelGroup /> 
+            			
+            			<p:outputLabel for="targetDate" value="Target Date" />
+            			<h:panelGroup styleClass="md-inputfield">            				
+            				<p:calendar id="targetDate" value="#{jobBean.targetDate}" required="true" mode="popup" 
+            							showOn="button" effect="slide" showButtonPanel="true" pattern="MM/dd/yyyy" title="Defaults to 3 weeks from initial Call-In date"/>            			
+            				<label>Target Date</label> 
+            				<p:message for="targetDate" />          				
+            			</h:panelGroup>
+            			
+                    </p:panelGrid>
+                    
+                   	<p:separator /> 
+                   	
+                  <br /><br />
+                  
+                  	<p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-2,ui-grid-col-2" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                  		
+                  		<ui:remove>rowKey is the Customer.  This should do a lookup against the Customer table, maybe a type-ahead function on the results.</ui:remove>
+                    	<h:panelGroup styleClass="ui-selectonemenu">
+                    		<p:outputLabel for="rowKey" value="Select Customer:" />
+                    		<p:selectOneMenu id="rowKey" value="#{jobBean.rowKey}" required="true" label="rowKey" validatorMessage="Invalid character" >  
+                    			<f:selectItems value="#{dataBean.customerNames}" />	               		
+                    		</p:selectOneMenu> 
+            				<ui:remove><label>Customer</label></ui:remove>
+            				<p:message id="msgRowKey" for="rowKey" />
+            				<br /> 
+                   		 </h:panelGroup>
+                   		 
+                   		 <p:outputLabel for="rushJobFlag" value="Rush Job" />
+                   		 <h:panelGroup styleClass="md-inputfield">                   		 	
+                   		 	<p:selectBooleanCheckbox id="rushJobFlag" value="#{jobBean.rushJobFlag}"  />
+                   		 </h:panelGroup>
+                   		 
+                    </p:panelGrid>
+                    
+                    <p:separator /> 
+                    
+                    <label>Job Location:</label> 
+                    <f:ajax event="change" render="whichJobLocation" > 
+                    <p:selectOneRadio id="jobLocationType" value="#{jobBean.jobLocationType}" required="true" 
+                    					style="margin-bottom:10px;" layout="lineDirection"  >                            
+                            <f:selectItem itemLabel="Subdivision and Lot" itemValue="Subdiv_Lot" />
+                            <f:selectItem itemLabel="Street Address" itemValue="StreetAddress" />                                                     
+                    </p:selectOneRadio>	
+                    </f:ajax>
+                    <br />
+                    
+                    <h:panelGroup id = "whichJobLocation" >
+                    
+                    	<h:panelGroup id="jobLocationForm-Subdiv" rendered="#{jobBean.jobLocationType == 'Subdiv_Lot'}" styleClass="md-inputfield">
+                    		<p:inputText id="jobAddrSubdivisionLot" value="#{jobBean.jobAddrSubdivisionLot}" label="jobAddrSubdivisionLot" validatorMessage="Invalid character" >
+                    			<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^,.]+$" /> 
+                    			<f:ajax event="keyup" render="jobAddrSubdivisionLot, msgJobAddrSubdivisionLot" />
+                    		</p:inputText> 
+            				<label>Subdivision (Lot)</label>    
+                    		<p:message id="msgJobAddrSubdivisionLot" for="jobAddrSubdivisionLot" />
+                   		 </h:panelGroup>
+                    	
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;" rendered="#{jobBean.jobLocationType == 'StreetAddress'}">
+                    	
+                    	<p:outputLabel for="jobAddr_Line1" value="Address" rendered="#{jobBean.jobLocationType == 'StreetAddress'}"/>
+                    	<h:panelGroup id="jobLocationForm-StreetAddr1" rendered="#{jobBean.jobLocationType == 'StreetAddress'}" styleClass="md-inputfield">
+                    		<p:inputText id="jobAddr_Line1" value="#{jobBean.jobAddr_Line1}" label="jobAddr_Line1" validatorMessage="Invalid character">
+                    			<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^,.]+$" /> 
+                    			<f:ajax event="keyup" render="jobAddr_Line1, msgJobAddr_Line1" />
+                    		</p:inputText> 
+            				<label>Street Address</label> <br /> 
+            				<p:message id="msgJobAddr_Line1" for="jobAddr_Line1" />
+                   		 </h:panelGroup>
+                   		                    		 
+                   		 <h:panelGroup />                   		 
+                   		 <h:panelGroup id="jobLocationForm-StreetAddr2" rendered="#{jobBean.jobLocationType == 'StreetAddress'}" styleClass="md-inputfield">
+                   		 	<p:inputText id="jobAddr_Line2" value="#{jobBean.jobAddr_Line2}" label="jobAddr_Line2" validatorMessage="Invalid character" >
+                   		 		<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^,.]+$" /> 
+                    			<f:ajax event="keyup" render="jobAddr_Line2, msgJobAddr_Line2" />
+                   		 	</p:inputText> 
+            				<label>Suite/Apt</label> 
+            				<p:message id="msgJobAddr_Line2" for="jobAddr_Line2" />                    		 
+                   		 </h:panelGroup>
+                   		 
+                   		 <h:panelGroup />                   		 
+                   		 <h:panelGroup id="jobLocationForm-City" rendered="#{jobBean.jobLocationType == 'StreetAddress'}" styleClass="md-inputfield">
+                   		 	<p:inputText id="jobAddr_City" value="#{jobBean.jobAddr_City}" label="jobAddr_City" validatorMessage="Invalid character">
+                   		 		<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^,.]+$" /> 
+                    			<f:ajax event="keyup" render="jobAddr_City, msgJobAddr_City" />
+                   		 	</p:inputText> 
+            				<label>City</label>
+            				<p:message id="msgJobAddr_City" for="jobAddr_City" />                     		 
+                   		 </h:panelGroup>
+                   		 
+                   		 <h:panelGroup />                   		 
+                   		 <h:panelGroup id="jobLocationForm-State" rendered="#{jobBean.jobLocationType == 'StreetAddress'}" styleClass="md-inputfield">
+                   		 	<p:inputText id="jobAddr_State" value="#{jobBean.jobAddr_State}" label="jobAddr_State" validatorMessage="Invalid character">
+                   		 		<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^,.]+$" /> 
+                    			<f:ajax event="keyup" render="jobAddr_State, msgJobAddr_State" />
+                   		 	</p:inputText> 
+            				<label>State</label>
+            				<p:message id="msgJobAddr_State" for="jobAddr_State" />                     		 
+                   		 </h:panelGroup>
+                   		 
+                   		 <h:panelGroup />                   		 
+                   		 <h:panelGroup id="jobLocationForm-Zip" rendered="#{jobBean.jobLocationType == 'StreetAddress'}" styleClass="md-inputfield">
+                   		 	<p:inputText id="jobAddr_Zip" value="#{jobBean.jobAddr_Zip}" label="jobAddr_Zip" validatorMessage="Invalid character">
+                   		 		<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^,.]+$" /> 
+                    			<f:ajax event="keyup" render="jobAddr_Zip, msgJobAddr_Zip" />
+                   		 	</p:inputText> 
+            				<label>Zip</label>
+            				<p:message id="msgJobAddr_Zip" for="jobAddr_Zip" />                     		 
+                   		 </h:panelGroup>
+                   		 
+                    	</p:panelGrid>
+                    </h:panelGroup>
+                    
+                    
+                 
+                    
+                    
+                    <p:separator /> 
+                    <label>Job Contact Info:</label>
+                    
+                    
+                    <br /><br />
+                    <br />
+                    <p:commandButton value="Create Job" actionListener="#{jobBean.saveToJobTable}" validateClient="true" ajax="false" action="dashboard"/>
+                    
+                </div>
+            </div>
+        </div>
+        </div>
+      </h:form>  
+    </ui:define>
+
+</ui:composition>
