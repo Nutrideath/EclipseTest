@@ -1,28 +1,50 @@
 package com.dfal.jobtracker.beans;
 
-import lombok.Data;
+import java.io.Serializable;
 
-@Data public class lombokTestBean {
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@ManagedBean(name = "lombokTestBean")
+@ViewScoped
+@Getter @Setter @EqualsAndHashCode @ToString
+public class lombokTestBean implements Serializable {
+	private static final long serialVersionUID = 1L;
 		
-	
+	@ManagedProperty(value="#{lombokTestBean.rushJob}")
 	private boolean rushJob;
 	
+	@ManagedProperty(value="#{lombokTestBean.location}")
 	private String location;
 	
+	@ManagedProperty(value="#{lombokTestBean.height}")
 	private String height;
 	
+	@ManagedProperty(value="#{lombokTestBean.width}")
 	private String width;
 	
+	@ManagedProperty(value="#{lombokTestBean.supersName}")
 	private String supersName;
 	
+	@ManagedProperty(value="#{lombokTestBean.supersAddress_line1}")
 	private String supersAddress_line1;
 	
+	@ManagedProperty(value="#{lombokTestBean.supersAddress_line2}")
 	private String supersAddress_line2;
 	
+	@ManagedProperty(value="#{lombokTestBean.supersAddress_city}")
 	private String supersAddress_city;
 	
+	@ManagedProperty(value="#{lombokTestBean.supersAddress_state}")
 	private String supersAddress_state;
 	
+	@ManagedProperty(value="#{lombokTestBean.supersAddress_zip}")
 	private String supersAddress_zip;
 
 

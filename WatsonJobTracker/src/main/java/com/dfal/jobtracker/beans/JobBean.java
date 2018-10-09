@@ -26,7 +26,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	
 	private String partitionKey;	//used in Azure storage tables as part of unique id
 	
-	@ManagedProperty(value="#{JobBean.rowKey}")
+	@ManagedProperty(value="#{JobBean.rowKey}") 
 	private String rowKey;			//used in Azure storage tables as part of unique id (This is the job's Customer)
 	
 	@ManagedProperty(value="#{JobBean.jobCustomer}")
