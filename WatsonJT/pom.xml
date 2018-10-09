@@ -43,7 +43,13 @@
     		<version>1.0.4</version>
     		<scope>system</scope>
     		<systemPath>C:\PrimeFaces\SerenityTheme\serenity-theme-1.0.4.jar</systemPath>
-		</dependency>    
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.2</version>
+			<scope>provided</scope>
+		</dependency>   
   </dependencies>
  
      <repositories>

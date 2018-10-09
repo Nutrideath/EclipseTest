@@ -16,11 +16,18 @@ import java.text.SimpleDateFormat;
 
 
 import com.dfal.jobtracker.model.*;
-import com.microsoft.azure.storage.table.*; 
+import com.microsoft.azure.storage.table.*;
+
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString; 
 
 
 @ManagedBean(name = "jobBean")
 @ViewScoped
+@Getter @Setter @EqualsAndHashCode @ToString
 public class JobBean extends TableServiceEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -62,6 +69,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	@ManagedProperty(value="#{JobBean.jobAddr_City}")	
 	private String jobAddr_City;
 	
+	@Setter(AccessLevel.NONE)	//special setter below to make sure input is capitalized
 	@ManagedProperty(value="#{JobBean.jobAddr_State}")	
 	private String jobAddr_State;
 	
@@ -228,119 +236,8 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	
 	
 
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//getters and setters for fields other than dates (those are all grouped together below this section)
-	
-	public String getPartitionKey() {
-		return partitionKey;
-	}
-	public void setPartitionKey(String partitionKey) {
-		this.partitionKey = partitionKey;
-	}
-	
-	public String getRowKey() {
-		return rowKey;
-	}
-	public void setRowKey(String rowKeyInbound) {
-		
-		/* 	rowKey cannot contain any of the following: 
-		 * 	The forward slash (/) character
-		 *	The backslash (\) character
-		 *	The number sign (#) character
-		 *	The question mark (?) character
-		 *	Also might be best to remove (%) and (+)
-		 */
-		//this.rowKey = sanitizeString(rowKey);
-		//final String DisallowedCharsInTableKeys = new String("[\\\\#%+/?\u0000-\u001F\u007F-\u009F]");
-	/*	
-		if(rowKey != null) {
-			System.out.println(" XX JobBean::setRowKey XX : rowKey is not null. It's value is: " + rowKey);
-		} else {
-			System.out.println(" XX JobBean::setRowKey XX : rowKey is null");
-		}
-		
-		if(rowKeyInbound != null) {
-			System.out.println(" XX JobBean::setRowKey XX : rowKeyInbound is not null; It's value is: " + rowKeyInbound);
-			rowKeyCleaned = rowKeyInbound.replaceAll("\\"," ");
-			System.out.println(" XX JobBean::setRowKey XX : rowKeyCleaned is not null; It's value is: " + rowKeyCleaned);
-		} else {
-			System.out.println(" XX JobBean::setRowKey XX : rowKeyInbound is null");
-		}
-	*/	
-		this.rowKey = rowKeyInbound;
-	}
-	
-	
-	public String getJobCustomer() {
-		return jobCustomer;
-	}
-	public void setJobCustomer(String jobCustomer) {
-		this.jobCustomer = jobCustomer;
-	}
 
-	public boolean getRushJobFlag() {
-		return rushJobFlag;
-	}
-	public void setRushJobFlag(boolean rushJobFlag) {
-		this.rushJobFlag = rushJobFlag;
-	}
-
-	public String getJobStatus() {
-		return jobStatus;
-	}
-	public void setJobStatus(String jobStatus) {
-		this.jobStatus = jobStatus;
-	}
-
-	public String getJobType() {
-		return jobType;
-	}
-	public void setJobType(String jobType) {
-		this.jobType = jobType;
-	}
 	
-	
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//Job Address & location
-	public String getJobLocationType() {
-		return jobLocationType;
-	}
-	public void setJobLocationType(String jobLocationType) {
-		this.jobLocationType = jobLocationType;
-	}
-	
-	
-	public String getJobAddrSubdivisionLot() {
-		return jobAddrSubdivisionLot;
-	}
-	public void setJobAddrSubdivisionLot(String jobAddrSubdivisionLot) {
-		this.jobAddrSubdivisionLot = jobAddrSubdivisionLot;
-	}
-
-	public String getJobAddr_Line1() {
-		return jobAddr_Line1;
-	}
-	public void setJobAddr_Line1(String jobAddr_Line1) {
-		this.jobAddr_Line1 = jobAddr_Line1;
-	}
-
-	public String getJobAddr_Line2() {
-		return jobAddr_Line2;
-	}
-	public void setJobAddr_Line2(String jobAddr_Line2) {
-		this.jobAddr_Line2 = jobAddr_Line2;
-	}
-
-	public String getJobAddr_City() {
-		return jobAddr_City;
-	}
-	public void setJobAddr_City(String jobAddr_City) {
-		this.jobAddr_City = jobAddr_City;
-	}
-
-	public String getJobAddr_State() {
-		return jobAddr_State;
-	}
 	public void setJobAddr_State(String jobAddr_State) {	//Make sure to capitalize. But can't capitalize null, so check for it
 		if(jobAddr_State == null) {
 			this.jobAddr_State = jobAddr_State;
@@ -349,45 +246,6 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		}
 	}
 
-	public String getJobAddr_Zip() {
-		return jobAddr_Zip;
-	}
-	public void setJobAddr_Zip(String jobAddr_Zip) {
-		this.jobAddr_Zip = jobAddr_Zip;
-	}
-
 	
-	
-	public String getJobMake() {
-		return jobMake;
-	}
-	public void setJobMake(String jobMake) {
-		this.jobMake = jobMake;
-	}
-
-	/*
-	public String getJobNumber() {
-		return jobNumber;
-	}
-	public void setJobNumber(String jobNumber) {
-		this.jobNumber = jobNumber;
-	}
-	*/
-	
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//getters/setters for date fields  
-	public Date getCallInDate() {
-		return callInDate;
-	}
-	public void setCallInDate(Date callInDate) {
-		this.callInDate = callInDate;
-	}
-
-	public Date getTargetDate() {
-		return targetDate;
-	}
-	public void setTargetDate(Date targetDate) {
-		this.targetDate = targetDate;
-	}
 
 }
