@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import com.dfal.jobtracker.model.*;
 import com.microsoft.azure.storage.table.*;
 
+//lombok does auto-generation of getters, setters, equals, and toString functions
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -27,7 +28,7 @@ import lombok.ToString;
 
 @ManagedBean(name = "jobBean")
 @ViewScoped
-@Getter @Setter @EqualsAndHashCode @ToString
+@Getter @Setter @EqualsAndHashCode(callSuper=false) @ToString(callSuper=true, includeFieldNames=true)
 public class JobBean extends TableServiceEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -237,7 +238,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	
 
 
-	
+	//special setter
 	public void setJobAddr_State(String jobAddr_State) {	//Make sure to capitalize. But can't capitalize null, so check for it
 		if(jobAddr_State == null) {
 			this.jobAddr_State = jobAddr_State;
