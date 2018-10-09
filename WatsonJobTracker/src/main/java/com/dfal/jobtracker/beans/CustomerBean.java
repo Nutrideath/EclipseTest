@@ -6,26 +6,26 @@ import javax.faces.bean.ManagedProperty;
 //import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import com.microsoft.azure.storage.table.TableServiceEntity;
+
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 //import java.util.Date;
 import com.dfal.jobtracker.model.*;
 import com.microsoft.azure.storage.table.*; 
-/*
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-*/
+
 
 @ManagedBean(name = "customerBean")
 @ViewScoped
+@Getter @Setter @EqualsAndHashCode @ToString
 public class CustomerBean extends TableServiceEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	//@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
 	private String partitionKey;	//used in Azure storage tables as part of unique id
 	
 	@ManagedProperty(value="#{CustomerBean.rowKey}")
@@ -146,10 +146,7 @@ public class CustomerBean extends TableServiceEntity implements Serializable {
         	
         }
 */
-        //partitionKey in Azure table storage is the primary key, so must make it unique.
-        public String getPartitionKey() {
-        	return this.partitionKey;
-        }
+
         public void setPartitionKey(String _lastName, String _firstName, String _email) {		//set value explicitly
         	this.partitionKey = _lastName + ", " + _firstName + "<" + _email + ">";
         }
@@ -157,88 +154,5 @@ public class CustomerBean extends TableServiceEntity implements Serializable {
         	this.partitionKey = this.lastName + ", " + this.firstName + "<" + this.email + ">";	//set value using info already present in object
         }
         
-        public String getCorp() {
-        	return this.rowKey;
-        }
-        public void setCorp(String corp) {
-        	this.rowKey = corp;
-        }
-        
-        public String getFirstName() {
-            return this.firstName;
-        }
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
-        
-        public String getLastName() {
-            return this.lastName;
-        }
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
-        
-        //use fullName and fullNameLastFirst for sorting
-        public String getFullName() {
-        	return this.fullName;
-        }
-        public void setFullName(String fullName) {
-            this.fullName = fullName;
-        }
-        
-        public String getFullNameLastFirst() {
-        	return this.fullNameLastFirst;
-        }
-        public void setFullNameLastFirst(String fullNameLastFirst) {
-            this.fullNameLastFirst = fullNameLastFirst;
-        }
-        
-        public String getEmail() {
-            return this.email;
-        }
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public String getPhoneNumber() {
-            return this.phoneNumber;
-        }
-        public void setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
-        }
-        
-        public String getAddr_Line1() {
-            return this.addr_Line1;
-        }        
-        public void setAddr_Line1(String addr_Line1) {
-        	this.addr_Line1 = addr_Line1;
-        }
-        
-        public String getAddr_Line2() {
-            return this.addr_Line2;
-        }
-        public void setAddr_Line2(String addr_Line2) {
-        	this.addr_Line2 = addr_Line2;
-        }
-        
-        public String getAddr_City() {
-            return this.addr_City;
-        }
-        public void setAddr_City(String addr_City) {
-        	this.addr_City = addr_City;
-        }
-        
-        public String getAddr_State() {
-            return this.addr_State;
-        }
-        public void setAddr_State(String addr_State) {
-        	this.addr_State = addr_State;
-        }
-        
-        public String getAddr_Zip() {
-            return this.addr_Zip;
-        }
-        public void setAddr_Zip(String addr_Zip) {
-        	this.addr_Zip = addr_Zip;
-        }
+ 
     }

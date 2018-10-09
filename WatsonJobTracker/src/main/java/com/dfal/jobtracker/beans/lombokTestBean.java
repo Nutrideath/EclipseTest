@@ -10,13 +10,18 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.AccessLevel;
 
 @ManagedBean(name = "lombokTestBean")
 @ViewScoped
 @Getter @Setter @EqualsAndHashCode @ToString
 public class lombokTestBean implements Serializable {
 	private static final long serialVersionUID = 1L;
-		
+	
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private String leaveThisOneAlone;
+	
 	@ManagedProperty(value="#{lombokTestBean.rushJob}")
 	private boolean rushJob;
 	
