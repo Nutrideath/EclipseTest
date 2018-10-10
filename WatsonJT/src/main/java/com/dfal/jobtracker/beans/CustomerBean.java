@@ -1,6 +1,7 @@
 package com.dfal.jobtracker.beans;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -17,6 +18,13 @@ import org.primefaces.serenity.domain.Car;
 //import org.apache.catalina.core.ApplicationContext;
 
 import com.microsoft.azure.storage.table.TableServiceEntity;
+
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 //import java.util.Date;
 import com.dfal.jobtracker.model.*;
 import com.microsoft.azure.storage.table.*;
@@ -35,9 +43,12 @@ import javax.validation.constraints.Size;
 
 @ManagedBean(name = "customerBean")
 @ViewScoped
+@Getter @Setter @EqualsAndHashCode(callSuper=false) @ToString(callSuper=true, includeFieldNames=true)
 public class CustomerBean extends TableServiceEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@Setter(AccessLevel.NONE)	//special setter below 
+	@ManagedProperty(value="#{CustomerBean.partitionKey}")
 	private String partitionKey;	//used in Azure storage tables as part of unique id
 	
 	@ManagedProperty(value="#{CustomerBean.rowKey}")
@@ -73,6 +84,7 @@ public class CustomerBean extends TableServiceEntity implements Serializable {
     @ManagedProperty(value="#{CustomerBean.addr_City}")
     private String addr_City;
     
+    @Setter(AccessLevel.NONE)	//special setter below to make sure input is capitalized
     @ManagedProperty(value="#{CustomerBean.addr_State}")
     private String addr_State;
     
@@ -101,7 +113,7 @@ public class CustomerBean extends TableServiceEntity implements Serializable {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//Constructor stuff   	
 	public CustomerBean() { 
-    	System.out.println(" XX CustomerBean XX Created empty instance of CustomerBean"); 
+    	//System.out.println(" XX CustomerBean XX Created empty instance of CustomerBean"); 
     }
 	 
 	public CustomerBean(String _corp, String _lastName, String _firstName, String _email) {
@@ -116,13 +128,14 @@ public class CustomerBean extends TableServiceEntity implements Serializable {
     
     @PostConstruct
     public void init() { 
-    	System.out.println(" XX CustomerBean^^init() XX Created empty instance of CustomerBean");
+    	//System.out.println(" XX CustomerBean^^init() XX Created empty instance of CustomerBean");
     	companyInputLabel = "Company Name";	//set default value. Will change if user selects "Residential" as customer type
         customerType = "Corporate";			//set default value
     }
     	
 
-        
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Methods        
         public void saveToCustomerTable() {
         	System.out.println(" XX CustomerBean XX Call to .saveToCustomerTable()");
         	
@@ -170,144 +183,7 @@ public class CustomerBean extends TableServiceEntity implements Serializable {
         	
         	
         }
-        	
 
-        //partitionKey in Azure table storage is the primary key, so must make it unique.
-        public String getPartitionKey() {
-        	return this.partitionKey;
-        }
-        public void setPartitionKey(String _lastName, String _firstName, String _email) {		//set value explicitly
-        	this.partitionKey = _lastName + ", " + _firstName + "<" + _email + ">";
-        }
-        public void setPartitionKey() {
-        	this.partitionKey = this.lastName + ", " + this.firstName + "<" + this.email + ">";	//set value using info already present in object
-        }
-        
-        //rowKey in Azure table storage is related to the primary key, so must make it unique. We are also using it as the customer's company name       
-        public String getRowKey() {
-        	return this.rowKey;
-        }
-        public void setRowKey(String rowKey) {
-        	this.rowKey = rowKey;
-        }
-        
-        public String getFirstName() {
-            return this.firstName;
-        }
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
-        
-        public String getLastName() {
-            return this.lastName;
-        }
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
-        
-        //use fullName and fullNameLastFirst for sorting
-        public String getFullName() {
-        	return this.fullName;
-        }
-        public void setFullName(String fullName) {
-            this.fullName = fullName;
-        }
-        
-        public String getFullNameLastFirst() {
-        	return this.fullNameLastFirst;
-        }
-        public void setFullNameLastFirst(String fullNameLastFirst) {
-            this.fullNameLastFirst = fullNameLastFirst;
-        }
-        
-        public String getCustomerType() {
-			return customerType;
-		}
-
-		public void setCustomerType(String customerType) {
-			this.customerType = customerType;
-		}
-
-		public String getEmail() {
-            return this.email;
-        }
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public String getPhoneNumber() {
-            return this.phoneNumber;
-        }
-        public void setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
-        }
-        
-        public String getAddr_Line1() {
-            return this.addr_Line1;
-        }        
-        public void setAddr_Line1(String addr_Line1) {
-        	this.addr_Line1 = addr_Line1;
-        }
-        
-        public String getAddr_Line2() {
-            return this.addr_Line2;
-        }
-        public void setAddr_Line2(String addr_Line2) {
-        	this.addr_Line2 = addr_Line2;
-        }
-        
-        public String getAddr_City() {
-            return this.addr_City;
-        }
-        public void setAddr_City(String addr_City) {
-        	this.addr_City = addr_City;
-        }
-        
-        public String getAddr_State() {
-            return this.addr_State;
-        }
-        public void setAddr_State(String addr_State) {
-    		if(addr_State == null) {
-    			this.addr_State = addr_State;
-    		} else {
-    			this.addr_State = addr_State.toUpperCase();
-    		}
-        }
-        
-        public String getAddr_Zip() {
-            return this.addr_Zip;
-        }
-        public void setAddr_Zip(String addr_Zip) {
-        	this.addr_Zip = addr_Zip;
-        }
-        
-		public boolean isCompanyInputDisabledFlag() {
-			return companyInputDisabledFlag;
-		}
-
-		public void setCompanyInputDisabledFlag(boolean companyInputDisabledFlag) {
-			this.companyInputDisabledFlag = companyInputDisabledFlag;
-		}
-
-		public String getCompanyInputLabel() {
-			return companyInputLabel;
-		}
-
-		public void setCompanyInputLabel(String companyInputLabel) {
-			this.companyInputLabel = companyInputLabel;
-		}
-        
-        /*
-        public DataManagerAzureService getDataManager() {
-        	return dataManager;
-        }
-        
-        public void setDataManager(DataManagerAzureService dataManager) {
-        	 this.dataManager = dataManager;
-        	
-        }
-        */
-		
 		
     	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     	//ajax listener 
@@ -339,7 +215,7 @@ public class CustomerBean extends TableServiceEntity implements Serializable {
         		this.companyInputDisabledFlag = false;		//enable (or re-enable) entry 
         		this.companyInputLabel = "Company Name";	//change input label
         	} 
-        	/*
+        	/* debug
         	System.out.println("XX CustomerBean XX listener fired:");
         	System.out.println("XX CustomerBean XX   firstName = " + firstName);
         	System.out.println("XX CustomerBean XX   lastName = " + lastName);
@@ -352,6 +228,26 @@ public class CustomerBean extends TableServiceEntity implements Serializable {
             */
         } 
  
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //Special setters
+        
+        //partitionKey in Azure table storage is the primary key, so must make it unique.
+        public void setPartitionKey(String _lastName, String _firstName, String _email) {		//set value explicitly
+        	this.partitionKey = _lastName + ", " + _firstName + "<" + _email + ">";
+        }
+        public void setPartitionKey() {
+        	this.partitionKey = this.lastName + ", " + this.firstName + "<" + this.email + ">";	//set value using info already present in object
+        }
+        
+
+        public void setAddr_State(String addr_State) {
+    		if(addr_State == null) {
+    			this.addr_State = addr_State;
+    		} else {
+    			this.addr_State = addr_State.toUpperCase();
+    		}
+        }
+        
         /*        
         public DataBean getDataBean() {
 			return dataBean;
@@ -377,7 +273,7 @@ public class CustomerBean extends TableServiceEntity implements Serializable {
 		public void setDataManager(DataManagerAzure dataManager) {
 			this.dataManager = dataManager;
 		}  
-*/	
+	
         
         @Override
         public int hashCode() {
@@ -401,5 +297,5 @@ public class CustomerBean extends TableServiceEntity implements Serializable {
             }
             return true;
         }
-        
+       */ 
     }

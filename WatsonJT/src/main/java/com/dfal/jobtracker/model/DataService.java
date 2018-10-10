@@ -45,31 +45,7 @@ public class DataService implements Serializable {
     
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   	//Constructor stuff   	
-  	public DataService() { 
-  /*		
-  		System.out.println(" XX DataService XX Beginning creation of new instance of DataService");
-        customerNames = new ArrayList<String>(); 
-        customerBeans = new ArrayList<CustomerBean>();
-        
-        
-    //create DataManager object
-    	dataManager = new DataManagerAzure();	//dataManager object to connect to Azure table storage
-    	System.out.println(" XX DataService XX Created DataManagerAzure object");
-  
-    //set up customerNames list
-    	// Specify a query (get all records in this case)
-        TableQuery<CustomerBean> query = TableQuery.from(CustomerBean.class);           
-        
-        // Loop through the results, loading customer names into array
-        for (CustomerBean entity : dataManager.customerTable.execute(query)) {
-        	customerBeans.add(entity);
-        	customerNames.add(entity.getRowKey()); //rowKey represents customer name                
-        }
-    	        
-        Collections.sort(customerNames);		//sort the names
-        customerNames.add(0, " ");        		//make first one blank (so nothing looks like default option)
-
-  */      
+  	public DataService() {      
         System.out.println(" XX DataService XX Created new empty instance of DataService");
     }
 
@@ -77,7 +53,7 @@ public class DataService implements Serializable {
   	
     @PostConstruct
     public void init() {
-    	System.out.println(" XX DataService XX init() started");
+    	System.out.println(" XX DataService^^init() XX init() started");
         customerNames = new ArrayList<String>(); 
         customerBeans = new ArrayList<CustomerBean>();
            
@@ -117,9 +93,38 @@ public class DataService implements Serializable {
  
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
+    public void refreshCustomerLists(){
+    	//refresh both local lists - of customer names and customer beans - from the database
+    	System.out.println(" XX DataService^^refreshCustomerLists() XX call received");
+    	
+    	int cnt = 0; //counter
+    	
+    	//blank out the lists, so don't create duplicates.  gc will clean up memory
+    	customerNames = new ArrayList<String>(); 
+    	customerBeans = new ArrayList<CustomerBean>();
+    	
+    	// Specify a query (get all records in this case)
+        TableQuery<CustomerBean> query = TableQuery.from(CustomerBean.class);           
+        
+        // Loop through the results, loading customer names and objects into arrays
+        for (CustomerBean entity : dataManager.customerTable.execute(query)) { 
+        	customerBeans.add(entity);
+        	customerNames.add(entity.getRowKey()); //rowKey represents customer name  
+        	cnt++;	//increment counter
+        }
+    	        
+        Collections.sort(customerNames);		//sort the names
+        customerNames.add(0, " ");        		//make first one blank (so nothing looks like default option)
+        
+        System.out.println(" XX DataService^^refreshCustomerLists() XX both ArrayLists updated, " + Integer.toString(cnt) + " customers.");
+       
+    }
+    
     public void refreshCustomerNames(){
     	//refresh local list of customer names from the database
     	System.out.println(" XX DataService^^refreshCustomerNames() XX call received");
+    	
+    	int cnt = 0; //counter
     	
     	//blank out the list, so don't create duplicates.  gc will clean up memory
     	customerNames = new ArrayList<String>(); 
@@ -129,17 +134,22 @@ public class DataService implements Serializable {
         
         // Loop through the results, loading customer names into array
         for (CustomerBean entity : dataManager.customerTable.execute(query)) {        	
-        	customerNames.add(entity.getRowKey()); //rowKey represents customer name               
+        	customerNames.add(entity.getRowKey()); //rowKey represents customer name  
+        	cnt++;	//increment counter
         }
     	        
         Collections.sort(customerNames);		//sort the names
         customerNames.add(0, " ");        		//make first one blank (so nothing looks like default option)
         
+        System.out.println(" XX DataService^^refreshCustomerNames() XX customerNames ArrayList updated, " + Integer.toString(cnt) + " customers.");
         //return customerNames;
     }
     
     public void refreshCustomerBeans(){
     	//refresh local list of customer beans from the database
+    	System.out.println(" XX DataService^^refreshCustomerBeans() XX call received");
+    	
+    	int cnt = 0; //counter
     	
     	//blank out the list, so don't create duplicates.  gc will clean up memory
     	customerBeans = new ArrayList<CustomerBean>();
@@ -147,11 +157,13 @@ public class DataService implements Serializable {
     	// Specify a query (get all records in this case)
         TableQuery<CustomerBean> query = TableQuery.from(CustomerBean.class);           
         
-        // Loop through the results, loading customer names into array
-        for (CustomerBean entity : dataManager.customerTable.execute(query)) {        	
-        	customerNames.add(entity.getRowKey()); //rowKey represents customer name               
+        // Loop through the results, loading customer entities into array
+        for (CustomerBean entity : dataManager.customerTable.execute(query)) { 
+        	customerBeans.add(entity); 
+        	cnt++;	//increment counter
         }
         
+        System.out.println(" XX DataService^^refreshCustomerBeans() XX customerBeans ArrayList updated, " + Integer.toString(cnt) + " customerBeans.");
         //TODO: These beans are not sorted in the array!!
         //return customerBeans;
     }

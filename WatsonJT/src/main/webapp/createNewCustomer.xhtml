@@ -129,8 +129,7 @@
                     <br />
                     <p:commandButton value="Save" validateClient="true" ajax="false" action="dashboard">
                     	<f:actionListener binding="#{customerBean.saveToCustomerTable()}"/>
-                    	<f:actionListener binding="#{dataBean.dataService.refreshCustomerNames()}"/>
-                    	<f:actionListener binding="#{dataBean.dataService.refreshCustomerBeans()}"/>
+                    	<f:actionListener binding="#{dataBean.dataService.refreshCustomerLists()}"/>
                     </p:commandButton>
                     
                 </div>
