@@ -15,15 +15,22 @@ import javax.faces.bean.ManagedBean;
 import com.dfal.jobtracker.beans.CustomerBean;
 import com.microsoft.azure.storage.table.TableQuery;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 @ManagedBean(name="dataService", eager = true)
 @SessionScoped
+@Getter @Setter @EqualsAndHashCode(callSuper=false) @ToString(callSuper=true, includeFieldNames=true)
 //@WebListener
 //public class DataService implements ServletContextListener {
 public class DataService implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	//Load this bean at beginning of session
+	
 	/*
+	 * //Load this bean at beginning of session
 		@Override
 	    public void contextInitialized(ServletContextEvent event) {
 	        event.getServletContext().setAttribute("dataService", new DataService());
@@ -82,7 +89,7 @@ public class DataService implements Serializable {
     
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // getters & setters  
-    
+/*    
     public List<String> getCustomerNames() {
         return customerNames;
     } 
@@ -90,9 +97,11 @@ public class DataService implements Serializable {
     public List<CustomerBean> getCustomerBeans() {
         return customerBeans;
     }
- 
+*/
+    
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//
+//methods
+    
     public void refreshCustomerLists(){
     	//refresh both local lists - of customer names and customer beans - from the database
     	System.out.println(" XX DataService^^refreshCustomerLists() XX call received");

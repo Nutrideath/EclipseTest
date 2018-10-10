@@ -127,11 +127,18 @@
                     </p:panel>
                     <br /><br />
                     <br />
-                    <p:commandButton value="Save" validateClient="true" ajax="false" action="dashboard">
+                    <p:commandButton value="Save and New Customer" icon="ui-icon-save" iconPos="right" validateClient="true" ajax="false" style="width:auto" action="createNewCustomer">
                     	<f:actionListener binding="#{customerBean.saveToCustomerTable()}"/>
                     	<f:actionListener binding="#{dataBean.dataService.refreshCustomerLists()}"/>
                     </p:commandButton>
-                    
+                 
+                    <p:commandButton value="Save and New Job" icon="ui-icon-send" iconPos="right" validateClient="true" ajax="false" style="width:auto" action="customerView">
+                    	<f:actionListener binding="#{customerBean.saveToCustomerTable()}"/>
+                    	<f:actionListener binding="#{dataBean.dataService.refreshCustomerLists()}"/>
+                    </p:commandButton>
+                  	<ui:remove>
+                    	<p:commandButton type="reset" value="Clear/Reset" icon="ui-icon-restore-page" iconPos="right" style="width:auto"/>
+                	</ui:remove>
                 </div>
             </div>
         </div>
