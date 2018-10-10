@@ -31,33 +31,76 @@ import lombok.ToString;
 @Getter @Setter @EqualsAndHashCode(callSuper=false) @ToString(callSuper=true, includeFieldNames=true)
 public class JobBean extends TableServiceEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
+
 	
+	@ManagedProperty(value="#{JobBean.jobStatus}")
+	private String jobStatus;		//tracks the job's lifecycle
+	
+	/*
+	 * The properties below are grouped according to how they appear on the corresponding
+	 *   createNewJob.xhtml and jobForm.xhtml.  Those forms are used to create and manage
+	 *   the jobBean objects.
+	 */
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Job Customer
 	private String partitionKey;	//used in Azure storage tables as part of unique id
 	
 	@ManagedProperty(value="#{JobBean.rowKey}")
 	private String rowKey;			//used in Azure storage tables as part of unique id (This is the job's Customer)
 	
-	@ManagedProperty(value="#{JobBean.jobCustomer}")
-	private String jobCustomer;
-		
-	@ManagedProperty(value="#{JobBean.rushJobFlag}")
-	private boolean rushJobFlag = false;
+	//@ManagedProperty(value="#{JobBean.jobCustomer}")	//using rowKey as customer, so removed
+	//private String jobCustomer;
+
+
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Job Contact Info
+	@ManagedProperty(value="#{JobBean.jobContactLastName}")
+    private String jobContactLastName;
+    
+    @ManagedProperty(value="#{JobBean.jobContactFirstName}")
+    private String jobContactFirstName;
+    
+    @ManagedProperty(value="#{JobBean.jobContactFullName}")
+    private String jobContactFullName;
+    
+    @ManagedProperty(value="#{JobBean.jobContactFullNameLastFirst}")
+    private String jobContactFullNameLastFirst;   	
+    
+    @ManagedProperty(value="#{JobBean.jobContactEmail}")
+    private String jobContactEmail;
+    
+    @ManagedProperty(value="#{JobBean.jobContactPhoneNumber}")
+    private String jobContactPhoneNumber;
+    
+   
+
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Job Info (General info on the Job)
 	
 	@ManagedProperty(value="#{JobBean.jobType}")
 	private String jobType;	//whether Corporate or Residential
 	
-	@ManagedProperty(value="#{JobBean.jobLocationType}")
-	private String jobLocationType;	//whether Subdiv/Lot or StreetAddress
-	
 	@ManagedProperty(value="#{JobBean.jobMake}")
 	private String jobMake;	//whether Rails or Mailbox or Custom
-
-	@ManagedProperty(value="#{JobBean.jobStatus}")
-	private String jobStatus;
+	
+	@ManagedProperty(value="#{JobBean.callInDate}")
+	private Date callInDate;		//date originally contacted by client and job created
+		
+	@ManagedProperty(value="#{JobBean.targetDate}")
+	private Date targetDate;		//default target date should initially default to 3 weeks from call-in date
+	
+	@ManagedProperty(value="#{JobBean.rushJobFlag}")
+	private boolean rushJobFlag = false;
+	
 	
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//Job Address
+	//Job Location
+	
+	@ManagedProperty(value="#{JobBean.jobLocationType}")
+	private String jobLocationType;	//whether Subdiv/Lot or StreetAddress
+
 	@ManagedProperty(value="#{JobBean.jobAddrSubdivisionLot}")	
 	private String jobAddrSubdivisionLot;	//Job Address, if using Subdivision/Lot# format
 	
@@ -78,18 +121,12 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	private String jobAddr_Zip;
 	
 	
-	
-	//@ManagedProperty(value="#{JobBean.jobNumber}")	
-	//private String jobNumber;		//unique id for this job
-	
+
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//date fields
-	@ManagedProperty(value="#{JobBean.callInDate}")
-	private Date callInDate;		//date originally contacted by client and job created
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 	
-	@ManagedProperty(value="#{JobBean.targetDate}")
-	private Date targetDate;		//default target date should initially default to 3 weeks from call-in date
 	
 
 	
@@ -143,6 +180,9 @@ public class JobBean extends TableServiceEntity implements Serializable {
     	System.out.println(" XX JobBean XX");
     	System.out.println(" XX JobBean XX Call to .saveToJobTable()");
     	
+    	//set contact name values
+    	this.jobContactFullName = this.jobContactFirstName + " " + this.jobContactLastName;
+    	this.jobContactFullNameLastFirst = this.jobContactLastName + ", " + this.jobContactFirstName;
     	
     	/*
     	 * Jobs are either:  Corporate or Residential (stored in jobType)

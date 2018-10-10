@@ -15,7 +15,13 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
+                  
+                    
+                   <ui:remove> CreateNewCustomer form
+                   Collects required data to create a new customer, and saves to database.
+                   Subsequent calls to interact with customer will use a different form.               
                    
+                   </ui:remove>                   
                    
                     <p:focus context="mainPanelGrid" />
                      <p:panel header="Create New Customer">
@@ -132,7 +138,7 @@
                     	<f:actionListener binding="#{dataBean.dataService.refreshCustomerLists()}"/>
                     </p:commandButton>
                  
-                    <p:commandButton value="Save and New Job" icon="ui-icon-send" iconPos="right" validateClient="true" ajax="false" style="width:auto" action="customerView">
+                    <p:commandButton value="Save and New Job" icon="ui-icon-send" iconPos="right" validateClient="true" ajax="false" style="width:auto" action="createNewJob">
                     	<f:actionListener binding="#{customerBean.saveToCustomerTable()}"/>
                     	<f:actionListener binding="#{dataBean.dataService.refreshCustomerLists()}"/>
                     </p:commandButton>
