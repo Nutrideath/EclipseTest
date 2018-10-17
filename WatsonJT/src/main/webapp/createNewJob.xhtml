@@ -33,10 +33,10 @@
                         filteredValue="#{dataBean.filteredCustomerBeans}"
                         paginator="true" rows="10">
                         
-                        <f:ajax event="rowSelect" update="jobType" /> 
+                        <f:ajax event="rowSelect" update="jobType jobLocationType" /> 
                         
                             <f:facet name="header">
-                                Select customer (Filter by typing at column header)
+                                Select customer (Filter or Sort at Column Header)
                             </f:facet>
                             
                             <p:column headerText="Name" sortBy="#{customer.rowKey}" filterBy="#{customer.rowKey}">

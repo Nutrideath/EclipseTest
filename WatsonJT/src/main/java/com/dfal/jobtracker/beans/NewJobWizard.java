@@ -42,12 +42,24 @@ public class NewJobWizard implements Serializable {
     
     
     public String onFlowProcess(FlowEvent event) {
+    	String customerType;
     	
     	//need to set a a few fields on the job from the selection of the customer
     	selectedCB = dataBean.getSelectedCustomerBean();	//get the selected customer, if there is one    	
     	if(selectedCB != null) {
     		jobBean.setRowKey(selectedCB.getRowKey());			//set the rowKey field on the jobBean (the customer name)
-    		jobBean.setJobType(selectedCB.getCustomerType());	//set the jobType field on the jobBean to match customer type (Corporate or Residential)
+    		customerType = selectedCB.getCustomerType();			//get the customer type (Corporate or Residential)    		
+    		jobBean.setJobType(customerType);	//set the jobType field on the jobBean to match customer type (Corporate or Residential)
+    		
+    		if(customerType.equals("Residential")){
+    			//inherit address fields if residential
+    			jobBean.setJobLocationType("StreetAddress");
+    			jobBean.setJobAddr_Line1(selectedCB.getAddr_Line1());
+    			jobBean.setJobAddr_Line2(selectedCB.getAddr_Line2());
+    			jobBean.setJobAddr_City(selectedCB.getAddr_City());
+    			jobBean.setJobAddr_State(selectedCB.getAddr_State());
+    			jobBean.setJobAddr_Zip(selectedCB.getAddr_Zip());
+    		}
     	}
     	
     	//checks for skip boolean (not currently used)
