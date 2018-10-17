@@ -26,19 +26,37 @@
 		<p:wizard flowListener="#{newJobWizard.onFlowProcess}">
 			<p:tab id="customer" title="Customer">
 				
-                  	<p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-2,ui-grid-col-2" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
-                  		<f:facet name="header">Customer Selection</f:facet>	
-                  		<ui:remove>rowKey is the Customer.  This should do a lookup against the Customer table, maybe a type-ahead function on the results.</ui:remove>
-                    	<h:panelGroup styleClass="ui-selectonemenu">
-                    		<p:outputLabel for="rowKey" value="Select Customer:" />
-                    		<p:selectOneMenu id="rowKey" value="#{newJobWizard.jobBean.rowKey}" required="true" label="rowKey" validatorMessage="Invalid character" >  
-                    			<f:selectItems value="#{dataBean.customerNames}" />	               		
-                    		</p:selectOneMenu> 
-            				<ui:remove><label>Customer</label></ui:remove>
-            				<p:message id="msgRowKey" for="rowKey" />
-            				<br /> 
-                   		 </h:panelGroup>
-                    </p:panelGrid>		
+                  	
+                    
+            	<p:dataTable var="customer" value="#{dataBean.customerBeans}" selectionMode="single" reflow="true" 
+                        selection="#{dataBean.selectedCustomerBean}" rowKey="#{customer.rowKey}" 
+                        filteredValue="#{dataBean.filteredCustomerBeans}"
+                        paginator="true" rows="10">
+                        
+                        <f:ajax event="rowSelect" update="jobType" /> 
+                        
+                            <f:facet name="header">
+                                Select customer (Filter by typing at column header)
+                            </f:facet>
+                            
+                            <p:column headerText="Name" sortBy="#{customer.rowKey}" filterBy="#{customer.rowKey}">
+                                <h:outputText value="#{customer.rowKey}" />
+                            </p:column>
+
+                            <p:column headerText="Contact" sortBy="#{customer.fullNameLastFirst}" filterBy="#{customer.fullNameLastFirst}">
+                                <h:outputText value="#{customer.fullNameLastFirst}" />
+                            </p:column>
+
+                            <p:column headerText="Type" sortBy="#{customer.customerType}" filterBy="#{customer.customerType}">
+                                <h:outputText value="#{customer.customerType}" />
+                            </p:column>
+                            
+                  </p:dataTable>  
+                       
+              
+                 
+
+                    		
 			</p:tab>
 			
 			<p:tab id="jobContact" title="Job Contact Info">
@@ -204,10 +222,7 @@
                    		 
                    		 <h:panelGroup />                   		 
                    		 <h:panelGroup id="jobLocationForm-Zip" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="md-inputfield">
-                   		 	<p:inputText id="jobAddr_Zip" value="#{newJobWizard.jobBean.jobAddr_Zip}" label="jobAddr_Zip" validatorMessage="Invalid character">
-                   		 		<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^,.]+$" /> 
-                    			<f:ajax event="keyup" render="jobAddr_Zip, msgJobAddr_Zip" />
-                   		 	</p:inputText> 
+                   		 	<p:inputMask id="jobAddr_Zip" value="#{newJobWizard.jobBean.jobAddr_Zip}" label="jobAddr_Zip" mask="99999?-9999"/>             		 	
             				<label>Zip</label>
             				<p:message id="msgJobAddr_Zip" for="jobAddr_Zip" />                     		 
                    		 </h:panelGroup>
