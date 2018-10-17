@@ -25,6 +25,7 @@
                    
 		<p:wizard flowListener="#{newJobWizard.onFlowProcess}">
 			<p:tab id="customer" title="Customer">
+				
                   	<p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-2,ui-grid-col-2" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
                   		<f:facet name="header">Customer Selection</f:facet>	
                   		<ui:remove>rowKey is the Customer.  This should do a lookup against the Customer table, maybe a type-ahead function on the results.</ui:remove>
@@ -37,14 +38,12 @@
             				<p:message id="msgRowKey" for="rowKey" />
             				<br /> 
                    		 </h:panelGroup>
-                   		 
-                   		 
-                   		 
                     </p:panelGrid>		
 			</p:tab>
 			
 			<p:tab id="jobContact" title="Job Contact Info">
-					<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+				<p:focus context="jobContactPG" for="firstName"/>
+					<p:panelGrid id="jobContactPG" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
 						
 						<f:facet name="header">Contact Information for this Job</f:facet>
 						
@@ -84,7 +83,8 @@
 			</p:tab>
 			
 			<p:tab id="jobInfo" title="Job Info">
-                    <p:panelGrid columns="6" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+				<p:focus context="jobInfoPG" for="jobType"/>
+                    <p:panelGrid id="jobInfoPG" columns="6" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
 						<f:facet name="header">General Job Information</f:facet>
 						
 						<p:outputLabel for="jobType" value="Select Job Type" />						
@@ -136,8 +136,9 @@
 			</p:tab>   
 
             <p:tab id="jobLocation" title="Job Location"> 
-            	<p:panel header="Job Location Information"> 
-            		    
+            	<p:focus context="jobLocationPanel" for="jobLocationType"/> 
+            	
+            	<p:panel id="jobLocationPanel" header="Job Location Information">             		  
                     <label>Job Location:</label> 
                     <f:ajax event="change" render="whichJobLocation" > 
                     <p:selectOneRadio id="jobLocationType" value="#{newJobWizard.jobBean.jobLocationType}" required="true" 
@@ -217,6 +218,7 @@
             </p:tab>
             
         	<p:tab id="confirm" title="Confirmation">
+        		<p:focus context="confirm"/>
         		<h:outputText> This is the confirmation tab </h:outputText>
         		<p:commandButton value="Create Job" actionListener="#{newJobWizard.jobBean.saveToJobTable}" validateClient="true" ajax="false" style="width:auto" action="dashboard"/>
         	</p:tab>            
