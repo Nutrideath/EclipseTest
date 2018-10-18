@@ -33,7 +33,7 @@
                         filteredValue="#{dataBean.filteredCustomerBeans}"
                         paginator="true" rows="10">
                         
-                        <f:ajax event="rowSelect" update="jobType jobLocationType" /> 
+                        <f:ajax event="rowSelect" update="jobType jobLocationType confirmation" /> 
                         
                             <f:facet name="header">
                                 Select customer (Filter or Sort at Column Header)
@@ -158,7 +158,7 @@
             	
             	<p:panel id="jobLocationPanel" header="Job Location Information">             		  
                     <label>Job Location:</label> 
-                    <f:ajax event="change" render="whichJobLocation" > 
+                    <f:ajax event="change" render="whichJobLocation confirmation" > 
                     <p:selectOneRadio id="jobLocationType" value="#{newJobWizard.jobBean.jobLocationType}" required="true" 
                     					style="margin-bottom:10px;" layout="lineDirection"  >                            
                             <f:selectItem itemLabel="Subdivision and Lot" itemValue="Subdiv_Lot" />
@@ -233,9 +233,82 @@
             </p:tab>
             
         	<p:tab id="confirm" title="Confirmation">
-        		<p:focus context="confirm"/>
-        		<h:outputText> This is the confirmation tab </h:outputText>
-        		<p:commandButton value="Create Job" actionListener="#{newJobWizard.jobBean.saveToJobTable}" validateClient="true" ajax="false" style="width:auto" action="dashboard"/>
+        		
+       
+        		<p:panel header="Please Confirm Information">
+                <p:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
+                
+                    <p:panelGrid columns="2" columnClasses="label, value">
+                    	<f:facet name="header">
+							Job Contact
+						</f:facet>
+                        <h:outputText value="Customer name: " />
+                        <h:outputText value="#{newJobWizard.selectedCustomerBean.rowKey}" styleClass="outputLabel"/>
+
+                        <h:outputText value="Job Contact: " />
+                        <h:outputText value="#{newJobWizard.jobBean.jobContactFirstName} #{newJobWizard.jobBean.jobContactLastName}" styleClass="outputLabel"/>
+ 
+                        <h:outputText value="Email: " />
+                        <h:outputText value="#{newJobWizard.jobBean.jobContactEmail}" styleClass="outputLabel"/>
+                        
+                        <h:outputText value="Phone: " />
+                        <h:outputText value="#{newJobWizard.jobBean.jobContactPhoneNumber}" styleClass="outputLabel"/>
+                    </p:panelGrid>
+                    
+                    <p:panelGrid columns="2" columnClasses="label, value">
+                   		<f:facet name="header">
+							Job Info
+						</f:facet>                    
+                        <h:outputText value="Job Type: " />
+                        <h:outputText value="#{newJobWizard.jobBean.jobType}" styleClass="outputLabel"/>
+
+                        <h:outputText value="Job Make: " />
+                        <h:outputText value="#{newJobWizard.jobBean.jobMake}" styleClass="outputLabel"/>
+ 
+                        <h:outputText value="Call-In Date: " />
+                        <h:outputText value="#{newJobWizard.jobBean.callInDate}" styleClass="outputLabel"/>
+                        
+                        <h:outputText value="Target Date: " />
+                        <h:outputText value="#{newJobWizard.jobBean.targetDate}" styleClass="outputLabel"/>
+                        
+                        <h:outputText value="Rush Job: " />
+                        <h:outputText value="Yes" rendered="#{newJobWizard.jobBean.rushJobFlag}" />
+                        <h:outputText value="No" rendered="#{not newJobWizard.jobBean.rushJobFlag}" />
+                    </p:panelGrid>
+                    
+                    <p:panelGrid columns="2" columnClasses="label, value">
+                   		<f:facet name="header">
+							Job Location
+						</f:facet>                    
+                        <h:outputText value="Job Subdivision (Lot): " rendered="#{newJobWizard.jobBean.jobLocationType == 'Subdiv_Lot'}" />
+                        <h:outputText value="#{newJobWizard.jobBean.jobAddrSubdivisionLot}" rendered="#{newJobWizard.jobBean.jobLocationType == 'Subdiv_Lot'}" styleClass="outputLabel"/>
+
+                        <h:outputText value="Job Address: " rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}"/>
+                        <h:outputText value="#{newJobWizard.jobBean.jobAddr_Line1}" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
+ 
+                        <h:outputText value=" " rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}"/>
+                        <h:outputText value="#{newJobWizard.jobBean.jobAddr_Line2}" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
+                        
+                        <h:outputText value=" " rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}"/>
+                        <h:outputText value="#{newJobWizard.jobBean.jobAddr_City}" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
+                        
+                        <h:outputText value=" " rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}"/>
+                        <h:outputText value="#{newJobWizard.jobBean.jobAddr_State}" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
+                        
+                        <h:outputText value=" " rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}"/>
+                        <h:outputText value="#{newJobWizard.jobBean.jobAddr_Zip}" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
+                        
+                    </p:panelGrid>
+                    
+                </p:panelGrid>
+                
+                <p:commandButton value="Create Job" actionListener="#{newJobWizard.jobBean.saveToJobTable}" validateClient="true" ajax="false" style="width:auto" action="dashboard"/>
+                </p:panel>
+ 	
+        		
+        		
+        		
+        		
         	</p:tab>            
 		</p:wizard> 
                     

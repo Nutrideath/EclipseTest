@@ -91,7 +91,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	private Date targetDate;		//default target date should initially default to 3 weeks from call-in date
 	
 	@ManagedProperty(value="#{JobBean.rushJobFlag}")
-	private boolean rushJobFlag = false;
+	private boolean rushJobFlag = false; 
 	
 	
 	
@@ -147,6 +147,8 @@ public class JobBean extends TableServiceEntity implements Serializable {
 */	
 	@PostConstruct
     public void init(){
+		//this.jobStatus = "New";
+		
 		Calendar cal = Calendar.getInstance();
 		
 		this.callInDate = new Date();	//set default to today's date
@@ -212,9 +214,11 @@ public class JobBean extends TableServiceEntity implements Serializable {
     	String pKey1, pKey2, pKey3, pKey4;
     	
     	//set up format of date
-    	String pattern = "yyyy-MM-dd";
-    	SimpleDateFormat ymdDateFormat = new SimpleDateFormat(pattern);
-    	pKey1 = ymdDateFormat.format(this.callInDate); 
+    	//String pattern = "yyyy-MM-dd";
+    	//SimpleDateFormat ymdDateFormat = new SimpleDateFormat(pattern);
+    	//pKey1 = ymdDateFormat.format(this.callInDate); 
+    	
+    	pKey1 = convertSimpleDate(this.callInDate);
     	
     	pKey2 = jobMake;
     	/*
@@ -272,8 +276,15 @@ public class JobBean extends TableServiceEntity implements Serializable {
         } 
     }
 	
-	//TODO
-	//public getSpecificJob()
+	public String convertSimpleDate(Date dateToConvert) {
+		//takes java Date and returns simple version
+		
+    	//set up format of date
+    	String pattern = "yyyy-MM-dd";
+    	SimpleDateFormat ymdDateFormat = new SimpleDateFormat(pattern);
+    	return ymdDateFormat.format(dateToConvert); 
+	}
+
 	
 	
 
@@ -287,6 +298,8 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		}
 	}
 
+
 	
+
 
 }

@@ -2,6 +2,7 @@ package com.dfal.jobtracker.beans;
 
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -29,37 +30,80 @@ public class NewJobWizard implements Serializable {
 	@ManagedProperty(value="#{dataBean}")
 	private DataBean dataBean = new DataBean();
 	
-	private CustomerBean selectedCB;
+	
+	
+	private CustomerBean selectedCustomerBean;
      
-    private boolean skip;
+    private boolean skip; 
       
+    
+    
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //Constructor stuff
+    public NewJobWizard() {
+    	
+    }
+    
+    @PostConstruct
+    public void init(){
+    	jobBean.setJobStatus("New"); //This is a new job, so set initial status
+    }
+    
     
     // functions
     
     public void save() {        
-        jobBean.saveToJobTable();
+        jobBean.saveToJobTable(); 
     }
     
-    
+   
     public String onFlowProcess(FlowEvent event) {
     	String customerType;
     	
     	//need to set a a few fields on the job from the selection of the customer
-    	selectedCB = dataBean.getSelectedCustomerBean();	//get the selected customer, if there is one    	
-    	if(selectedCB != null) {
-    		jobBean.setRowKey(selectedCB.getRowKey());			//set the rowKey field on the jobBean (the customer name)
-    		customerType = selectedCB.getCustomerType();			//get the customer type (Corporate or Residential)    		
+    	selectedCustomerBean = dataBean.getSelectedCustomerBean();	//get the selected customer, if there is one  
+    	
+    	if(selectedCustomerBean != null) {
+    		jobBean.setRowKey(selectedCustomerBean.getRowKey());			//set the rowKey field on the jobBean (the customer name)
+    		
+    		customerType = selectedCustomerBean.getCustomerType();			//get the customer type (Corporate or Residential)    		
     		jobBean.setJobType(customerType);	//set the jobType field on the jobBean to match customer type (Corporate or Residential)
     		
     		if(customerType.equals("Residential")){
-    			//inherit address fields if residential
-    			jobBean.setJobLocationType("StreetAddress");
-    			jobBean.setJobAddr_Line1(selectedCB.getAddr_Line1());
-    			jobBean.setJobAddr_Line2(selectedCB.getAddr_Line2());
-    			jobBean.setJobAddr_City(selectedCB.getAddr_City());
-    			jobBean.setJobAddr_State(selectedCB.getAddr_State());
-    			jobBean.setJobAddr_Zip(selectedCB.getAddr_Zip());
-    		}
+    			//inherit job contact fields if residential (but only if values aren't already set. Allows user to edit these fields.)
+    			if(jobBean.getJobContactFirstName() == null) {
+    				jobBean.setJobContactFirstName(selectedCustomerBean.getFirstName());
+    			}
+    			if(jobBean.getJobContactLastName() == null) {
+    				jobBean.setJobContactLastName(selectedCustomerBean.getLastName());
+    			}
+    			if(jobBean.getJobContactEmail() == null) {
+    				jobBean.setJobContactEmail(selectedCustomerBean.getEmail());
+    			}
+    			if(jobBean.getJobContactPhoneNumber() == null) {
+    				jobBean.setJobContactPhoneNumber(selectedCustomerBean.getPhoneNumber());
+    			}
+    			
+    			//inherit address fields if residential  (but only if values aren't already set. Allows user to edit these fields.)
+    			if(jobBean.getJobLocationType() == null) {
+    				jobBean.setJobLocationType("StreetAddress");
+    			}
+    			if(jobBean.getJobAddr_Line1() == null) {
+    				jobBean.setJobAddr_Line1(selectedCustomerBean.getAddr_Line1());
+    			}
+    			if(jobBean.getJobAddr_Line2() == null) {
+    				jobBean.setJobAddr_Line2(selectedCustomerBean.getAddr_Line2());
+    			}
+    			if(jobBean.getJobAddr_City() == null) {
+    				jobBean.setJobAddr_City(selectedCustomerBean.getAddr_City());
+    			}
+    			if(jobBean.getJobAddr_State() == null) {
+    				jobBean.setJobAddr_State(selectedCustomerBean.getAddr_State());
+    			}
+    			if(jobBean.getJobAddr_Zip() == null) {
+    				jobBean.setJobAddr_Zip(selectedCustomerBean.getAddr_Zip());
+    			}
+    		} 
     	}
     	
     	//checks for skip boolean (not currently used)
