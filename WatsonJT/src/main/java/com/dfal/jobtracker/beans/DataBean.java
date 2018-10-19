@@ -1,7 +1,7 @@
 package com.dfal.jobtracker.beans;
 
 import java.io.Serializable;
-import java.util.Date;
+//import java.util.Date;
 //import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class DataBean implements Serializable {
     @ManagedProperty(value="#{dataService}")	//get the SessionScoped data service already in memory (or instantiate it if it doesn't exist)
     public DataService dataService;
     
-   
+    
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //to hold selections and filtered lists
     
