@@ -49,8 +49,11 @@ public class DataBean implements Serializable {
     @ManagedProperty(value="#{dataService}")	//get the SessionScoped data service already in memory (or instantiate it if it doesn't exist)
     public DataService dataService;
     
+   
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //to hold selections and filtered lists
+    
+//customer data    
     @Setter(AccessLevel.NONE)	//special setter below to show debug output
     private CustomerBean selectedCustomerBean;
     
@@ -59,15 +62,32 @@ public class DataBean implements Serializable {
     //@ManagedProperty(value="#{DataBean.filteredCustomerBeans}")
     private List<CustomerBean> filteredCustomerBeans; 
     
+//job data    
+    @Setter(AccessLevel.NONE)	//special setter below to show debug output
+    private JobBean selectedJobBean;
+    
+    private List<JobBean> selectedJobBeans;
+    
+    //@ManagedProperty(value="#{DataBean.filteredJobBeans}")
+    private List<JobBean> filteredJobBeans;     
+    
+    
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//Managed properties
-    
+
+//customer data
     @ManagedProperty(value="#{DataBean.customerNames}")
     private List<String> customerNames;
    	
     @ManagedProperty(value="#{DataBean.customerBeans}")
     private List<CustomerBean> customerBeans;
     
+//job data
+    @ManagedProperty(value="#{DataBean.jobNames}")
+    private List<String> jobNames;
+   	
+    @ManagedProperty(value="#{DataBean.jobBeans}")
+    private List<JobBean> jobBeans;   
     
     
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,6 +102,9 @@ public class DataBean implements Serializable {
     public void init() {
         customerNames = dataService.getCustomerNames();
         customerBeans = dataService.getCustomerBeans();
+        
+        jobNames = dataService.getJobNames();
+        jobBeans = dataService.getJobBeans();
     }
     
     
@@ -100,7 +123,16 @@ public class DataBean implements Serializable {
     		System.out.println(" XX DataBean^^setSelectedCustomerBean XX Selected: " + this.selectedCustomerBean.getRowKey());
     	}
     }
-    
+
+    public void setSelectedJobBean(JobBean selectedJobBean) {
+    	System.out.println(" XX DataBean^^setSelectedJobBean XX Called");
+    	if(selectedJobBean == null) {
+    		System.out.println(" XX DataBean^^setSelectedJobBean XX ERROR: Called with null JobBean arg");
+    	} else {
+    		this.selectedJobBean = selectedJobBean;
+    		System.out.println(" XX DataBean^^setSelectedJobBean XX Selected: " + this.selectedJobBean.getJobName());
+    	}
+    }
     
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//getters & setters

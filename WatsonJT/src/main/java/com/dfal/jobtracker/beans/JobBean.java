@@ -185,6 +185,8 @@ public class JobBean extends TableServiceEntity implements Serializable {
     	System.out.println(" XX JobBean XX");
     	System.out.println(" XX JobBean XX Call to .saveToJobTable()");
     	
+    	//TODO: Check for existing to avoid duplicates or overwriting another row of data
+    	
     	//set contact name values
     	this.jobContactFullName = this.jobContactFirstName + " " + this.jobContactLastName;
     	this.jobContactFullNameLastFirst = this.jobContactLastName + ", " + this.jobContactFirstName;
@@ -212,7 +214,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		 *	Also might be best to remove (%) and (+)
 		 *	Plus, partitionKey cannot begin with an underscore (_)
 		 */
-    	
+    	 
     	// set up variables to concatenate later into the partitionKey and jobName fields
     	String pKey1, pKey2, pKey3, pKey4;
     	
