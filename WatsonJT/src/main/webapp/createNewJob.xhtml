@@ -25,9 +25,7 @@
                    
 		<p:wizard flowListener="#{newJobWizard.onFlowProcess}">
 			<p:tab id="customer" title="Customer">
-				
-                  	
-                    
+        
             	<p:dataTable var="customer" value="#{dataBean.customerBeans}" selectionMode="single" reflow="true" 
                         selection="#{dataBean.selectedCustomerBean}" rowKey="#{customer.rowKey}" 
                         filteredValue="#{dataBean.filteredCustomerBeans}"
@@ -52,11 +50,7 @@
                             </p:column>
                             
                   </p:dataTable>  
-                       
-              
-                 
-
-                    		
+                             		
 			</p:tab>
 			
 			<p:tab id="jobContact" title="Job Contact Info">
@@ -236,8 +230,8 @@
         		
        
         		<p:panel header="Please Confirm Information">
-                <p:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
-                
+                	
+                  <p:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid" layout="grid">
                     <p:panelGrid columns="2" columnClasses="label, value">
                     	<f:facet name="header">
 							Job Contact
@@ -300,7 +294,7 @@
                         
                     </p:panelGrid>
                     
-                </p:panelGrid>
+               	   </p:panelGrid>
                 
                 <p:commandButton value="Create Job" actionListener="#{newJobWizard.jobBean.saveToJobTable}" validateClient="true" ajax="false" style="width:auto" action="dashboard"/>
                 </p:panel>
