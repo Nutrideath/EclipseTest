@@ -198,10 +198,12 @@ public class CustomerBean extends TableServiceEntity implements Serializable {
         	String fn;
         	String comma;
         	String res;
+        	
+        
             if(customerType.equals("Residential")) {
             	//check for null values
-            	if(lastName != null) {ln = lastName; } else {ln = "";}
-            	if(firstName != null) {fn = firstName; } else {fn = "";}
+            	if(lastName != null && !lastName.isEmpty()) {ln = lastName; } else {ln = "";}
+            	if(firstName != null && !firstName.isEmpty()) {fn = firstName; } else {fn = "";}
             	if(ln != "" && fn != "") {comma = ", "; } else {comma = "";}			//determine if we need a comma
             	if(ln=="" && fn == "") {res = ""; } else { res = " (Residential)"; }	//if no fn or ln, make blank
             	

@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 //import javax.servlet.ServletContextListener;
 
 import com.dfal.jobtracker.beans.CustomerBean;
+import com.dfal.jobtracker.beans.JobBean;
 import com.microsoft.azure.storage.table.TableQuery;
 
 import lombok.EqualsAndHashCode;
@@ -42,11 +43,16 @@ public class DataService implements Serializable {
 		}
     */
 	
+	public DataManagerAzure dataManager;		//handles interaction with the database
+	
+	//for customers
 	private List<String> customerNames;
 	private List<CustomerBean> customerBeans;	
 	
-        
-    public DataManagerAzure dataManager;		//handles interaction with the database
+	//for jobs
+	private List<String> jobNames;
+	private List<JobBean> jobBeans;	    
+    
     
     
     
@@ -61,25 +67,44 @@ public class DataService implements Serializable {
     @PostConstruct
     public void init() {
     	System.out.println(" XX DataService^^init() XX init() started");
-        customerNames = new ArrayList<String>(); 
-        customerBeans = new ArrayList<CustomerBean>();
-           
-    //create DataManager object
+    	
+        //create DataManager object
     	dataManager = new DataManagerAzure();	//dataManager object to connect to Azure table storage
     	System.out.println(" XX DataService^^init() XX Created DataManagerAzure object");
-  
-    //set up customerNames list
-    	// Specify a query (get all records in this case)
-        TableQuery<CustomerBean> query = TableQuery.from(CustomerBean.class);           
+    	
+    //load up customer data	
+        customerNames = new ArrayList<String>(); 
+        customerBeans = new ArrayList<CustomerBean>();
+         
+    	// Specify a query of customers (get all records in this case)
+        TableQuery<CustomerBean> customerQuery = TableQuery.from(CustomerBean.class);           
         
-        // Loop through the results, loading customer names into array
-        for (CustomerBean entity : dataManager.customerTable.execute(query)) {
+        // Loop through the results, loading data into array
+        for (CustomerBean entity : dataManager.customerTable.execute(customerQuery)) {
         	customerBeans.add(entity);
         	customerNames.add(entity.getRowKey()); //rowKey represents customer name                
         }
     	        
         Collections.sort(customerNames);		//sort the names
         customerNames.add(0, " ");        		//make first one blank (so nothing looks like default option)
+
+        
+        
+    //load up job data	
+        jobNames = new ArrayList<String>(); 
+        jobBeans = new ArrayList<JobBean>();        
+        
+    	// Specify a query of jobs (get all records in this case)
+        TableQuery<JobBean> jobQuery = TableQuery.from(JobBean.class);  
+
+        // Loop through the results, loading data into array
+        for (JobBean entity : dataManager.jobTable.execute(jobQuery)) {
+        	jobBeans.add(entity);
+        	jobNames.add(entity.getJobName()); //jobName represents short identification of job               
+        }        
+
+        Collections.sort(jobNames);		//sort the names
+        jobNames.add(0, " ");        	//make first one blank (so nothing looks like default option)
 
         
         System.out.println(" XX DataService^^init() XX init() completed");

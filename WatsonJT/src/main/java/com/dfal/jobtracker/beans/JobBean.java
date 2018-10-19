@@ -36,6 +36,9 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	@ManagedProperty(value="#{JobBean.jobStatus}")
 	private String jobStatus;		//tracks the job's lifecycle
 	
+	@ManagedProperty(value="#{JobBean.jobName}")
+	private String jobName;			//short designation of job
+	
 	/*
 	 * The properties below are grouped according to how they appear on the corresponding
 	 *   createNewJob.xhtml and jobForm.xhtml.  Those forms are used to create and manage
@@ -134,7 +137,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	//Constructor stuff
 	
 	public JobBean() {
-		System.out.println(" XX JobBean XX Created empty instance of JobBean"); 
+		//System.out.println(" XX JobBean XX Created empty instance of JobBean"); 
 		//this.partitionKey = UUID.randomUUID().toString();
 		//System.out.println(" XX JobBean XX   partitionKey set to: " + this.partitionKey); 
 	}
@@ -210,7 +213,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		 *	Plus, partitionKey cannot begin with an underscore (_)
 		 */
     	
-    	// set up variables
+    	// set up variables to concatenate later into the partitionKey and jobName fields
     	String pKey1, pKey2, pKey3, pKey4;
     	
     	//set up format of date
@@ -218,34 +221,40 @@ public class JobBean extends TableServiceEntity implements Serializable {
     	//SimpleDateFormat ymdDateFormat = new SimpleDateFormat(pattern);
     	//pKey1 = ymdDateFormat.format(this.callInDate); 
     	
-    	pKey1 = convertSimpleDate(this.callInDate);
+    	pKey1 = convertSimpleDate(this.callInDate);	//convert to simple date format, without the time info
     	
-    	pKey2 = jobMake;
-    	/*
-    	if(this.jobType.equals("Corporate")){
-    		pKey3 = this.rowKey;
+    	pKey2 = "[" + jobMake + "]";	//Rails or Mailbox or Custom
+
+    	pKey3 = rowKey;	//customer name
+ 
+
+    	//figure out which type of address to use, based on the jobLocationType
+    	String jobAddr_Line2CommaFix;
+    	if(jobLocationType.equals("StreetAddress")) {
+    		if(jobAddr_Line2 != null && !jobAddr_Line2.isEmpty()) {	//if no value for jobAddr_Line2, then leave out the comma
+    			jobAddr_Line2CommaFix = ", " + jobAddr_Line2;
+    			//System.out.println(" XX JobBean XX NOT null. jobAddr_Line2 = [" + jobAddr_Line2 + "]");
+    		} else {
+    			jobAddr_Line2CommaFix = "";
+    			//System.out.println(" XX JobBean XX IS null.");
+    		}
+    		pKey4 = jobAddr_Line1 + jobAddr_Line2CommaFix + ", " + jobAddr_City + ", " + jobAddr_State + ", " + jobAddr_Zip;
     	} else {
-    		pKey3 = this.rowKey + "(Residential)";	//TODO: fix this, once we have better way to fill out Residential data. Should be last name of residential customer
+    		pKey4 = jobAddrSubdivisionLot;    		
     	}
-    	*/
-    	pKey3 = this.rowKey;
-    	//pKey3 = this.jobCustomer;
-    	//this.rowKey = this.jobCustomer;
     	
-    	if(this.jobLocationType.equals("StreetAddress")) {
-    		pKey4 = this.jobAddr_Line1 + ", " + this.jobAddr_Line2 + ", " + this.jobAddr_City + ", " + this.jobAddr_State + ", " + this.jobAddr_Zip;
-    	} else {
-    		pKey4 = this.jobAddrSubdivisionLot;    		
-    	}
     	//debug out
-    	System.out.println(" XX JobBean XX pKey1 = " + pKey1);
-    	System.out.println(" XX JobBean XX pKey2 = " + pKey2);
-    	System.out.println(" XX JobBean XX pKey3 = " + pKey3);
-    	System.out.println(" XX JobBean XX pKey4 = " + pKey4);
+    	//System.out.println(" XX JobBean XX pKey1 = " + pKey1);
+    	//System.out.println(" XX JobBean XX pKey2 = " + pKey2);
+    	//System.out.println(" XX JobBean XX pKey3 = " + pKey3);
+    	//System.out.println(" XX JobBean XX pKey4 = " + pKey4);
     	
     	
     	// concatenate them
-    	partitionKey = pKey1 + " " + pKey2 + ": " + pKey3 + " - " + pKey4;
+    	partitionKey = pKey1 + " " + pKey2 + " " + pKey3 + " - " + pKey4;
+    	
+    	//also use them to set the jobName
+    	jobName = pKey3 + " - " + pKey4 + " " + pKey2;
     	
     	
     	System.out.println(" XX JobBean XX partitionKey = " + partitionKey);

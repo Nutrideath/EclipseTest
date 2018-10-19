@@ -1,6 +1,7 @@
 package com.dfal.jobtracker.beans;
 
 import java.io.Serializable;
+import java.util.Date;
 //import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +17,19 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
+//lombok does auto-generation of getters, setters, equals, and toString functions
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString; 
 
 import com.dfal.jobtracker.model.DataService;
 //import com.microsoft.azure.storage.table.TableServiceEntity;
 
 @ManagedBean(name="dataBean")
 @ViewScoped
+@Getter @Setter @EqualsAndHashCode(callSuper=false) @ToString(callSuper=true, includeFieldNames=true)
 public class DataBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	/*
@@ -41,8 +49,11 @@ public class DataBean implements Serializable {
     @ManagedProperty(value="#{dataService}")	//get the SessionScoped data service already in memory (or instantiate it if it doesn't exist)
     public DataService dataService;
     
-    //to hold selections
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //to hold selections and filtered lists
+    @Setter(AccessLevel.NONE)	//special setter below to show debug output
     private CustomerBean selectedCustomerBean;
+    
     private List<CustomerBean> selectedCustomerBeans;
     
     //@ManagedProperty(value="#{DataBean.filteredCustomerBeans}")
@@ -74,9 +85,26 @@ public class DataBean implements Serializable {
     }
     
     
+    
+    
+    
+    
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  	//special setters
+    public void setSelectedCustomerBean(CustomerBean selectedCustomerBean) {
+    	System.out.println(" XX DataBean^^setSelectedCustomerBean XX Called");
+    	if(selectedCustomerBean == null) {
+    		System.out.println(" XX DataBean^^setSelectedCustomerBean XX ERROR: Called with null CustomerBean arg");
+    	} else {
+    		this.selectedCustomerBean = selectedCustomerBean;
+    		System.out.println(" XX DataBean^^setSelectedCustomerBean XX Selected: " + this.selectedCustomerBean.getRowKey());
+    	}
+    }
+    
+    
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//getters & setters
-    
+/*    
     public void setCustomerNames(List<String> customerNames) {
     	this.customerNames = customerNames;
     }
@@ -122,15 +150,7 @@ public class DataBean implements Serializable {
         return selectedCustomerBean;
     }
 
-    public void setSelectedCustomerBean(CustomerBean selectedCustomerBean) {
-    	System.out.println(" XX DataBean^^setSelectedCustomerBean XX Called");
-    	if(selectedCustomerBean == null) {
-    		System.out.println(" XX DataBean^^setSelectedCustomerBean XX ERROR: Called with null CustomerBean arg");
-    	} else {
-    		this.selectedCustomerBean = selectedCustomerBean;
-    		System.out.println(" XX DataBean^^setSelectedCustomerBean XX Selected: " + this.selectedCustomerBean.getRowKey());
-    	}
-    }
+
 
     public List<CustomerBean> getSelectedCustomerBeans() {
         return selectedCustomerBeans;
@@ -139,7 +159,7 @@ public class DataBean implements Serializable {
     public void setSelectedCustomerBeans(List<CustomerBean> selectedCustomerBeans) {
         this.selectedCustomerBeans = selectedCustomerBeans;
     }
-    
+*/    
     public void onRowSelect(SelectEvent event) {
     	System.out.println(" XX DataBean^^onRowSelect XX Selected: " + ((CustomerBean) event.getObject()).getRowKey());
         FacesMessage msg = new FacesMessage("Customer Selected", ((CustomerBean) event.getObject()).getRowKey());
