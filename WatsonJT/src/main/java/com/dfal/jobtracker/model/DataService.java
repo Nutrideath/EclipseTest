@@ -126,6 +126,7 @@ public class DataService implements Serializable {
     
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //methods
+    //TODO: Do we need refresh methods? If so, need to add corresponding job methods
     
     public void refreshCustomerLists(){
     	//refresh both local lists - of customer names and customer beans - from the database

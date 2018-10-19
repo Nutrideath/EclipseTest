@@ -14,7 +14,11 @@
   </properties>
   
   <dependencies>
- 
+ 	<dependency>
+  		<groupId>com.microsoft.azure</groupId>
+  		<artifactId>azure-storage</artifactId>
+  		<version>6.1.0</version>
+	</dependency>
     <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
