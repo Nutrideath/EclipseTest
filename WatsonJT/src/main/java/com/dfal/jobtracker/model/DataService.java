@@ -48,11 +48,12 @@ public class DataService implements Serializable {
 	//for customers
 	private List<String> customerNames;
 	private List<CustomerBean> customerBeans;	
+	private int customerCount;		//tracks how many
 	
 	//for jobs
 	private List<String> jobNames;
 	private List<JobBean> jobBeans;	    
-    
+    private int jobCount;			//tracks how many
     
     
     
@@ -80,9 +81,11 @@ public class DataService implements Serializable {
         TableQuery<CustomerBean> customerQuery = TableQuery.from(CustomerBean.class);           
         
         // Loop through the results, loading data into array
+        customerCount = 0; //counter
         for (CustomerBean entity : dataManager.customerTable.execute(customerQuery)) {
         	customerBeans.add(entity);
-        	customerNames.add(entity.getRowKey()); //rowKey represents customer name                
+        	customerNames.add(entity.getRowKey()); //rowKey represents customer name 
+        	customerCount++;	//increment counter
         }
     	        
         Collections.sort(customerNames);		//sort the names
@@ -98,9 +101,11 @@ public class DataService implements Serializable {
         TableQuery<JobBean> jobQuery = TableQuery.from(JobBean.class);  
 
         // Loop through the results, loading data into array
+        jobCount = 0; //counter
         for (JobBean entity : dataManager.jobTable.execute(jobQuery)) {
         	jobBeans.add(entity);
-        	jobNames.add(entity.getJobName()); //jobName represents short identification of job               
+        	jobNames.add(entity.getJobName()); //jobName represents short identification of job  
+        	jobCount++;		//increment counter
         }        
 
         Collections.sort(jobNames);		//sort the names
@@ -126,13 +131,11 @@ public class DataService implements Serializable {
     
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //methods
-    //TODO: Do we need refresh methods? If so, need to add corresponding job methods
+    //TODO: need to add corresponding refresh job methods
     
     public void refreshCustomerLists(){
     	//refresh both local lists - of customer names and customer beans - from the database
     	System.out.println(" XX DataService^^refreshCustomerLists() XX call received");
-    	
-    	int cnt = 0; //counter
     	
     	//blank out the lists, so don't create duplicates.  gc will clean up memory
     	customerNames = new ArrayList<String>(); 
@@ -142,19 +145,49 @@ public class DataService implements Serializable {
         TableQuery<CustomerBean> query = TableQuery.from(CustomerBean.class);           
         
         // Loop through the results, loading customer names and objects into arrays
+        customerCount = 0; //counter
         for (CustomerBean entity : dataManager.customerTable.execute(query)) { 
         	customerBeans.add(entity);
         	customerNames.add(entity.getRowKey()); //rowKey represents customer name  
-        	cnt++;	//increment counter
+        	customerCount++;	//increment counter
         }
     	        
         Collections.sort(customerNames);		//sort the names
         customerNames.add(0, " ");        		//make first one blank (so nothing looks like default option)
         
-        System.out.println(" XX DataService^^refreshCustomerLists() XX both ArrayLists updated, " + Integer.toString(cnt) + " customers.");
+        System.out.println(" XX DataService^^refreshCustomerLists() XX both ArrayLists updated, " + Integer.toString(customerCount) + " customers.");
        
     }
     
+    public void refreshJobLists() {
+    	//refresh both local lists - of job names and job beans - from the database
+    	System.out.println(" XX DataService^^refreshJobLists() XX call received");
+    	
+    	//blank out the lists, so don't create duplicates.  gc will clean up memory
+    	jobNames = new ArrayList<String>(); 
+        jobBeans = new ArrayList<JobBean>(); 
+        
+    	// Specify a query of jobs (get all records in this case)
+        TableQuery<JobBean> jobQuery = TableQuery.from(JobBean.class);  
+
+        // Loop through the results, loading data into array
+        jobCount = 0; //counter
+        for (JobBean entity : dataManager.jobTable.execute(jobQuery)) {
+        	jobBeans.add(entity);
+        	jobNames.add(entity.getJobName()); //jobName represents short identification of job  
+        	jobCount++;		//increment counter
+        }        
+
+        Collections.sort(jobNames);		//sort the names
+        jobNames.add(0, " ");        	//make first one blank (so nothing looks like default option)
+
+        
+        System.out.println(" XX DataService^^refreshJobLists() XX both ArrayLists updated, " + Integer.toString(jobCount) + " jobs.");
+    	
+    }
+    
+    
+    /*  //removed 2018.10.23 - FW NOTE: if adding back in, make sure to update the customerCount
     public void refreshCustomerNames(){
     	//refresh local list of customer names from the database
     	System.out.println(" XX DataService^^refreshCustomerNames() XX call received");
@@ -202,4 +235,5 @@ public class DataService implements Serializable {
         //TODO: These beans are not sorted in the array!!
         //return customerBeans;
     }
+    */
 }
