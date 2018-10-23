@@ -34,7 +34,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Forrest Waggoner/.m2/repository/com/microsoft/azure/azure-storage/6.1.0/azure-storage-6.1.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Forrest Waggoner/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.9.4/jackson-core-2.9.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
