@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.event.SelectEvent;
@@ -28,7 +28,7 @@ import com.dfal.jobtracker.model.DataService;
 //import com.microsoft.azure.storage.table.TableServiceEntity;
 
 @ManagedBean(name="dataBean")
-@ViewScoped
+@SessionScoped
 @Getter @Setter @EqualsAndHashCode(callSuper=false) @ToString(callSuper=true, includeFieldNames=true)
 public class DataBean implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -52,7 +52,7 @@ public class DataBean implements Serializable {
    
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //to hold selections and filtered lists
-    
+   
 //customer data    
     @Setter(AccessLevel.NONE)	//special setter below to show debug output
     private CustomerBean selectedCustomerBean;

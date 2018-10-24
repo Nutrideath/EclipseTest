@@ -142,6 +142,7 @@ public class DataService implements Serializable {
     	customerBeans = new ArrayList<CustomerBean>();
     	
     	// Specify a query (get all records in this case)
+    	//TODO: Exclude inactive customers from query
         TableQuery<CustomerBean> query = TableQuery.from(CustomerBean.class);           
         
         // Loop through the results, loading customer names and objects into arrays
@@ -168,6 +169,7 @@ public class DataService implements Serializable {
         jobBeans = new ArrayList<JobBean>(); 
         
     	// Specify a query of jobs (get all records in this case)
+        //TODO: Exclude inactive status jobs from query
         TableQuery<JobBean> jobQuery = TableQuery.from(JobBean.class);  
 
         // Loop through the results, loading data into array

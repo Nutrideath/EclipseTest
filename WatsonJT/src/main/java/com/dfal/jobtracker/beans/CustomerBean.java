@@ -97,6 +97,9 @@ public class CustomerBean extends TableServiceEntity implements Serializable {
     @ManagedProperty(value="#{CustomerBean.companyInputLabel}")
     private String companyInputLabel;	//Value is displayed at company name input (rowKey property)
     
+    @ManagedProperty(value="#{CustomerBean.status}")
+    private String status;	//either Active or Inactive
+    
     //@ManagedProperty(value="#{dataManagerAzureService}")	//get the SessionScoped data manager already in memory (or instantiate it if it doesn't exist)
     //private DataManagerAzureService dataManager;
 
