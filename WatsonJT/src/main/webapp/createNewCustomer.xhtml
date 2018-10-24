@@ -137,6 +137,7 @@
                     	<f:actionListener binding="#{customerBean.setStatus('Active')}"/>
                     	<f:actionListener binding="#{customerBean.saveToCustomerTable()}"/>
                     	<f:actionListener binding="#{dataBean.dataService.refreshCustomerLists()}"/>
+                    	<f:actionListener binding="#{dataBean.refreshCustomerLists()}"/>
                     	<f:actionListener binding="#{dataBean.setSelectedCustomerBean(customerBean)}"/>
                     </p:commandButton>
                  
@@ -144,6 +145,7 @@
                     	<f:actionListener binding="#{customerBean.setStatus('Active')}"/>
                     	<f:actionListener binding="#{customerBean.saveToCustomerTable()}"/>
                     	<f:actionListener binding="#{dataBean.dataService.refreshCustomerLists()}"/>
+                    	<f:actionListener binding="#{dataBean.refreshCustomerLists()}"/>
                     	<f:actionListener binding="#{dataBean.setSelectedCustomerBean(customerBean)}"/>
                     </p:commandButton>
                   	<ui:remove>

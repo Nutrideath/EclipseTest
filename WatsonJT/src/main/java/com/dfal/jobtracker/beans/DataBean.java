@@ -109,7 +109,17 @@ public class DataBean implements Serializable {
     
     
     
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //methods
+    public void refreshCustomerLists() {
+    	customerNames = dataService.getCustomerNames();
+        customerBeans = dataService.getCustomerBeans(); 
+    }
     
+    public void refreshJobLists() {
+    	jobNames = dataService.getJobNames();
+        jobBeans = dataService.getJobBeans();
+    }
     
     
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -191,6 +201,7 @@ public class DataBean implements Serializable {
     public void setSelectedCustomerBeans(List<CustomerBean> selectedCustomerBeans) {
         this.selectedCustomerBeans = selectedCustomerBeans;
     }
+    
 */    
     public void onRowSelect(SelectEvent event) {
     	System.out.println(" XX DataBean^^onRowSelect XX Selected: " + ((CustomerBean) event.getObject()).getRowKey());
