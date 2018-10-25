@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="breadcrumb">
@@ -31,10 +32,12 @@
                         filteredValue="#{dataBean.filteredCustomerBeans}"
                         paginator="true" rows="10">
                         
-                        <f:ajax event="rowSelect" update="jobType jobLocationType confirmation" /> 
+                        <f:ajax event="rowSelect" update="jobType jobLocationType confirmation dataTableHeader" render="dataTableHeader"/> 
                         
                             <f:facet name="header">
-                                Select customer (Filter or Sort at Column Header)
+                            	<c:set var="noneSelected" value="Select Customer (Filter or Sort at Column Header)" />
+								<c:set var="haveSelected" value="Selected: #{dataBean.selectedCustomerBean.rowKey}" />
+                            	<h:outputText id="dataTableHeader" value="#{empty dataBean.selectedCustomerBean.rowKey ? noneSelected : haveSelected}" escape="false" />
                             </f:facet>
                             
                             <p:column headerText="Name" sortBy="#{customer.rowKey}" filterBy="#{customer.rowKey}">
