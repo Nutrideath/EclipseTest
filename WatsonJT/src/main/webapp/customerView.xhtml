@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="/WEB-INF/template.xhtml">
                 
 <ui:define name="head">
@@ -40,8 +41,6 @@
     <ui:define name="title">Customers</ui:define>
     
     <ui:define name="breadcrumb">
-        <li>Components</li>
-        <li>/</li>
         <li><p:link outcome="/customerView">Customers</p:link></li>
     </ui:define>
 
@@ -50,138 +49,39 @@
             <div class="ui-g">
                 <div class="ui-g-12">
                     <div class="card card-w-title">
-                        <h1>DataTable</h1>
-                        <p:dataTable var="customer" value="#{dataBean.customerBeans}" selectionMode="single" reflow="true" 
-                        selection="#{dataBean.selectedCustomerBean}" rowKey="#{customer.rowKey}" 
-                        paginator="true" rows="10">
+                        <h1>Customers</h1>
                         
-                            <f:facet name="header">
-                                Row Click Selection
-                            </f:facet>
-                            
-                            <p:column headerText="Name" sortBy="#{customer.rowKey}">
-                                <h:outputText value="#{customer.rowKey}" />
-                            </p:column>
-
-                            <p:column headerText="Contact" sortBy="#{customer.fullNameLastFirst}">
-                                <h:outputText value="#{customer.fullNameLastFirst}" />
-                            </p:column>
-
-                            <p:column headerText="Type" sortBy="#{customer.customerType}">
-                                <h:outputText value="#{customer.customerType}" />
-                            </p:column>
-                            
-                        </p:dataTable>
-                  <br/><br/>
-                  
-                  <p:dataTable var="customer" value="#{dataBean.customerBeans}" selectionMode="single" reflow="true" 
+                   <p:dataTable var="customer" value="#{dataBean.customerBeans}" selectionMode="single" reflow="true" 
                         selection="#{dataBean.selectedCustomerBean}" rowKey="#{customer.rowKey}" 
                         filteredValue="#{dataBean.filteredCustomerBeans}"
                         paginator="true" rows="10">
                         
+                        <f:ajax event="rowSelect" update="jobType jobLocationType confirmation dataTableHeader" render="dataTableHeader"/> 
+                        
                             <f:facet name="header">
-                                Row Click Selection with column filters
+                            	<c:set var="noneSelected" value="Select Customer (Filter or Sort at Column Header)" />
+								<c:set var="haveSelected" value="Selected: #{dataBean.selectedCustomerBean.rowKey}" />
+                            	<h:outputText id="dataTableHeader" value="#{empty dataBean.selectedCustomerBean.rowKey ? noneSelected : haveSelected}" escape="false" />
                             </f:facet>
                             
                             <p:column headerText="Name" sortBy="#{customer.rowKey}" filterBy="#{customer.rowKey}">
                                 <h:outputText value="#{customer.rowKey}" />
                             </p:column>
 
-                            <p:column headerText="Contact" sortBy="#{customer.fullNameLastFirst}">
+                            <p:column headerText="Contact" sortBy="#{customer.fullNameLastFirst}" filterBy="#{customer.fullNameLastFirst}">
                                 <h:outputText value="#{customer.fullNameLastFirst}" />
                             </p:column>
 
-                            <p:column headerText="Type" sortBy="#{customer.customerType}">
+                            <p:column headerText="Type" sortBy="#{customer.customerType}" filterBy="#{customer.customerType}">
                                 <h:outputText value="#{customer.customerType}" />
                             </p:column>
                             
-                  </p:dataTable>
+                  </p:dataTable>  
+                        
+
                   <br/><br/>
                   
-                        <p:dataTable var="customer" value="#{dataBean.customerBeans}" editable="true" reflow="true" 
-                         paginator="true" rows="10">
-                            <f:facet name="header">
-                                InCell Editing
-                            </f:facet>
-                            
-                            <p:column headerText="Name" sortBy="#{customer.rowKey}">
-                                <h:outputText value="#{customer.rowKey}" />
-                            </p:column>
 
-                            <p:column headerText="Contact" sortBy="#{customer.fullNameLastFirst}">
-                                <h:outputText value="#{customer.fullNameLastFirst}" />
-                            </p:column>
-
-                            <p:column headerText="Type" sortBy="#{customer.customerType}">
-                            	<p:cellEditor>
-                            		<f:facet name="output">
-                                		<h:outputText value="#{customer.customerType}" />
-                                	</f:facet>
-                                	<f:facet name="input">
-                                		<h:inputText value="#{customer.customerType}" />
-                                	</f:facet>
-                                </p:cellEditor>
-                            </p:column>
-                            
-                            <p:column>
-                            	<p:rowEditor />
-                            </p:column>
-                            
-                        </p:dataTable>
-                    </div>
-                </div>
-                <br/><br/>
-                
-                <div class="ui-g-12">
-                    <!-- Left Side -->
-                    <div class="card card-w-title">
-                        <h1>DataGrid</h1>
-                        <p:dataGrid var="car" value="#{dataGridView.cars}" columns="3" layout="grid"
-                                    rows="6" paginator="true" id="cars"
-                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                    rowsPerPageTemplate="3,6,9,12,16">
-
-                            <f:facet name="header">
-                                Cars For Sale
-                            </f:facet>
-
-                            <p:panel header="#{car.brand}" style="text-align:center">
-                                <h:panelGrid columns="1" style="width:100%">
-                                    <h:outputText value="#{car.color}" styleClass="Fs14 FontDosisMedium"/>
-
-                                    <h:outputText value="#{car.year}" />
-
-                                    <p:commandButton icon="ui-icon-search" styleClass="AquaButton" update=":form:selectedCarDetail" oncomplete="PF('carDialog').show()">
-                                        <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
-                                    </p:commandButton>
-                                </h:panelGrid>
-                            </p:panel>
-
-                        </p:dataGrid>
-
-                        <p:dialog header="Car Info" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
-                            <p:outputPanel id="selectedCarDetail" style="text-align:center;">
-                                <p:panelGrid  columns="2" rendered="#{not empty dataGridView.selectedCar}" columnClasses="label,value">
-                                    <f:facet name="header">
-                                        <p:graphicImage name="demo/images/car/#{dataGridView.selectedCar.brand}-big.gif"/> 
-                                    </f:facet>
-
-                                    <h:outputText value="Id:" />
-                                    <h:outputText value="#{dataGridView.selectedCar.id}" />
-
-                                    <h:outputText value="Year" />
-                                    <h:outputText value="#{dataGridView.selectedCar.year}" />
-
-                                    <h:outputText value="Color:" />
-                                    <h:outputText value="#{dataGridView.selectedCar.color}" style="color:#{dataGridView.selectedCar.color}"/>
-
-                                    <h:outputText value="Price" />
-                                    <h:outputText value="\$#{dataGridView.selectedCar.price}" />
-                                </p:panelGrid>
-                            </p:outputPanel>
-                        </p:dialog>
-                    </div>
-                </div>
                 
                 <div class="ui-g-12 ui-xl-8">
                     <div class="card card-w-title">
@@ -203,156 +103,16 @@
                     </div>
                 </div>
                                         
-                <div class="ui-g-12">
-                    <div class="card card-w-title">
-                        <h1>TreeTable</h1>
-                        <p:treeTable value="#{treeSelectionView.root3}" var="document" selectionMode="checkbox" selection="#{treeSelectionView.selectedNodes1}">
-                            <p:column headerText="Name" sortBy="#{document.name}">
-                                <h:outputText value="#{document.name}" />
-                            </p:column>
-                            <p:column headerText="Size">
-                                <h:outputText value="#{document.size}" />
-                            </p:column>
-                            <p:column headerText="Type">
-                                <h:outputText value="#{document.type}" />
-                            </p:column>
-                        </p:treeTable>
-                    </div>
-                </div>
-                
-                <div class="ui-g-12">
-                    <div class="card card-w-title">
-                        <h1>DataList - Paginator</h1>
-                        <p:dataList value="#{dataListView.cars3}" var="car" 
-                            type="unordered" itemType="none" paginator="true" rows="7" styleClass="cars-datalist">
-                            <f:facet name="header">
-                                Cars For Sale
-                            </f:facet>
-                            <div style="border-bottom: 1px solid #bdbdbd" class="clearfix car-item">
-                                <i class="ui-icon ui-icon-directions-car" style="font-size:48px;color:#757575;margin:24px;"></i>
-                                <div class="car-details">
-                                    <p>#{car.brand}</p>
-                                    <p style="color:#757575">#{car.year} - #{car.color}</p>
-                                </div>
-                                <p:commandButton update=":form:carDetail" oncomplete="PF('carDialog2').show()" title="View Detail" icon="ui-icon-search" style="margin:24px 24px 0 0">
-                                    <f:setPropertyActionListener value="#{car}" target="#{dataListView.selectedCar}" />
-                                </p:commandButton>
-                            </div>
-                        </p:dataList>
+ 
 
-                        <p:dialog header="Car Info" widgetVar="carDialog2" responsive="true" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
-                            <p:outputPanel id="carDetail" style="text-align:center;">
-                                <p:panelGrid  columns="2" rendered="#{not empty dataListView.selectedCar}" columnClasses="label,value">
-                                    <f:facet name="header">
-                                        <p:graphicImage name="demo/images/car/#{dataListView.selectedCar.brand}-big.gif"/> 
-                                    </f:facet>
 
-                                    <h:outputText value="Id:" />
-                                    <h:outputText value="#{dataListView.selectedCar.id}" />
-
-                                    <h:outputText value="Year" />
-                                    <h:outputText value="#{dataListView.selectedCar.year}" />
-
-                                    <h:outputText value="Color:" />
-                                    <h:outputText value="#{dataListView.selectedCar.color}" style="color:#{dataListView.selectedCar.color}"/>
-
-                                    <h:outputText value="Price" />
-                                    <h:outputText value="\$#{dataListView.selectedCar.price}" />
-                                </p:panelGrid>
-                            </p:outputPanel>
-                        </p:dialog>
-                    </div>
-                </div>
-                    
-                <div class="ui-g-12">
-                    <div class="card card-w-title">
-                        <h1>Carousel</h1>
-                        <p:carousel value="#{carouselView.cars}" headerText="Carousel" var="car" itemStyleClass="carItem" 
-                            itemStyle="text-align:center" responsive="true">
-                            <p:panelGrid columns="2" style="width:100%" styleClass="ui-panelgrid-blank ui-car-display">
-                                <h:outputText value="Id:" />
-                                <h:outputText value="#{car.id}" />
-
-                                <h:outputText value="Year" />
-                                <h:outputText value="#{car.year}" />
-
-                                <h:outputText value="Color:" />
-                                <h:outputText value="#{car.color}"/>
-
-                                <h:outputText value="Price" />
-                                <h:outputText value="\$#{car.price}" />
-                            </p:panelGrid>
-
-                            <f:facet name="footer">
-                                Carousel Footer
-                            </f:facet>
-                        </p:carousel>
-                    </div>
-                </div>
-                    
-                <div class="ui-g-12">
-                    <div class="card card-w-title">
-                        <h1>Tree Single</h1>
-                        <p:tree value="#{treeSelectionView.root1}" var="doc"
-                                selectionMode="single">
-                            <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
-                                <h:outputText value="#{doc.name}"/>
-                            </p:treeNode>
-                            <p:treeNode type="document" icon="ui-icon-content-paste">
-                                <h:outputText value="#{doc.name}" />
-                            </p:treeNode>
-                            <p:treeNode type="picture" icon="ui-icon-image">
-                                <h:outputText value="#{doc.name}" />
-                            </p:treeNode>
-                            <p:treeNode type="movie" icon="ui-icon-movie">
-                                <h:outputText value="#{doc.name}" />
-                            </p:treeNode>
-                        </p:tree>
-                    </div>
-                    
-                    <div class="card card-w-title">
-                        <h1>Tree Checkbox</h1>
-                        <p:tree value="#{treeSelectionView.root2}" var="doc"
-                                selectionMode="checkbox">
-                            <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
-                                <h:outputText value="#{doc.name}"/>
-                            </p:treeNode>
-                            <p:treeNode type="document" icon="ui-icon-content-paste">
-                                <h:outputText value="#{doc.name}" />
-                            </p:treeNode>
-                            <p:treeNode type="picture" icon="ui-icon-image">
-                                <h:outputText value="#{doc.name}" />
-                            </p:treeNode>
-                            <p:treeNode type="movie" icon="ui-icon-movie">
-                                <h:outputText value="#{doc.name}" />
-                            </p:treeNode>
-                        </p:tree>
-                    </div>
-                </div>
-                <div class="ui-g-12">
-                    <div class="card card-w-title">
-                        <h1>Horizontal Tree</h1>
-                        <p:tree value="#{treeSelectionView.root1}" var="doc" orientation="horizontal">
-                            <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
-                                <h:outputText value="#{doc.name}"/>
-                            </p:treeNode>
-                            <p:treeNode type="document" icon="ui-icon-document">
-                                <h:outputText value="#{doc.name}" />
-                            </p:treeNode>
-                            <p:treeNode type="picture" icon="ui-icon-image">
-                                <h:outputText value="#{doc.name}" />
-                            </p:treeNode>
-                            <p:treeNode type="movie" icon="ui-icon-video">
-                                <h:outputText value="#{doc.name}" />
-                            </p:treeNode>
-                        </p:tree>
-                    </div>
                     <div class="card card-w-title">
                         <h1>Schedule</h1>
                         <p:schedule id="schedule" value="#{scheduleView.eventModel}"/>
                     </div>
                 </div>
             </div>
+           </div>
         </h:form>
         
     </ui:define>
