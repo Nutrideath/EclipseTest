@@ -110,8 +110,8 @@ public class JobProgressChartView implements Serializable {
         
         //populate data
         for (JobBean entity : dataBean.getJobBeans()) {
-        	jobs.set(entity.getRowKey(), 80);
-
+        	jobs.set(entity.getRowKey(), Integer.parseInt(entity.getJobProgress()));
+        	
         }
 
         horizontalBarModel.addSeries(jobs);

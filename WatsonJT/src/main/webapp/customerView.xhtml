@@ -41,6 +41,8 @@
     <ui:define name="title">Customers</ui:define>
     
     <ui:define name="breadcrumb">
+    	<li><p:link outcome="/dashboard">Dashboard</p:link></li>
+        <li>/</li>
         <li><p:link outcome="/customerView">Customers</p:link></li>
     </ui:define>
 
@@ -49,7 +51,7 @@
             <div class="ui-g">
                 <div class="ui-g-12">
                     <div class="card card-w-title">
-                        <h1>Customers</h1>
+                        <h1>Manage Customers</h1>
                         
                    <p:dataTable var="customer" value="#{dataBean.customerBeans}" selectionMode="single" reflow="true" 
                         selection="#{dataBean.selectedCustomerBean}" rowKey="#{customer.rowKey}" 

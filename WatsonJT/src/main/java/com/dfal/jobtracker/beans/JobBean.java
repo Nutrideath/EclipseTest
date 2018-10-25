@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 //import java.util.UUID;
+import java.util.Random;
 
 
 import com.dfal.jobtracker.model.*;
@@ -35,6 +36,9 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	
 	@ManagedProperty(value="#{JobBean.jobStatus}")
 	private String jobStatus;		//tracks the job's lifecycle
+	
+	@ManagedProperty(value="#{JobBean.jobProgress}")
+	private String jobProgress;		//like jobStatus, but is a percentage of completion
 	
 	@ManagedProperty(value="#{JobBean.jobName}")
 	private String jobName;			//short designation of job
@@ -299,8 +303,8 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	
 	
 
-
-	//special setter
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//special getters and setters
 	public void setJobAddr_State(String jobAddr_State) {	//Make sure to capitalize. But can't capitalize null, so check for it
 		if(jobAddr_State == null) {
 			this.jobAddr_State = jobAddr_State;
@@ -309,7 +313,22 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		}
 	}
 
+    public void setJobProgressRandom() {
+ 		//this.jobProgress = percentage;	//disabled for debug, see below
+ 		
+ 		//for debug purposes, set to a random number between 10 and 100
+    	
 
+    	Random rand = new Random();
+    	
+    	//100 is the maximum and the 10 is our minimum
+    	int  n = rand.nextInt(100) + 10;
+    	
+    	
+    	this.jobProgress = Integer.toString(n);
+    	//return Integer.toString(n);
+    	
+     }
 	
 
 

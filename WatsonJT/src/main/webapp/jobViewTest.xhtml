@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="/WEB-INF/template.xhtml">
                 
 <ui:define name="head">
@@ -40,9 +41,9 @@
     <ui:define name="title">Jobs</ui:define>
     
     <ui:define name="breadcrumb">
-        <li>Components</li>
+        <li><p:link outcome="/dashboard">Dashboard</p:link></li>
         <li>/</li>
-        <li><p:link outcome="/customerView">Customers</p:link></li>
+        <li><p:link outcome="/jobViewTest">Manage Jobs</p:link></li>
     </ui:define>
 
     <ui:define name="content">
@@ -50,7 +51,7 @@
             <div class="ui-g">
                 <div class="ui-g-12">
                     <div class="card card-w-title">
-                        <h1>DataTable</h1>
+                        <h1>Manage Jobs</h1>
                         
                   
                   <p:dataTable var="job" value="#{dataBean.jobBeans}" selectionMode="single" reflow="true" 
@@ -58,8 +59,12 @@
                         filteredValue="#{dataBean.filteredJobBeans}"
                         paginator="true" rows="10">
                         
+                         <f:ajax event="rowSelect" update="dataTableHeader" render="dataTableHeader"/> 
+                        
                             <f:facet name="header">
-                                Row Click Selection with column filters
+                            	<c:set var="noneSelected" value="Select Job (Filter or Sort at Column Header)" />
+								<c:set var="haveSelected" value="Selected: #{dataBean.selectedJobBean.jobName}" />
+                            	<h:outputText id="dataTableHeader" value="#{empty dataBean.selectedJobBean.rowKey ? noneSelected : haveSelected}" escape="false" />
                             </f:facet>
                             
                             <p:column headerText="Job Name" sortBy="#{job.jobName}" filterBy="#{job.jobName}">
@@ -74,7 +79,12 @@
                             
                   </p:dataTable>
                   <br/><br/>
-                  
+                  <p:commandButton value="Update Job Progress to Random Percentage" validateClient="true" ajax="true" style="width:auto" >
+                  	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgressRandom()}"/>
+               
+                	<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>
+                    
+                </p:commandButton>
   
                     </div>
                 </div>
