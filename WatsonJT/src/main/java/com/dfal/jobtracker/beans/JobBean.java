@@ -97,6 +97,9 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	@ManagedProperty(value="#{JobBean.targetDate}")
 	private Date targetDate;		//default target date should initially default to 3 weeks from call-in date
 	
+	@ManagedProperty(value="#{JobBean.targetDateEnd}")
+	private Date targetDateEnd;		//used during scheduling to show installation appt has length
+	
 	@ManagedProperty(value="#{JobBean.rushJobFlag}")
 	private boolean rushJobFlag = false; 
 	
@@ -156,7 +159,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
     public void init(){
 		//this.jobStatus = "New";
 		
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance();	//cal will be used to calculate target date info
 		
 		this.callInDate = new Date();	//set default to today's date
 		this.rushJobFlag = false;
@@ -173,8 +176,20 @@ public class JobBean extends TableServiceEntity implements Serializable {
 			dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 		}
 		
+		
+		
+		//set time to default of 7 am
+		cal.set(Calendar.HOUR_OF_DAY,7);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MILLISECOND,0);
+				
 		this.targetDate = cal.getTime();
 		
+		//for display in a schedule (looks like a calendar) we need to track the end of the installation appt
+		//add an arbitrary hour. User will set actual appt length during scheduling 
+		//cal.set(Calendar.HOUR_OF_DAY,8);
+		//this.targetDateEnd = cal.getTime();
 	
 		System.out.println(" XX JobBean.init() XX  Call to init()");
     }

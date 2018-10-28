@@ -131,7 +131,7 @@ public class DataService implements Serializable {
     
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //methods
-    //TODO: need to add corresponding refresh job methods
+   
     
     public void refreshCustomerLists(){
     	//refresh both local lists - of customer names and customer beans - from the database

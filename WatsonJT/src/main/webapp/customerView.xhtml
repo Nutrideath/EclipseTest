@@ -38,7 +38,7 @@
     </style>
 </ui:define>
                 
-    <ui:define name="title">Customers</ui:define>
+    <ui:define name="title">Manage Customers</ui:define>
     
     <ui:define name="breadcrumb">
     	<li><p:link outcome="/dashboard">Dashboard</p:link></li>
@@ -85,33 +85,12 @@
                   
 
                 
-                <div class="ui-g-12 ui-xl-8">
-                    <div class="card card-w-title">
-                        <h1>PickList</h1>
-                        <p:pickList id="pickList" value="#{pickListView.cities}" var="cities" itemLabel="#{cities}" itemValue="#{cities}"
-                                    showSourceControls="true" showTargetControls="true" showSourceFilter="true" showTargetFilter="true" responsive="true">
-                            <f:facet name="sourceCaption">From</f:facet>
-                            <f:facet name="targetCaption">To</f:facet>
-                        </p:pickList>
-                    </div>
-                </div>
-                
-                <div class="ui-g-12 ui-xl-4">
-                    <div class="card card-w-title">
-                        <h1>OrderList</h1>
-                        <p:orderList value="#{orderListView.cities}" var="city" controlsLocation="left" itemLabel="#{city}" itemValue="#{city}" responsive="true">
-                            <f:facet name="caption">Cities List</f:facet>
-                        </p:orderList>
-                    </div>
-                </div>
+             
                                         
  
 
 
-                    <div class="card card-w-title">
-                        <h1>Schedule</h1>
-                        <p:schedule id="schedule" value="#{scheduleView.eventModel}"/>
-                    </div>
+                   
                 </div>
             </div>
            </div>
