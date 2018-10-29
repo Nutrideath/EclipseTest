@@ -37,6 +37,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	@ManagedProperty(value="#{JobBean.jobStatus}")
 	private String jobStatus;		//tracks the job's lifecycle
 	
+	@Getter(AccessLevel.NONE)	//special getter below
 	@ManagedProperty(value="#{JobBean.jobProgress}")
 	private String jobProgress;		//like jobStatus, but is a percentage of completion
 	
@@ -161,7 +162,10 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		
 		Calendar cal = Calendar.getInstance();	//cal will be used to calculate target date info
 		
-		this.callInDate = new Date();	//set default to today's date
+		//this.callInDate = new Date();	//set default to today's date
+		this.callInDate = cal.getTime();//use cal to avoid differences in EDT and EST
+		
+		//set default for rushJobFlag
 		this.rushJobFlag = false;
 		//this.rushJobFlag = true;
 		
@@ -178,16 +182,20 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		
 		
 		
-		//set time to default of 7 am
-		cal.set(Calendar.HOUR_OF_DAY,7);
-		cal.set(Calendar.MINUTE,0);
+		//set time to default of 6:30 am
+		cal.set(Calendar.HOUR_OF_DAY,6);
+		cal.set(Calendar.MINUTE,30);
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MILLISECOND,0);
 				
 		this.targetDate = cal.getTime();
 		
+		System.out.println(" XX JobBean.init() XX targetDate set to: " + targetDate);  // dow mon dd hh:mm:ss zzz yyyy
+		
 		//for display in a schedule (looks like a calendar) we need to track the end of the installation appt
 		//add an arbitrary hour. User will set actual appt length during scheduling 
+		//  NOTE: This targetDateEnd field will be created with the arbitrary hour the first time the schedule is displayed.
+		//		No need to set it here.
 		//cal.set(Calendar.HOUR_OF_DAY,8);
 		//this.targetDateEnd = cal.getTime();
 	
@@ -205,6 +213,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
     	System.out.println(" XX JobBean XX Call to .saveToJobTable()");
     	
     	//TODO: Check for existing to avoid duplicates or overwriting another row of data
+    	//TODO: Possibly make separate save function for initial save
     	
     	//set contact name values
     	this.jobContactFullName = this.jobContactFirstName + " " + this.jobContactLastName;
@@ -306,18 +315,31 @@ public class JobBean extends TableServiceEntity implements Serializable {
         } 
     }
 	
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//special date functions
 	public String convertSimpleDate(Date dateToConvert) {
 		//takes java Date and returns simple version
 		
     	//set up format of date
-    	String pattern = "yyyy-MM-dd";
+    	//String pattern = "yyyy-MM-dd";
+    	String pattern = "MM/dd/yyyy hh:mm a";
     	SimpleDateFormat ymdDateFormat = new SimpleDateFormat(pattern);
     	return ymdDateFormat.format(dateToConvert); 
 	}
 
+	public String getSimpleCallInDate() {
+		return convertSimpleDate(callInDate);
+	}
 	
-	
+	public String getSimpleTargetDate() {
+		return convertSimpleDate(targetDate);
+	}
 
+	public String getSimpleTargetDateEnd() {
+		return convertSimpleDate(targetDateEnd);
+	}	
+	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//special getters and setters
 	public void setJobAddr_State(String jobAddr_State) {	//Make sure to capitalize. But can't capitalize null, so check for it
@@ -328,7 +350,17 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		}
 	}
 
+	public String getJobProgress() {
+		//don't allow null return value.  Send 5% if null
+		if(jobProgress == null) {
+			return "5";
+		} else {
+			return jobProgress;
+		}
+	}
+	
     public void setJobProgressRandom() {
+    	System.out.println(" XX JobBean^^setJobProgressRandom XX Call to setJobProgressRandom" );
  		//this.jobProgress = percentage;	//disabled for debug, see below
  		
  		//for debug purposes, set to a random number between 10 and 100
@@ -342,7 +374,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
     	
     	this.jobProgress = Integer.toString(n);
     	//return Integer.toString(n);
-    	
+    	System.out.println(" XX JobBean^^setJobProgressRandom XX Created random value for jobProgress: " + this.jobProgress ); 
      }
 	
 

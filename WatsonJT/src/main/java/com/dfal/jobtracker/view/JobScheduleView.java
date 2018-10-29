@@ -55,6 +55,7 @@ public class JobScheduleView implements Serializable {
 
     @PostConstruct
 	public void init() {
+    	dataService.refreshJobLists();	//make sure we have latest list    	
     	jobBeans = dataService.getJobBeans();
     	Calendar cal = Calendar.getInstance();	//cal will be used to calculate target date info
     	
@@ -234,21 +235,21 @@ public class JobScheduleView implements Serializable {
 	}
 	
 	public void onEventMove(ScheduleEntryMoveEvent event) {
-		//move, so change start date and time, plus end date and time
+		//this is a move, so change start date and time, plus end date and time (move both times equally)
 		Calendar cal = Calendar.getInstance();
-		JobBean movedJob = (JobBean) event.getScheduleEvent().getData();	//get the jobBean
+		JobBean movedJob = (JobBean) event.getScheduleEvent().getData();	//get the jobBean from the event
 		
 		//change targetDate
-		cal.setTime(movedJob.getTargetDate());	//get the targetDate
+		cal.setTime(movedJob.getTargetDate());		//get the targetDate
 		cal.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
 		cal.add(Calendar.MINUTE, event.getMinuteDelta()); 			//change by minute delta
-		movedJob.setTargetDate(cal.getTime());	//set targetDate to new value
+		movedJob.setTargetDate(cal.getTime());		//set targetDate to new value
 		
 		//change targetDateEnd by same amounts, since entire job was moved
-		cal.setTime(movedJob.getTargetDateEnd());	//get the targetDateEnd
+		cal.setTime(movedJob.getTargetDateEnd());		//get the targetDateEnd
 		cal.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
 		cal.add(Calendar.MINUTE, event.getMinuteDelta()); 			//change by minute delta
-		movedJob.setTargetDateEnd(cal.getTime());	//set targetDateEnd to new value
+		movedJob.setTargetDateEnd(cal.getTime());		//set targetDateEnd to new value
 		
 		//save the jobBean with new values
 		movedJob.saveToJobTable();
@@ -258,15 +259,15 @@ public class JobScheduleView implements Serializable {
 	}
 	
 	public void onEventResize(ScheduleEntryResizeEvent event) {
-		//resize, so only change TargetDateEnd  (?)
+		//this is a resize, so only change TargetDateEnd  (Does that logic work?)
 		Calendar cal = Calendar.getInstance();
-		JobBean resizedJob = (JobBean) event.getScheduleEvent().getData();	//get the jobBean
+		JobBean resizedJob = (JobBean) event.getScheduleEvent().getData();	//get the jobBean from the event
 		
 		//change targetDateEnd 
-		cal.setTime(resizedJob.getTargetDateEnd());	//get the targetDateEnd
+		cal.setTime(resizedJob.getTargetDateEnd());		//get the targetDateEnd
 		cal.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
 		cal.add(Calendar.MINUTE, event.getMinuteDelta()); 			//change by minute delta
-		resizedJob.setTargetDateEnd(cal.getTime());	//set targetDateEnd to new value
+		resizedJob.setTargetDateEnd(cal.getTime());		//set targetDateEnd to new value
 				
 		//save the jobBean with new values
 		resizedJob.saveToJobTable();

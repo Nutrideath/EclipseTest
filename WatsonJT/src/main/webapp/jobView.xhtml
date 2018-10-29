@@ -55,7 +55,7 @@
                         <h1>Manage Jobs</h1>
                         
                   
-                  <p:dataTable var="job" value="#{dataBean.jobBeans}" selectionMode="single" reflow="true" 
+                  <p:dataTable id="jobTable" var="job" value="#{dataBean.jobBeans}" selectionMode="single" reflow="true" 
                         selection="#{dataBean.selectedJobBean}" rowKey="#{job.jobName}" 
                         filteredValue="#{dataBean.filteredJobBeans}"
                         paginator="true" rows="10">
@@ -80,54 +80,19 @@
                             
                   </p:dataTable>
                   <br/><br/>
-                 <p:commandButton value="Update Job Progress to Random Percentage" validateClient="true" ajax="true" style="width:auto" >
-                  	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgressRandom()}"/>
-               
-                	<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>
-                    
-                </p:commandButton>
-  
+                  
+                 	<p:commandButton value="Update Job Progress to Random Percentage" validateClient="true" ajax="true" style="width:auto" >
+                  		<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgressRandom()}"/>             
+                		<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>                    
+                	</p:commandButton>
+
+					<p:commandButton value="Refresh list" style="width:auto" icon="ui-icon-refresh" actionListener="#{dataBean.dataService.refreshJobLists()}" update="jobTable" />
+					<p:commandButton value="Manage Target Date Schedules" style="width:auto" icon="ui-icon-event" action="jobScheduleView" ajax="false"/>
+					 
                     </div>
                 </div>
-                <br/><br/>
                 
-
-
-                <div class="ui-g-12">
-                   
-                    <div class="card card-w-title">
-                        <h1>Job Target Date Schedule</h1>
-                        <h:panelGrid columnClasses="value">
-                        <p:schedule id="schedule" value="#{jobScheduleView.eventModel}" widgetVar="myschedule" timeZone="GMT-5">
- 
-            				<p:ajax event="dateSelect" listener="#{jobScheduleView.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
-            				<p:ajax event="eventSelect" listener="#{jobScheduleView.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
-            				<p:ajax event="eventMove" listener="#{jobScheduleView.onEventMove}" update="messages" />
-            				<p:ajax event="eventResize" listener="#{jobScheduleView.onEventResize}" update="messages" />
- 
-        				</p:schedule>
-                        
-                        <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
-        					<h:panelGrid id="eventDetails" columns="2">
-            					<p:outputLabel for="title" value="Titles:" />
-            					<p:inputText id="title" value="#{jobScheduleView.event.title}" required="true" />
- 
-            					<p:outputLabel for="from" value="From:" />
-            					<p:calendar id="from" value="#{jobScheduleView.event.startDate}" timeZone="GMT-5" pattern="MM/dd/yyyy hh:mm" stepMinute="15"/>
- 
-            					<p:outputLabel for="to" value="To:" />
-            					<p:calendar id="to" value="#{jobScheduleView.event.endDate}" timeZone="GMT-5" pattern="MM/dd/yyyy hh:mm" stepMinute="15"/>
- 
-            					<p:outputLabel for="allDay" value="All Day:" />
-            					<h:selectBooleanCheckbox id="allDay" value="#{jobScheduleView.event.allDay}" />
- 
-            					<p:commandButton type="reset" value="Reset" />
-            					<p:commandButton id="addButton" value="Save" actionListener="#{jobScheduleView.addEvent}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
-        					</h:panelGrid>
-    					</p:dialog>    
-                        </h:panelGrid>
-                    </div>
-                </div>
+  
             </div>
         </h:form>
         
