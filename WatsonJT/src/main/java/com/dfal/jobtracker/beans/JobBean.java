@@ -207,10 +207,39 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	
 
 	//function stuff	
-
 	public void saveToJobTable() {
     	System.out.println(" XX JobBean XX");
     	System.out.println(" XX JobBean XX Call to .saveToJobTable()");
+      	//create DataManager object
+    	DataManagerAzure dataManager = new DataManagerAzure();	//dataManager object to connect to Azure table storage
+    	//System.out.println(" XX CustomerBean XX Created DataManagerAzure object");
+    	
+    	try{
+        	// Create an operation to add the new customer to the tablebasics table.
+        	TableOperation insertOrMergeThisJob = TableOperation.insertOrMerge(this);
+
+             // Submit the operation to the table service.
+             dataManager.jobTable.execute(insertOrMergeThisJob);
+             //return "empty";	//operation succeeded!!
+             System.out.println(" XX JobBean.saveToJobTable XX Job saved successfully.");
+        }
+    	
+    	 catch(TableServiceException e) {
+    		//return "error";	//operation failed!!
+    		System.out.println(" XX JobBean.saveToJobTable XX [[EXCEPTION]] " + e);
+         	
+    	 } catch(Throwable t) {
+        	//return "error";	//operation failed!!
+        	System.out.println(" XX JobBean.saveToJobTable XX [[THROWABLE ERROR]] " + t);
+       
+        } 
+    }
+	
+	public void initialSaveToJobTable() {
+    	System.out.println(" XX JobBean XX");
+    	System.out.println(" XX JobBean XX Call to .initialSaveToJobTable()");
+    	//called first time job is saved. Sets initial values before save
+    	
     	
     	//TODO: Check for existing to avoid duplicates or overwriting another row of data
     	//TODO: Possibly make separate save function for initial save
@@ -287,8 +316,8 @@ public class JobBean extends TableServiceEntity implements Serializable {
     	jobName = pKey3 + " - " + pKey4 + " " + pKey2;
     	
     	
-    	System.out.println(" XX JobBean XX partitionKey = " + partitionKey);
-    	System.out.println(" XX JobBean XX rowKey = " + rowKey);
+    	System.out.println(" XX JobBean.initialSaveToJobTable XX partitionKey = " + partitionKey);
+    	System.out.println(" XX JobBean.initialSaveToJobTable XX rowKey = " + rowKey);
    	
     	//create DataManager object
     	DataManagerAzure dataManager = new DataManagerAzure();	//dataManager object to connect to Azure table storage
@@ -301,16 +330,16 @@ public class JobBean extends TableServiceEntity implements Serializable {
              // Submit the operation to the table service.
              dataManager.jobTable.execute(insertOrMergeThisJob);
              //return "empty";	//operation succeeded!!
-             System.out.println(" XX JobBean XX Job saved successfully.");
+             System.out.println(" XX JobBean.initialSaveToJobTable XX Job saved successfully.");
         }
     	
     	 catch(TableServiceException e) {
     		//return "error";	//operation failed!!
-    		System.out.println(" XX JobBean XX [[EXCEPTION]] " + e);
+    		System.out.println(" XX JobBean.initialSaveToJobTable XX [[EXCEPTION]] " + e);
          	
     	 } catch(Throwable t) {
         	//return "error";	//operation failed!!
-        	System.out.println(" XX JobBean XX [[THROWABLE ERROR]] " + t);
+        	System.out.println(" XX JobBean.initialSaveToJobTable XX [[THROWABLE ERROR]] " + t);
        
         } 
     }

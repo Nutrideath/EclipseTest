@@ -300,7 +300,7 @@
                	   </p:panelGrid>
                 
                 <p:commandButton value="Create Job" validateClient="true" ajax="false" style="width:auto" action="dashboard">
-                	<f:actionListener binding="#{newJobWizard.jobBean.saveToJobTable()}"/>
+                	<f:actionListener binding="#{newJobWizard.jobBean.initialSaveToJobTable()}"/>
                     <f:actionListener binding="#{dataBean.dataService.refreshJobLists()}"/>
                 </p:commandButton>
                 </p:panel>
