@@ -41,8 +41,6 @@
     <ui:define name="title">Manage Jobs</ui:define>
     
     <ui:define name="breadcrumb">
-        <li><p:link outcome="/dashboard">Dashboard</p:link></li>
-        <li>/</li>
         <li><p:link outcome="/jobView">Manage Jobs</p:link></li>
     </ui:define>
 
@@ -58,7 +56,7 @@
                   <p:dataTable id="jobTable" var="job" value="#{dataBean.jobBeans}" selectionMode="single" reflow="true" 
                         selection="#{dataBean.selectedJobBean}" rowKey="#{job.jobName}" 
                         filteredValue="#{dataBean.filteredJobBeans}"
-                        paginator="true" rows="10">
+                        paginator="true" rows="10" sortBy="#{job.getSimpleTargetDate()}">
                         
                          <f:ajax event="rowSelect" update="dataTableHeader" render="dataTableHeader"/> 
                         
@@ -67,6 +65,10 @@
 								<c:set var="haveSelected" value="Selected: #{dataBean.selectedJobBean.jobName}" />
                             	<h:outputText id="dataTableHeader" value="#{empty dataBean.selectedJobBean.rowKey ? noneSelected : haveSelected}" escape="false" />
                             </f:facet>
+
+                            <p:column headerText="Target Date" sortBy="#{job.getSimpleTargetDate()}" filterBy="#{job.getSimpleTargetDate()}">
+                                <h:outputText value="#{job.getSimpleTargetDate()}" />
+                            </p:column>
                             
                             <p:column headerText="Job Name" sortBy="#{job.jobName}" filterBy="#{job.jobName}">
                                 <h:outputText value="#{job.jobName}" />
@@ -86,7 +88,7 @@
                 		<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>                    
                 	</p:commandButton>
 
-					<p:commandButton value="Refresh list" style="width:auto" icon="ui-icon-refresh" actionListener="#{dataBean.dataService.refreshJobLists()}" update="jobTable" />
+					<p:commandButton value="Refresh list" style="width:auto" icon="ui-icon-refresh" actionListener="#{dataBean.refreshJobLists()}" update="jobTable" />
 					<p:commandButton value="Manage Target Date Schedules" style="width:auto" icon="ui-icon-event" action="jobScheduleView" ajax="false"/>
 					 
                     </div>

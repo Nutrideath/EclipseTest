@@ -18,7 +18,7 @@ public class DataManagerAzure {
             + "AccountName=dfalstoragetest;"
             + "AccountKey=GKPPduvRKUCV8h7ik7q9BsOlf8DPS8k/6J2VFl5mrCpGOQqTC7qJ4oRaokrBlWfMPwkszTJCPaG3L+HiGJWyiQ==";
     */
-	
+    
     //This is the local Development account using the Azure Storage Emulator
     public static final String storageConnectionString = "DefaultEndpointsProtocol=http;"
     + "AccountName=devstoreaccount1;"

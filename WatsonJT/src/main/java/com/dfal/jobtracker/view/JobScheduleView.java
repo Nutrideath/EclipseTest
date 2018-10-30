@@ -97,6 +97,95 @@ public class JobScheduleView implements Serializable {
     
     
     
+
+	
+	
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //getters and setters
+    
+	public ScheduleModel getEventModel() {
+		return eventModel;
+	}
+	
+	/*
+	public ScheduleModel getLazyEventModel() {
+		return lazyEventModel;
+	}
+	*/
+
+	
+	public ScheduleEvent getEvent() {
+		return event;
+	}
+
+	public void setEvent(ScheduleEvent event) {
+		this.event = event;
+	}
+	
+	public void addEvent(ActionEvent actionEvent) {
+		if(event.getId() == null)
+			eventModel.addEvent(event);
+		else
+			eventModel.updateEvent(event);
+		
+		event = new JobScheduleEvent();
+	}
+	
+	public void onEventSelect(SelectEvent selectEvent) {
+		event = (ScheduleEvent) selectEvent.getObject();
+	}
+	
+	public void onDateSelect(SelectEvent selectEvent) {
+		event = new JobScheduleEvent("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
+	}
+	
+	public void onEventMove(ScheduleEntryMoveEvent event) {
+		//this is a move, so change start date and time, plus end date and time (move both times equally)
+		Calendar cal = Calendar.getInstance();
+		JobBean movedJob = (JobBean) event.getScheduleEvent().getData();	//get the jobBean from the event
+		
+		//change targetDate
+		cal.setTime(movedJob.getTargetDate());		//get the targetDate
+		cal.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
+		cal.add(Calendar.MINUTE, event.getMinuteDelta()); 			//change by minute delta
+		movedJob.setTargetDate(cal.getTime());		//set targetDate to new value
+		
+		//change targetDateEnd by same amounts, since entire job was moved
+		cal.setTime(movedJob.getTargetDateEnd());		//get the targetDateEnd
+		cal.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
+		cal.add(Calendar.MINUTE, event.getMinuteDelta()); 			//change by minute delta
+		movedJob.setTargetDateEnd(cal.getTime());		//set targetDateEnd to new value
+		
+		//save the jobBean with new values
+		movedJob.saveToJobTable();
+		
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());		
+		addMessage(message);
+	}
+	
+	public void onEventResize(ScheduleEntryResizeEvent event) {
+		//this is a resize, so only change TargetDateEnd  (Does that logic work?)
+		Calendar cal = Calendar.getInstance();
+		JobBean resizedJob = (JobBean) event.getScheduleEvent().getData();	//get the jobBean from the event
+		
+		//change targetDateEnd 
+		cal.setTime(resizedJob.getTargetDateEnd());		//get the targetDateEnd
+		cal.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
+		cal.add(Calendar.MINUTE, event.getMinuteDelta()); 			//change by minute delta
+		resizedJob.setTargetDateEnd(cal.getTime());		//set targetDateEnd to new value
+				
+		//save the jobBean with new values
+		resizedJob.saveToJobTable();
+		
+		
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());		
+		addMessage(message);
+	}
+	
+	private void addMessage(FacesMessage message) {
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+	
 	/*
 	 * methods for filling in fake/display data; removed, but may be useful
 	 * 
@@ -193,91 +282,4 @@ public class JobScheduleView implements Serializable {
 		return t.getTime();
 	}
 	*/
-	
-	
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    //getters and setters
-    
-	public ScheduleModel getEventModel() {
-		return eventModel;
-	}
-	
-	/*
-	public ScheduleModel getLazyEventModel() {
-		return lazyEventModel;
-	}
-	*/
-
-	
-	public ScheduleEvent getEvent() {
-		return event;
-	}
-
-	public void setEvent(ScheduleEvent event) {
-		this.event = event;
-	}
-	
-	public void addEvent(ActionEvent actionEvent) {
-		if(event.getId() == null)
-			eventModel.addEvent(event);
-		else
-			eventModel.updateEvent(event);
-		
-		event = new JobScheduleEvent();
-	}
-	
-	public void onEventSelect(SelectEvent selectEvent) {
-		event = (ScheduleEvent) selectEvent.getObject();
-	}
-	
-	public void onDateSelect(SelectEvent selectEvent) {
-		event = new JobScheduleEvent("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
-	}
-	
-	public void onEventMove(ScheduleEntryMoveEvent event) {
-		//this is a move, so change start date and time, plus end date and time (move both times equally)
-		Calendar cal = Calendar.getInstance();
-		JobBean movedJob = (JobBean) event.getScheduleEvent().getData();	//get the jobBean from the event
-		
-		//change targetDate
-		cal.setTime(movedJob.getTargetDate());		//get the targetDate
-		cal.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
-		cal.add(Calendar.MINUTE, event.getMinuteDelta()); 			//change by minute delta
-		movedJob.setTargetDate(cal.getTime());		//set targetDate to new value
-		
-		//change targetDateEnd by same amounts, since entire job was moved
-		cal.setTime(movedJob.getTargetDateEnd());		//get the targetDateEnd
-		cal.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
-		cal.add(Calendar.MINUTE, event.getMinuteDelta()); 			//change by minute delta
-		movedJob.setTargetDateEnd(cal.getTime());		//set targetDateEnd to new value
-		
-		//save the jobBean with new values
-		movedJob.saveToJobTable();
-		
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());		
-		addMessage(message);
-	}
-	
-	public void onEventResize(ScheduleEntryResizeEvent event) {
-		//this is a resize, so only change TargetDateEnd  (Does that logic work?)
-		Calendar cal = Calendar.getInstance();
-		JobBean resizedJob = (JobBean) event.getScheduleEvent().getData();	//get the jobBean from the event
-		
-		//change targetDateEnd 
-		cal.setTime(resizedJob.getTargetDateEnd());		//get the targetDateEnd
-		cal.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
-		cal.add(Calendar.MINUTE, event.getMinuteDelta()); 			//change by minute delta
-		resizedJob.setTargetDateEnd(cal.getTime());		//set targetDateEnd to new value
-				
-		//save the jobBean with new values
-		resizedJob.saveToJobTable();
-		
-		
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());		
-		addMessage(message);
-	}
-	
-	private void addMessage(FacesMessage message) {
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
 }

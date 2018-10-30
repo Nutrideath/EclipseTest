@@ -115,7 +115,7 @@
             			<p:outputLabel for="callInDate" value="Call-In Date" />          			
      					<h:panelGroup styleClass="md-inputfield">
 							<p:calendar id="callInDate" value="#{newJobWizard.jobBean.callInDate}" required="true" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
-										showOn="button" effect="slide" showButtonPanel="true" title="Defaults to today" timeZone="GMT-5"/>	
+										showOn="button" effect="slide" showButtonPanel="true" title="Defaults to today" timeZone="GMT-4"/>	
             				<label>Call-In Date</label>   
             			<p:message for="callInDate" />	          				 
             		 	</h:panelGroup>  
@@ -136,7 +136,7 @@
             			<p:outputLabel for="targetDate" value="Target Date" />
             			<h:panelGroup styleClass="md-inputfield">            				
             				<p:calendar id="targetDate" value="#{newJobWizard.jobBean.targetDate}" required="true" mode="popup" pattern="MM/dd/yyyy hh:mm a" stepMinute="15"
-            							showOn="button" effect="slide" showButtonPanel="true" title="Defaults to 3 weeks from initial Call-In date" timeZone="GMT-5"/>            			
+            							showOn="button" effect="slide" showButtonPanel="true" title="Defaults to 3 weeks from initial Call-In date" timeZone="GMT-4"/>            			
             				<label>Target Date</label> 
             				<p:message for="targetDate" />          				
             			</h:panelGroup>
@@ -301,7 +301,7 @@
                 
                 <p:commandButton value="Create Job" validateClient="true" ajax="false" style="width:auto" action="dashboard">
                 	<f:actionListener binding="#{newJobWizard.jobBean.initialSaveToJobTable()}"/>
-                    <f:actionListener binding="#{dataBean.dataService.refreshJobLists()}"/>
+                    <f:actionListener binding="#{dataBean.refreshJobLists()}"/>
                 </p:commandButton>
                 </p:panel>
  	

@@ -112,12 +112,16 @@ public class DataBean implements Serializable {
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   //methods
     public void refreshCustomerLists() {
+    	System.out.println(" XX DataBean XX Called refreshCustomerLists()"); 
+    	dataService.refreshCustomerLists();
     	customerNames = dataService.getCustomerNames();
         customerBeans = dataService.getCustomerBeans(); 
     }
     
     public void refreshJobLists() {
-    	jobNames = dataService.getJobNames();
+    	System.out.println(" XX DataBean XX Called refreshJobLists()"); 
+    	dataService.refreshJobLists();
+    	jobNames = dataService.getJobNames();    	
         jobBeans = dataService.getJobBeans();
     }
     

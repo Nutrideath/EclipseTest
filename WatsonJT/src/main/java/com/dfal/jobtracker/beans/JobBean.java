@@ -34,8 +34,92 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Constructor stuff
+	
+	public JobBean() {
+		//System.out.println(" XX JobBean XX Created empty instance of JobBean"); 
+		//this.partitionKey = UUID.randomUUID().toString();
+		//System.out.println(" XX JobBean XX   partitionKey set to: " + this.partitionKey); 
+	}
+
+/*
+	public JobBean(String jobCustomer) {
+		//this.partitionKey = UUID.randomUUID().toString();
+		this.rowKey = jobCustomer;
+	}
+*/	
+	@PostConstruct
+    public void init(){
+	//if this is a new empty job, need to set up a few basic properties.  Otherwise, leave them alone.	
+	if(jobStatus == null) {
+		
+		
+		Calendar cal = Calendar.getInstance();	//cal will be used to calculate target date info
+		
+		//this.callInDate = new Date();	//set default to today's date
+		//this.targetDate = new Date();
+		//this.targetDateEnd = new Date();
+	
+		
+		this.callInDate = cal.getTime();//use cal to avoid differences in EDT and EST
+		
+		//set default for rushJobFlag
+		this.rushJobFlag = false;
+		//this.rushJobFlag = true;
+		
+		//Set targetDate default to 3 weeks in future from call date (or in other words, from now)
+		cal.add(Calendar.DAY_OF_YEAR, 21);
+		
+		//make sure is not on a Saturday or Sunday		
+		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+		while (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY ) {
+			//if this is a weekend, add a day and check again
+			cal.add(Calendar.DAY_OF_YEAR, 1);
+			dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+		}
+		
+
+		//set time to default of 6:30 am
+		cal.set(Calendar.HOUR_OF_DAY,6);
+		cal.set(Calendar.MINUTE,30);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MILLISECOND,0);
+				
+		this.targetDate = cal.getTime();
+		
+		System.out.println(" XX JobBean.init() XX targetDate set to: " + targetDate);  // dow mon dd hh:mm:ss zzz yyyy
+		
+		//for display in a schedule (looks like a calendar) we need to track the end of the installation appt
+		//add an arbitrary hour. User will set actual appt length during scheduling 
+
+		cal = Calendar.getInstance();	//reset cal
+		//adjust to one hour later than targetDate
+		cal.add(Calendar.DAY_OF_YEAR, 21);
+		cal.set(Calendar.HOUR_OF_DAY,7);
+		cal.set(Calendar.MINUTE,30);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MILLISECOND,0);
+		
+		this.targetDateEnd = cal.getTime();
+		
+		System.out.println(" XX JobBean.init() XX targetDateEnd set to: " + targetDateEnd);
+		
+		System.out.println(" XX JobBean.init() XX  Call to init()");
+	}
+	
+    }
+	
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// "global" properties
+	
 	@ManagedProperty(value="#{JobBean.jobStatus}")
 	private String jobStatus;		//tracks the job's lifecycle
+	
+	@ManagedProperty(value="#{JobBean.jobStatusShort}")
+	private String jobStatusShort;	//shortened version of each status, shown where full jobStatus takes too much room
 	
 	@Getter(AccessLevel.NONE)	//special getter below
 	@ManagedProperty(value="#{JobBean.jobProgress}")
@@ -50,6 +134,8 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	 *   the jobBean objects.
 	 */
 	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//	createNewJob.xhtml
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//Job Customer
 	private String partitionKey;	//used in Azure storage tables as part of unique id
@@ -137,81 +223,13 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	
-	
-
-	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//Constructor stuff
+	//	jobForm.xhtml
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	
-	public JobBean() {
-		//System.out.println(" XX JobBean XX Created empty instance of JobBean"); 
-		//this.partitionKey = UUID.randomUUID().toString();
-		//System.out.println(" XX JobBean XX   partitionKey set to: " + this.partitionKey); 
-	}
 
-/*
-	public JobBean(String jobCustomer) {
-		//this.partitionKey = UUID.randomUUID().toString();
-		this.rowKey = jobCustomer;
-	}
-*/	
-	@PostConstruct
-    public void init(){
-		//this.jobStatus = "New";
-		
-		Calendar cal = Calendar.getInstance();	//cal will be used to calculate target date info
-		
-		//this.callInDate = new Date();	//set default to today's date
-		//this.targetDate = new Date();
-		//this.targetDateEnd = new Date();
 	
-		
-		this.callInDate = cal.getTime();//use cal to avoid differences in EDT and EST
-		
-		//set default for rushJobFlag
-		this.rushJobFlag = false;
-		//this.rushJobFlag = true;
-		
-		//Set targetDate default to 3 weeks in future from call date (or in other words, from now)
-		cal.add(Calendar.DAY_OF_YEAR, 21);
-		
-		//make sure is not on a Saturday or Sunday		
-		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-		while (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY ) {
-			//if this is a weekend, add a day and check again
-			cal.add(Calendar.DAY_OF_YEAR, 1);
-			dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-		}
-		
 
-		//set time to default of 6:30 am
-		cal.set(Calendar.HOUR_OF_DAY,6);
-		cal.set(Calendar.MINUTE,30);
-		cal.set(Calendar.SECOND,0);
-		cal.set(Calendar.MILLISECOND,0);
-				
-		this.targetDate = cal.getTime();
-		
-		System.out.println(" XX JobBean.init() XX targetDate set to: " + targetDate);  // dow mon dd hh:mm:ss zzz yyyy
-		
-		//for display in a schedule (looks like a calendar) we need to track the end of the installation appt
-		//add an arbitrary hour. User will set actual appt length during scheduling 
-
-		cal = Calendar.getInstance();	//reset cal
-		//adjust to one hour later than targetDate
-		cal.add(Calendar.DAY_OF_YEAR, 21);
-		cal.set(Calendar.HOUR_OF_DAY,7);
-		cal.set(Calendar.MINUTE,30);
-		cal.set(Calendar.SECOND,0);
-		cal.set(Calendar.MILLISECOND,0);
-		
-		this.targetDateEnd = cal.getTime();
-		
-		System.out.println(" XX JobBean.init() XX targetDateEnd set to: " + targetDateEnd);
-		
-		System.out.println(" XX JobBean.init() XX  Call to init()");
-    }
 	
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -249,14 +267,14 @@ public class JobBean extends TableServiceEntity implements Serializable {
     }
 	
 	public void initialSaveToJobTable() {
+		//called first time job is saved from createNewJob.xhtml  Sets initial values before save
+		
     	System.out.println(" XX JobBean XX");
     	System.out.println(" XX JobBean XX Call to .initialSaveToJobTable()");
-    	//called first time job is saved. Sets initial values before save
-    	
+    	    	
     	
     	//TODO: Check for existing to avoid duplicates or overwriting another row of data
-    	//TODO: Possibly make separate save function for initial save
-    	
+    	    	
     	//set contact name values
     	this.jobContactFullName = this.jobContactFirstName + " " + this.jobContactLastName;
     	this.jobContactFullNameLastFirst = this.jobContactLastName + ", " + this.jobContactFirstName;
@@ -289,11 +307,11 @@ public class JobBean extends TableServiceEntity implements Serializable {
     	String pKey1, pKey2, pKey3, pKey4;
     	
     	//set up format of date
-    	//String pattern = "yyyy-MM-dd";
-    	//SimpleDateFormat ymdDateFormat = new SimpleDateFormat(pattern);
-    	//pKey1 = ymdDateFormat.format(this.callInDate); 
+    	String pattern = "yyyy-MM-dd";
+    	SimpleDateFormat ymdDateFormat = new SimpleDateFormat(pattern);
+    	pKey1 = ymdDateFormat.format(this.callInDate); 
     	
-    	pKey1 = convertSimpleDateWithDashes(this.callInDate);	//convert to simple date format, without the time info
+    	//pKey1 = convertSimpleDateWithDashes(this.callInDate);	//convert to simple date format, without the time info
     	
     	pKey2 = "[" + jobMake + "]";	//Rails or Mailbox or Custom
 
