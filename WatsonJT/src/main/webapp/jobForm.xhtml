@@ -7,10 +7,12 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="breadcrumb">
-        <li><p:link outcome="/createNewJob">Create New Job</p:link></li>
+    	<li><p:link outcome="/jobView">Manage Jobs</p:link></li>
+    	<li>/</li>
+        <li>Edit Job</li>
     </ui:define>
 
-	<ui:define name="title">Create Job</ui:define>
+	<ui:define name="title">Edit Job</ui:define>
 
     <ui:define name="content">
       <h:form>
@@ -20,15 +22,14 @@
                 
                   
                     
-                   <ui:remove> CreateNewJob form
-                   Collects required data to create a new job, and saves to database.
-                   Subsequent calls to interact with job will use a different view. (form, in domino-speak)               
+                   <ui:remove> jobForm
+                   Allows edit of job information, and saves to database.
                    
                    </ui:remove>
-        
-         <h1>Create New Job</h1>   
-                   
-		<p:wizard flowListener="#{newJobWizard.onFlowProcess}">
+          
+       <h3><h:outputText value="#{dataBean.selectedJobBean.jobName}" /> </h3>          
+    <ui:remove>               
+		<p:tabView >
 			<p:tab id="customer" title="Customer">
         
             	<p:dataTable var="customer" value="#{dataBean.customerBeans}" selectionMode="single" reflow="true" 
@@ -303,11 +304,9 @@
                     
                	   </p:panelGrid>
                 
-                <p:commandButton value="Create Job" validateClient="true" ajax="false" style="width:auto" action="jobForm">
+                <p:commandButton value="Create Job" validateClient="true" ajax="false" style="width:auto" action="dashboard">
                 	<f:actionListener binding="#{newJobWizard.jobBean.initialSaveToJobTable()}"/>
-                    <f:actionListener binding="#{dataBean.dataService.refreshJobLists()}"/>
                     <f:actionListener binding="#{dataBean.refreshJobLists()}"/>
-                    <f:actionListener binding="#{dataBean.setSelectedJobBean(jobBean)}"/>
                 </p:commandButton>
                 </p:panel>
  	
@@ -316,7 +315,8 @@
         		
         		
         	</p:tab>            
-		</p:wizard> 
+		</p:tabView> 
+</ui:remove>
                     
 					<br />
                     <br />
