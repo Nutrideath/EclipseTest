@@ -29,7 +29,129 @@
                    
                    </ui:remove>
           
-       <h3><h:outputText value="#{dataBean.selectedJobBean.jobName}" /> </h3>          
+	<h3><h:outputText value="#{dataBean.selectedJobBean.jobName}" /> </h3>    
+	
+	<p:panelGrid id="headerInfo" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+		
+                    <p:panelGrid columns="2" columnClasses="label, value">
+                    	
+                        <h:outputText value="Job Contact: " />
+                        <h:outputText value="#{dataBean.selectedJobBean.jobContactFirstName} #{dataBean.selectedJobBean.jobContactLastName}" styleClass="outputLabel"/>
+                   
+                        <h:outputText value="Phone: " />
+                        <h:outputText value="#{dataBean.selectedJobBean.jobContactPhoneNumber}" styleClass="outputLabel"/>
+                  	</p:panelGrid>
+                    
+                    <p:panelGrid columns="2" columnClasses="label, value">
+                    	
+                        <h:outputText value="Status: " />
+                        <h:panelGroup>
+                        	<h:outputText id="showJobStatus" value="#{dataBean.selectedJobBean.jobStatus}  " styleClass="outputLabel"/>
+                        	<p:menuButton value="Change To:">
+                        	
+                        		<p:menuitem value="Awaiting Measurer Assignment" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Awaiting Measurer Assignment')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('AMA')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('10')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>
+                        		                       		
+                        		<p:menuitem value="Ready to Measure" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Ready to Measure')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('R2M')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('20')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>
+                        		
+                        		<p:menuitem value="Ready for Estimate" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Ready for Estimate')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('RfE')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('30')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>
+                        		
+                        		<p:menuitem value="Pending Approval" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Pending Approval')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PendAppr')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('40')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>
+                        		
+                        		<p:menuitem value="Fabrication" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Fabrication')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Fab')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('50')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>
+                        		
+                        		<p:menuitem value="Grinding" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Grinding')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Grnd')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('60')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>
+                        		
+                        		<p:menuitem value="Painting" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Painting')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Paint')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('70')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>
+                        		
+                        		<p:menuitem value="Pending Installer Assignment" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Pending Installer Assignment')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PendInstAssg')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('80')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>
+                        		
+                        		<p:menuitem value="Assigned for Installation" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Assigned for Installation')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PendInstall')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('90')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>	
+                        		
+                        		<p:menuitem value="Job Complete" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Job Complete')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Done')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('100')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>
+                        		
+                        		<p:separator />
+                        		<!-- Powdercoat -->
+                        		
+                        		<p:menuitem value="PC - Pending Installer Assignment" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('PC - Pending Installer Assignment')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PC:PendInstAssg')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('60')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>
+                        		
+                        		<p:menuitem value="PC - Assigned for Trial Fit" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('PC - Assigned for Trial Fit')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PC:PendTrialFit')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('70')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>
+                        		
+                        		<p:menuitem value="PC - Powdercoat" icon="ui-icon-refresh" update="showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('PC - Powdercoat')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PC:Powdercoat')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('75')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        		</p:menuitem>
+                        		
+                        	</p:menuButton>
+ 						</h:panelGroup>
+                        <h:outputText value="Email: " />
+                        <h:outputText value="#{dataBean.selectedJobBean.jobContactEmail}" styleClass="outputLabel"/>
+                        
+                    </p:panelGrid>
+	
+	</p:panelGrid>
+	             
     <ui:remove>               
 		<p:tabView >
 			<p:tab id="customer" title="Customer">

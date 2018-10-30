@@ -118,8 +118,8 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	@ManagedProperty(value="#{JobBean.jobStatus}")
 	private String jobStatus;		//tracks the job's lifecycle
 	
-//	@ManagedProperty(value="#{JobBean.jobStatusShort}")
-//	private String jobStatusShort;	//shortened version of each status, shown where full jobStatus takes too much room
+	@ManagedProperty(value="#{JobBean.jobStatusShort}")
+	private String jobStatusShort;	//shortened version of each status, shown where full jobStatus takes too much room
 	
 	@Getter(AccessLevel.NONE)	//special getter below
 	@ManagedProperty(value="#{JobBean.jobProgress}")
