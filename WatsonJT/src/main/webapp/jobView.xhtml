@@ -41,6 +41,8 @@
     <ui:define name="title">Manage Jobs</ui:define>
     
     <ui:define name="breadcrumb">
+    	<li><p:link outcome="/dashboard">Dashboard</p:link></li>
+        <li>/</li>
         <li><p:link outcome="/jobView">Manage Jobs</p:link></li>
     </ui:define>
 
@@ -50,7 +52,7 @@
             <div class="ui-g">
                 <div class="ui-g-12">
                     <div class="card card-w-title">
-                        <h1>Manage Jobs</h1>
+                        <h1>Manage Jobs</h1> #{dataBean.dataService.jobCount} Active Jobs
                         
                   
                   <p:dataTable id="jobTable" var="job" value="#{dataBean.jobBeans}" selectionMode="single" reflow="true" 

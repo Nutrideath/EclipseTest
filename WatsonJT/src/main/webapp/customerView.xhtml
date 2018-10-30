@@ -51,7 +51,7 @@
             <div class="ui-g">
                 <div class="ui-g-12">
                     <div class="card card-w-title">
-                        <h1>Manage Customers</h1>
+                        <h1>Manage Customers</h1> #{dataBean.dataService.customerCount} Active Customers
                         
                    <p:dataTable var="customer" value="#{dataBean.customerBeans}" selectionMode="single" reflow="true" 
                         selection="#{dataBean.selectedCustomerBean}" rowKey="#{customer.rowKey}" 

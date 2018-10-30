@@ -7,9 +7,11 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="breadcrumb">
+    	<li><p:link outcome="/dashboard">Dashboard</p:link></li>
+        <li>/</li>
     	<li><p:link outcome="/jobView">Manage Jobs</p:link></li>
     	<li>/</li>
-        <li>Edit Job</li>
+    	<li><p:link outcome="/jobForm">Edit Job</p:link></li>
     </ui:define>
 
 	<ui:define name="title">Edit Job</ui:define>
