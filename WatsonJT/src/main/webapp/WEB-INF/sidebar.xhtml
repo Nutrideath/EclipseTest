@@ -21,8 +21,14 @@
                     <h:form id="menuform">
                         <pm:menu>
                             <p:menuitem id="sr_dashboard" value="Dashboard" icon="&#xE871;" outcome="/dashboard"/>
-                            <p:menuitem id="sr_createNewCustomer" value="Create New Customer" icon="&#xE871;" outcome="/createNewCustomer"/>
-                            <p:menuitem id="sr_createNewJob" value="Create New Job" icon="&#xE871;" outcome="/createNewJob"/>
+                            <p:submenu id="sr_customers" label="Customers" icon="&#xE8D3;">
+                            	<p:menuitem id="sr_manageCustomers" value="Manage Customers" icon="&#xE8D3;" outcome="/customerView"/>
+                            	<p:menuitem id="sr_createNewCustomer" value="Create New Customer" icon="&#xE8D3;" outcome="/createNewCustomer"/>
+                            </p:submenu>
+                            <p:submenu id="sr_Jobs" label="Jobs" icon="&#xE156;">
+                            	<p:menuitem id="sr_manageJobs" value="Manage Jobs" icon="&#xE156;" outcome="/jobView"/>
+                            	<p:menuitem id="sr_createNewJob" value="Create New Job" icon="&#xE156;" outcome="/createNewJob"/>
+                            </p:submenu>
                             <p:separator /> 
                             <p:separator /> 
                             <p:submenu id="sr_customization1" label="Menu Modes" icon="&#xE8B8;">
