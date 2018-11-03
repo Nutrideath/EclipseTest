@@ -80,7 +80,9 @@
                                 <h:outputText value="#{job.jobContactFullNameLastFirst}" />
                             </p:column>
 
-
+							<p:column headerText="Status" sortBy="#{job.jobStatus}" filterBy="#{job.jobStatus}">
+                                <h:outputText value="#{job.jobStatus}" />
+                            </p:column>
                             
                   </p:dataTable>
                   <br/><br/>

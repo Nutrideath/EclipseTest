@@ -17,7 +17,7 @@
 	<ui:define name="title">Edit Job</ui:define>
 
     <ui:define name="content">
-      <h:form>
+      <h:form id="mainForm">
       <div class="ui-fluid">
         <div class="ui-g">
             <div class="ui-g-12">
@@ -31,88 +31,345 @@
           
 	<h3><h:outputText value="#{dataBean.selectedJobBean.jobName}" /> </h3>    
 	
-	<p:panelGrid id="headerInfo" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
-		
+	<p:panelGrid id="headerInfo" columns="4" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+		       	
+                        <h:outputText value="Contact: " />
+                        <h:outputText value="#{dataBean.selectedJobBean.jobContactFirstName} #{dataBean.selectedJobBean.jobContactLastName}" styleClass="outputLabel" style="font-weight:bold"/>
+                   		
+                        <h:outputText value="Status: " />
+                        <h:outputText id="showJobStatus" value="#{dataBean.selectedJobBean.jobStatus}  " styleClass="outputLabel" style="font-weight:bold"/>
+                        	
+ 						<h:outputText value="Phone: " />
+                        <h:outputText value="#{dataBean.selectedJobBean.jobContactPhoneNumber}" styleClass="outputLabel" style="font-weight:bold"/>
+						
+                        <h:outputText value="Email: " />
+                        <h:outputText value="#{dataBean.selectedJobBean.jobContactEmail}" styleClass="outputLabel" style="font-weight:bold"/>     
+	
+
+	
+	</p:panelGrid>
+	       
+	       
+	<p:tabView id="tabviewID">
+		<p:tab id="generalInfo" title="General Info">
+			
+			   <p:panelGrid columns="3" columnClasses="grid,grid,grid" layout="grid">
+                                        
                     <p:panelGrid columns="2" columnClasses="label, value">
-                    	
-                        <h:outputText value="Job Contact: " />
-                        <h:outputText value="#{dataBean.selectedJobBean.jobContactFirstName} #{dataBean.selectedJobBean.jobContactLastName}" styleClass="outputLabel"/>
-                   
-                        <h:outputText value="Phone: " />
-                        <h:outputText value="#{dataBean.selectedJobBean.jobContactPhoneNumber}" styleClass="outputLabel"/>
-                  	</p:panelGrid>
+                   		<f:facet name="header">
+							Job Info
+						</f:facet>                    
+                        <h:outputText value="Job Type: " />
+                        <h:outputText value="#{dataBean.selectedJobBean.jobType}" styleClass="outputLabel"/>
+
+                        <h:outputText value="Job Make: " />
+                        <h:outputText value="#{dataBean.selectedJobBean.jobMake}" styleClass="outputLabel"/>
+ 
+                        <h:outputText value="Call-In Date: " />
+                        <h:outputText value="#{dataBean.selectedJobBean.getSimpleCallInDate()}" styleClass="outputLabel"/>
+                        
+                        <h:outputText value="Target Date: " />
+                        <h:outputText value="#{dataBean.selectedJobBean.getSimpleTargetDate()}" styleClass="outputLabel"/>
+                        
+                        <h:outputText value="Rush Job: " />
+                        <h:outputText value="Yes" rendered="#{dataBean.selectedJobBean.rushJobFlag}" />
+                        <h:outputText value="No" rendered="#{not dataBean.selectedJobBean.rushJobFlag}" />
+                    </p:panelGrid>
                     
                     <p:panelGrid columns="2" columnClasses="label, value">
-                    	
-                        <h:outputText value="Status: " />
-                        <h:panelGroup>
-                        	<h:outputText id="showJobStatus" value="#{dataBean.selectedJobBean.jobStatus}  " styleClass="outputLabel"/>
-                        	<p:menuButton value="Change To:">
+                   		<f:facet name="header">
+							Job Location
+						</f:facet>                    
+                        <h:outputText value="Job Subdivision (Lot): " rendered="#{dataBean.selectedJobBean.jobLocationType == 'Subdiv_Lot'}" />
+                        <h:outputText value="#{dataBean.selectedJobBean.jobAddrSubdivisionLot}" rendered="#{dataBean.selectedJobBean.jobLocationType == 'Subdiv_Lot'}" styleClass="outputLabel"/>
+
+                        <h:outputText value="Job Address: " rendered="#{dataBean.selectedJobBean.jobLocationType == 'StreetAddress'}"/>
+                        <h:outputText value="#{dataBean.selectedJobBean.jobAddr_Line1}" rendered="#{dataBean.selectedJobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
+ 
+                        <h:outputText value=" " rendered="#{dataBean.selectedJobBean.jobLocationType == 'StreetAddress'}"/>
+                        <h:outputText value="#{dataBean.selectedJobBean.jobAddr_Line2}" rendered="#{dataBean.selectedJobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
+                        
+                        <h:outputText value=" " rendered="#{dataBean.selectedJobBean.jobLocationType == 'StreetAddress'}"/>
+                        <h:outputText value="#{dataBean.selectedJobBean.jobAddr_City}" rendered="#{dataBean.selectedJobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
+                        
+                        <h:outputText value=" " rendered="#{dataBean.selectedJobBean.jobLocationType == 'StreetAddress'}"/>
+                        <h:outputText value="#{dataBean.selectedJobBean.jobAddr_State}" rendered="#{dataBean.selectedJobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
+                        
+                        <h:outputText value=" " rendered="#{dataBean.selectedJobBean.jobLocationType == 'StreetAddress'}"/>
+                        <h:outputText value="#{dataBean.selectedJobBean.jobAddr_Zip}" rendered="#{dataBean.selectedJobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
+                        
+                    </p:panelGrid>
+                    
+               	   </p:panelGrid>
+			
+			
+						
+		</p:tab>
+		
+		<p:tab id="assignMeasurer" title="Assign Measurer">
+			<div class="ui-g ui-fluid">
+            	<div class="ui-g-12 ui-lg-6">
+                	<!-- Left Side -->
+					<div class="card">
+					<p:panel id="assignMeasurerSelection" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Measurer</f:facet>
+					
+						<p:selectOneMenu id="selectMeasurer" value="#{dataBean.selectedJobBean.measurer}" style="margin-bottom:10px;">
+							<f:selectItem itemLabel="Select One" itemValue="" />
+                            <f:selectItem itemLabel="Benjamin Blando" itemValue="Benjamin Blando" />
+                            <f:selectItem itemLabel="Joseph Kramer" itemValue="Joseph Kramer" />
+                            <f:selectItem itemLabel="Leo Tolstoy" itemValue="Leo Tolstoy" />
+                            <f:selectItem itemLabel="Patrick Woods" itemValue="Patrick Woods" />
+                        </p:selectOneMenu>
+                    </p:panel>    
+					</div>
+				</div>
+			
+				<div class="ui-g-12 ui-lg-6">
+                	<!-- Right Side -->
+                	<div class="card">
+                	<p:panel id="assignMeasurerActions" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Actions</f:facet>
+                		
+                		<p:commandButton value="Save" style="width:auto" icon="ui-icon-save" actionListener="#{dataBean.selectedJobBean.saveToJobTable()}" />
+                		
+                		<p:commandButton value="Mark 'Awaiting Measurer Assignment'" style="width:auto" icon="ui-icon-arrow-back"  update=":mainForm:showJobStatus" >
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Awaiting Measurer Assignment')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('AMA')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('10')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        </p:commandButton>
+                		
+                		<p:commandButton value="Mark 'Ready to Measure'" style="width:auto" icon="ui-icon-arrow-forward"  update=":mainForm:showJobStatus" >
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Ready to Measure')}" />
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('R2M')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('20')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNow('dateReadyToMeasure')}"/>           
+                			<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                		</p:commandButton>
+                	</p:panel>	
+					</div>
+                
+                </div>
+			</div>
+			
+		</p:tab>
+		
+		<p:tab id="measure" title="Measure">
+			<div class="ui-g ui-fluid">
+			<div class="card card-w-title">
+			<h3>Measurements/pictures/notes:</h3>
+			
+			<div class="ui-g-12 ui-lg-6">
+            <!-- Left Side -->
+            
+				<div class="card">
+				<p:panel id="measureSchedule" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">						
+					<f:facet name="header">Schedule Measurement</f:facet>	
+					<label><b>Measurement Options</b></label><br/><br/>
+					<p:selectOneMenu id="measureScheduleMeetOptions" value="#{dataBean.selectedJobBean.measureScheduleMeetOptions}" style="margin-bottom:10px;">
+							<f:selectItem itemLabel="Select One" itemValue="" />
+                            <f:selectItem itemLabel="Meet-To-Measure" itemValue="Meet-To-Measure" />
+                            <f:selectItem itemLabel="Call Ahead" itemValue="Call Ahead" />
+                            <f:selectItem itemLabel="Go Ahead" itemValue="Go Ahead" />                            
+                    </p:selectOneMenu>
+					<br/><br/>
+					
+					<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+						<label><b>Date to Measure</b></label>         			
+     					<h:panelGroup styleClass="md-inputfield">
+							<p:calendar id="dateToMeasure" value="#{dataBean.selectedJobBean.dateToMeasure}" required="false" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
+										stepMinute="15" showOn="button" effect="slide" showButtonPanel="true" title="Defaults to today" timeZone="GMT-4"/>	
+            				<label>Date to Measure</label>   
+            			<p:message for="dateToMeasure" />	          				 
+            		 	</h:panelGroup>  
+					</p:panelGrid>
+					<br/><br/>
+					
+					<label><b>Jobsite Visit History</b></label> 
+					<p:inputTextarea rows="4" value="#{dataBean.selectedJobBean.measureScheduleJobsiteVisitHistory}" placeholder="jobsite visit history" autoResize="true"/>
+					
+					<br/><br/>
+					<p:commandButton value="Send Text to Job Contact" style="width:auto" icon="ui-icon-textsms"  />
+					<p:commandButton value="Send Email to Job Contact" style="width:auto" icon="ui-icon-email"  />
+					<br/>
+					
+                        
+				</p:panel>
+				</div>            
+
+				<div class="card">
+				<p:panel id="measureSheet" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">						
+					<f:facet name="header">Measure Sheets, Pictures and Related Attachments</f:facet>	
+					
+					<p:commandButton value="Upload Measure Sheets" style="width:auto" icon="ui-icon-camera"  />
+					<p:commandButton value="Upload Pictures" style="width:auto" icon="ui-icon-camera-alt"  />
+					
+					<br/><br/>Upload other attachment:<br/>
+					<p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}" mode="advanced" dragDropSupport="false"
+                                          multiple="true" update="messages" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" style="width:100%" />
+        
+                            <p:growl id="messages" showDetail="true" />
+				</p:panel>
+				</div> 
+            
+				<div class="card">
+				<p:panel id="measureNotes" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">						
+					<f:facet name="header">Notes</f:facet>					
+					<label><b>General Notes</b></label> 
+					<p:inputTextarea rows="4" value="#{dataBean.selectedJobBean.measureNotesGeneral}" placeholder="notes" autoResize="true"/>
+						
+					<label><b>Notes for Estimator</b></label> 
+					<p:inputTextarea rows="4" value="#{dataBean.selectedJobBean.measureNotesForEstimator}" placeholder="notes" autoResize="true"/>
+						
+					<label><b>Notes for Fabricator</b></label> 
+					<p:inputTextarea rows="4" value="#{dataBean.selectedJobBean.measureNotesForFabricator}" placeholder="notes" autoResize="true"/>
+						
+					<label><b>Notes for Installer</b></label> 
+					<p:inputTextarea rows="4" value="#{dataBean.selectedJobBean.measureNotesForInstaller}" placeholder="notes" autoResize="true"/>
+				</p:panel>
+				</div>
+				
+
+				
+			</div>
+			
+			<div class="ui-g-12 ui-lg-6">
+                	<!-- Right Side -->
+                	<div class="card">
+                	<p:panel id="measureActions" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Actions</f:facet>
+                		
+                		<p:commandButton value="Save" style="width:auto" icon="ui-icon-save" actionListener="#{dataBean.selectedJobBean.saveToJobTable()}" />
+                		
+                		<p:commandButton value="Mark 'Ready to Measure'" style="width:auto" icon="ui-icon-arrow-back"  update=":mainForm:showJobStatus" >
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Ready to Measure')}" />
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('R2M')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('20')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNow('dateReadyToMeasure')}"/>           
+                			<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                		</p:commandButton>
+                		
+                		<p:commandButton value="Mark 'Ready to Estimate'" style="width:auto" icon="ui-icon-arrow-forward"  update=":mainForm:showJobStatus" >
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Ready to Estimate')}" />
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('R2E')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('30')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNow('dateReadyToEstimate')}"/>           
+                			<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                		</p:commandButton>
+                	</p:panel>	
+					</div>
+                
+            </div>
+			
+			
+			</div>
+			</div>
+		</p:tab>
+		
+		<p:tab id="estimate" title="Estimate">
+			<h3>Estimate:</h3>
+		</p:tab>
+		
+		<p:tab id="approve" title="Approve">
+			Approve Job
+			(See estimate, previous tab)
+		</p:tab>
+		
+		<p:tab id="fabricate" title="Fabricate">
+			Mark Fabrication complete
+		</p:tab>
+		
+		<p:tab id="grind" title="Grind">
+			Mark grinding complete
+		</p:tab>
+		
+		<p:tab id="paint" title="Paint">
+			Mark Painting complete
+		</p:tab>
+		
+		<p:tab id="assignInstaller" title="Assign Installer">
+			Select Installer:
+		</p:tab>
+		
+		<p:tab id="scheduleInstallation" title="Schedule Installation">
+			Schedule for installation
+		</p:tab>
+		
+		<p:tab id="install" title="Install">
+			Installation notes/pictures:
+		</p:tab>
+		
+		<p:tab id="spacer" title="Spacer">
+			Remove this tab later.
+			
+					
+       		<p:menuButton value="Change Status" style="width:auto">
                         	
-                        		<p:menuitem value="Awaiting Measurer Assignment" icon="ui-icon-refresh" update="showJobStatus">
+                        		<p:menuitem value="Awaiting Measurer Assignment" icon="ui-icon-refresh" update=":mainForm:showJobStatus" >
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Awaiting Measurer Assignment')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('AMA')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('10')}"/>            
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         		</p:menuitem>
                         		                       		
-                        		<p:menuitem value="Ready to Measure" icon="ui-icon-refresh" update="showJobStatus">
+                        		<p:menuitem value="Ready to Measure" icon="ui-icon-refresh" update=":mainForm:showJobStatus">
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Ready to Measure')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('R2M')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('20')}"/>            
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         		</p:menuitem>
                         		
-                        		<p:menuitem value="Ready for Estimate" icon="ui-icon-refresh" update="showJobStatus">
-                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Ready for Estimate')}"/> 
-                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('RfE')}"/> 
+                        		<p:menuitem value="Ready for Estimate" icon="ui-icon-refresh" update=":mainForm:showJobStatus">
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Ready to Estimate')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('R2E')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('30')}"/>            
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         		</p:menuitem>
                         		
-                        		<p:menuitem value="Pending Approval" icon="ui-icon-refresh" update="showJobStatus">
+                        		<p:menuitem value="Pending Approval" icon="ui-icon-refresh" update=":mainForm:showJobStatus">
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Pending Approval')}"/> 
-                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PendAppr')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PndAppr')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('40')}"/>            
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         		</p:menuitem>
                         		
-                        		<p:menuitem value="Fabrication" icon="ui-icon-refresh" update="showJobStatus">
+                        		<p:menuitem value="Fabrication" icon="ui-icon-refresh" update=":mainForm:showJobStatus">
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Fabrication')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Fab')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('50')}"/>            
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         		</p:menuitem>
                         		
-                        		<p:menuitem value="Grinding" icon="ui-icon-refresh" update="showJobStatus">
+                        		<p:menuitem value="Grinding" icon="ui-icon-refresh" update=":mainForm:showJobStatus">
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Grinding')}"/> 
-                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Grnd')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Grind')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('60')}"/>            
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         		</p:menuitem>
                         		
-                        		<p:menuitem value="Painting" icon="ui-icon-refresh" update="showJobStatus">
+                        		<p:menuitem value="Painting" icon="ui-icon-refresh" update=":mainForm:showJobStatus">
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Painting')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Paint')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('70')}"/>            
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         		</p:menuitem>
                         		
-                        		<p:menuitem value="Pending Installer Assignment" icon="ui-icon-refresh" update="showJobStatus">
+                        		<p:menuitem value="Pending Installer Assignment" icon="ui-icon-refresh" update=":mainForm:showJobStatus">
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Pending Installer Assignment')}"/> 
-                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PendInstAssg')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PndInstAssg')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('80')}"/>            
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         		</p:menuitem>
                         		
-                        		<p:menuitem value="Assigned for Installation" icon="ui-icon-refresh" update="showJobStatus">
+                        		<p:menuitem value="Assigned for Installation" icon="ui-icon-refresh" update=":mainForm:showJobStatus">
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Assigned for Installation')}"/> 
-                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PendInstall')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('AssgInst')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('90')}"/>            
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         		</p:menuitem>	
                         		
-                        		<p:menuitem value="Job Complete" icon="ui-icon-refresh" update="showJobStatus">
+                        		<p:menuitem value="Job Complete" icon="ui-icon-refresh" update=":mainForm:showJobStatus">
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Job Complete')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Done')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('100')}"/>            
@@ -122,325 +379,34 @@
                         		<p:separator />
                         		<!-- Powdercoat -->
                         		
-                        		<p:menuitem value="PC - Pending Installer Assignment" icon="ui-icon-refresh" update="showJobStatus">
+                        		<p:menuitem value="PC - Pending Installer Assignment" icon="ui-icon-refresh" update=":mainForm:showJobStatus">
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('PC - Pending Installer Assignment')}"/> 
-                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PC:PendInstAssg')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PC:PndInstAssg')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('60')}"/>            
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         		</p:menuitem>
                         		
-                        		<p:menuitem value="PC - Assigned for Trial Fit" icon="ui-icon-refresh" update="showJobStatus">
+                        		<p:menuitem value="PC - Assigned for Trial Fit" icon="ui-icon-refresh" update=":mainForm:showJobStatus">
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('PC - Assigned for Trial Fit')}"/> 
-                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PC:PendTrialFit')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PC:TrialFit')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('70')}"/>            
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         		</p:menuitem>
                         		
-                        		<p:menuitem value="PC - Powdercoat" icon="ui-icon-refresh" update="showJobStatus">
+                        		<p:menuitem value="PC - Powdercoat" icon="ui-icon-refresh" update=":mainForm:showJobStatus">
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('PC - Powdercoat')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PC:Powdercoat')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('75')}"/>            
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         		</p:menuitem>
                         		
-                        	</p:menuButton>
- 						</h:panelGroup>
-                        <h:outputText value="Email: " />
-                        <h:outputText value="#{dataBean.selectedJobBean.jobContactEmail}" styleClass="outputLabel"/>
-                        
-                    </p:panelGrid>
-	
-	</p:panelGrid>
+               </p:menuButton>
+		</p:tab>
+		
+	</p:tabView>	       
+	       
 	             
-    <ui:remove>               
-		<p:tabView >
-			<p:tab id="customer" title="Customer">
-        
-            	<p:dataTable var="customer" value="#{dataBean.customerBeans}" selectionMode="single" reflow="true" 
-                        selection="#{dataBean.selectedCustomerBean}" rowKey="#{customer.rowKey}" 
-                        filteredValue="#{dataBean.filteredCustomerBeans}"
-                        paginator="true" rows="10">
-                        
-                        <f:ajax event="rowSelect" update="jobType jobLocationType confirmation dataTableHeader" render="dataTableHeader"/> 
-                        
-                            <f:facet name="header">
-                            	<c:set var="noneSelected" value="Select Customer (Filter or Sort at Column Header)" />
-								<c:set var="haveSelected" value="Selected: #{dataBean.selectedCustomerBean.rowKey}" />
-                            	<h:outputText id="dataTableHeader" value="#{empty dataBean.selectedCustomerBean.rowKey ? noneSelected : haveSelected}" escape="false" />
-                            </f:facet>
-                            
-                            <p:column headerText="Name" sortBy="#{customer.rowKey}" filterBy="#{customer.rowKey}">
-                                <h:outputText value="#{customer.rowKey}" />
-                            </p:column>
-
-                            <p:column headerText="Contact" sortBy="#{customer.fullNameLastFirst}" filterBy="#{customer.fullNameLastFirst}">
-                                <h:outputText value="#{customer.fullNameLastFirst}" />
-                            </p:column>
-
-                            <p:column headerText="Type" sortBy="#{customer.customerType}" filterBy="#{customer.customerType}">
-                                <h:outputText value="#{customer.customerType}" />
-                            </p:column>
-                            
-                  </p:dataTable>  
-                             		
-			</p:tab>
-			
-			<p:tab id="jobContact" title="Job Contact Info">
-				<p:focus context="jobContactPG" for="firstName"/>
-					<p:panelGrid id="jobContactPG" columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
-						
-						<f:facet name="header">Contact Information for this Job</f:facet>
-						
-						<p:outputLabel for="firstName" value="Name"/>
-						<h:panelGroup />
-						
-						<h:panelGroup styleClass="md-inputfield">
-							<p:inputText id="firstName" value="#{newJobWizard.jobBean.jobContactFirstName}" required="true" label="firstName"/>
-            				<label>First</label>  
-            				<p:message for="firstName" />          				
-            			</h:panelGroup>           			
-            			            			
-     					<h:panelGroup styleClass="md-inputfield">
-							<p:inputText id="lastName" value="#{newJobWizard.jobBean.jobContactLastName}" required="true" label="Last Name"/>						
-            				<label>Last</label> 
-            				<p:message for="lastName" />   
-            		 	</h:panelGroup>
-	
-            			<p:outputLabel for="email" value="Email Address" />
-            			<h:panelGroup styleClass="md-inputfield">            				
-            				<p:inputText id="email" value="#{newJobWizard.jobBean.jobContactEmail}" required="true" label="email" validatorMessage="Invalid email address format">            					
-            					<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-            					<p:ajax event="blur" update="email msgEmail" /> 
-            				</p:inputText> 
-            				<label>email</label> 
-            				<p:message id="msgEmail" for="email" />          				
-            			</h:panelGroup>
-           			           						
-            			<p:outputLabel for="phoneNumber" value="Phone" />
-            			<h:panelGroup styleClass="md-inputfield">            				
-            				<p:inputMask id="phoneNumber" value="#{newJobWizard.jobBean.jobContactPhoneNumber}" required="true" label="phoneNumber" mask="(999)999-9999? x9999"/> 
-            				<label>Phone Number</label>           				
-            			</h:panelGroup>
-						
-						
-					</p:panelGrid>
-			</p:tab>
-			
-			<p:tab id="jobInfo" title="Job Info">
-				<p:focus context="jobInfoPG" for="jobType"/>
-                    <p:panelGrid id="jobInfoPG" columns="6" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
-						<f:facet name="header">General Job Information</f:facet>
-						
-						<p:outputLabel for="jobType" value="Select Job Type" />						
-						<h:panelGroup>
-						<p:selectOneRadio id="jobType" value="#{newJobWizard.jobBean.jobType}" required="true" style="margin-bottom:10px;" layout="pageDirection" >                            
-                            <f:selectItem itemLabel="Corporate" itemValue="Corporate" />
-                            <f:selectItem itemLabel="Residential" itemValue="Residential" />                            
-                        </p:selectOneRadio>		
-                        <p:message for="jobType" />				 
-						</h:panelGroup>  
-						<h:panelGroup />
- 											
-            			<p:outputLabel for="callInDate" value="Call-In Date" />          			
-     					<h:panelGroup styleClass="md-inputfield">
-							<p:calendar id="callInDate" value="#{newJobWizard.jobBean.callInDate}" required="true" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
-										showOn="button" effect="slide" showButtonPanel="true" title="Defaults to today" timeZone="GMT-4"/>	
-            				<label>Call-In Date</label>   
-            			<p:message for="callInDate" />	          				 
-            		 	</h:panelGroup>  
-            		 	<h:panelGroup />
-            		 	            	
-            			
-            			<p:outputLabel for="jobMake" value="Select Job Make" />
-            			<h:panelGroup>
-            			<p:selectOneRadio id="jobMake" value="#{newJobWizard.jobBean.jobMake}" required="true" style="margin-bottom:10px;" layout="pageDirection">                           
-                            <f:selectItem itemLabel="Rails" itemValue="Rails" />
-                            <f:selectItem itemLabel="Mailbox" itemValue="Mailbox" />
-                            <f:selectItem itemLabel="Custom" itemValue="Custom" />
-                        </p:selectOneRadio>
-						<p:message for="jobMake" />
-						</h:panelGroup>  
-						<h:panelGroup /> 
-            			
-            			<p:outputLabel for="targetDate" value="Target Date" />
-            			<h:panelGroup styleClass="md-inputfield">            				
-            				<p:calendar id="targetDate" value="#{newJobWizard.jobBean.targetDate}" required="true" mode="popup" pattern="MM/dd/yyyy hh:mm a" stepMinute="15"
-            							showOn="button" effect="slide" showButtonPanel="true" title="Defaults to 3 weeks from initial Call-In date" timeZone="GMT-4"/>            			
-            				<label>Target Date</label> 
-            				<p:message for="targetDate" />          				
-            			</h:panelGroup>
-            			
-            			<h:panelGroup /><h:panelGroup /><h:panelGroup /><h:panelGroup />
-            			<p:outputLabel for="rushJobFlag" value="Rush Job" />
-                   		 <h:panelGroup styleClass="md-inputfield">                   		 	
-                   		 	<p:selectBooleanCheckbox id="rushJobFlag" value="#{newJobWizard.jobBean.rushJobFlag}"  />
-                   		 </h:panelGroup>
-            			
-                    </p:panelGrid>
-			</p:tab>   
-
-            <p:tab id="jobLocation" title="Job Location"> 
-            	<p:focus context="jobLocationPanel" for="jobLocationType"/> 
-            	
-            	<p:panel id="jobLocationPanel" header="Job Location Information">             		  
-                    <label>Job Location:</label> 
-                    <f:ajax event="change" render="whichJobLocation confirmation" > 
-                    <p:selectOneRadio id="jobLocationType" value="#{newJobWizard.jobBean.jobLocationType}" required="true" 
-                    					style="margin-bottom:10px;" layout="lineDirection"  >                            
-                            <f:selectItem itemLabel="Subdivision and Lot" itemValue="Subdiv_Lot" />
-                            <f:selectItem itemLabel="Street Address" itemValue="StreetAddress" />                                                     
-                    </p:selectOneRadio>	
-                    </f:ajax>
-                    <br />
-                    
-                    <h:panelGroup id = "whichJobLocation" >
-                    
-                    	<h:panelGroup id="jobLocationForm-Subdiv" rendered="#{newJobWizard.jobBean.jobLocationType == 'Subdiv_Lot'}" styleClass="md-inputfield">
-                    		<p:inputText id="jobAddrSubdivisionLot" value="#{newJobWizard.jobBean.jobAddrSubdivisionLot}" label="jobAddrSubdivisionLot" validatorMessage="Invalid character" >
-                    			<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^,.]+$" /> 
-                    			<f:ajax event="keyup" render="jobAddrSubdivisionLot, msgJobAddrSubdivisionLot" />
-                    		</p:inputText> 
-            				<label>Subdivision (Lot)</label>    
-                    		<p:message id="msgJobAddrSubdivisionLot" for="jobAddrSubdivisionLot" />
-                   		 </h:panelGroup>
-                    	
-                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}">
-                    	
-                    	<p:outputLabel for="jobAddr_Line1" value="Address" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}"/>
-                    	<h:panelGroup id="jobLocationForm-StreetAddr1" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="md-inputfield">
-                    		<p:inputText id="jobAddr_Line1" value="#{newJobWizard.jobBean.jobAddr_Line1}" label="jobAddr_Line1" validatorMessage="Invalid character">
-                    			<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^,.]+$" /> 
-                    			<f:ajax event="keyup" render="jobAddr_Line1, msgJobAddr_Line1" />
-                    		</p:inputText> 
-            				<label>Street Address</label> <br /> 
-            				<p:message id="msgJobAddr_Line1" for="jobAddr_Line1" />
-                   		 </h:panelGroup>
-                   		                    		 
-                   		 <h:panelGroup />                   		 
-                   		 <h:panelGroup id="jobLocationForm-StreetAddr2" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="md-inputfield">
-                   		 	<p:inputText id="jobAddr_Line2" value="#{newJobWizard.jobBean.jobAddr_Line2}" label="jobAddr_Line2" validatorMessage="Invalid character" >
-                   		 		<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^,.]+$" /> 
-                    			<f:ajax event="keyup" render="jobAddr_Line2, msgJobAddr_Line2" />
-                   		 	</p:inputText> 
-            				<label>Suite/Apt</label> 
-            				<p:message id="msgJobAddr_Line2" for="jobAddr_Line2" />                    		 
-                   		 </h:panelGroup>
-                   		 
-                   		 <h:panelGroup />                   		 
-                   		 <h:panelGroup id="jobLocationForm-City" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="md-inputfield">
-                   		 	<p:inputText id="jobAddr_City" value="#{newJobWizard.jobBean.jobAddr_City}" label="jobAddr_City" validatorMessage="Invalid character">
-                   		 		<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^,.]+$" /> 
-                    			<f:ajax event="keyup" render="jobAddr_City, msgJobAddr_City" />
-                   		 	</p:inputText> 
-            				<label>City</label>
-            				<p:message id="msgJobAddr_City" for="jobAddr_City" />                     		 
-                   		 </h:panelGroup>
-                   		 
-                   		 <h:panelGroup />                   		 
-                   		 <h:panelGroup id="jobLocationForm-State" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="md-inputfield">
-                   		 	<p:inputText id="jobAddr_State" value="#{newJobWizard.jobBean.jobAddr_State}" label="jobAddr_State" validatorMessage="Invalid character">
-                   		 		<f:validateRegex pattern="^[a-zA-Z0-9\s-~!@*()^,.]+$" /> 
-                    			<f:ajax event="keyup" render="jobAddr_State, msgJobAddr_State" />
-                   		 	</p:inputText> 
-            				<label>State</label>
-            				<p:message id="msgJobAddr_State" for="jobAddr_State" />                     		 
-                   		 </h:panelGroup>
-                   		 
-                   		 <h:panelGroup />                   		 
-                   		 <h:panelGroup id="jobLocationForm-Zip" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="md-inputfield">
-                   		 	<p:inputMask id="jobAddr_Zip" value="#{newJobWizard.jobBean.jobAddr_Zip}" label="jobAddr_Zip" mask="99999?-9999"/>             		 	
-            				<label>Zip</label>
-            				<p:message id="msgJobAddr_Zip" for="jobAddr_Zip" />                     		 
-                   		 </h:panelGroup>
-                   		 
-                    	</p:panelGrid>
-                    </h:panelGroup>
-                   </p:panel>
-            </p:tab>
-            
-        	<p:tab id="confirm" title="Confirmation">
-        		
-       
-        		<p:panel header="Please Confirm Information">
-                	
-                  <p:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid" layout="grid">
-                    <p:panelGrid columns="2" columnClasses="label, value">
-                    	<f:facet name="header">
-							Job Contact
-						</f:facet>
-                        <h:outputText value="Customer name: " />
-                        <h:outputText value="#{newJobWizard.selectedCustomerBean.rowKey}" styleClass="outputLabel"/>
-
-                        <h:outputText value="Job Contact: " />
-                        <h:outputText value="#{newJobWizard.jobBean.jobContactFirstName} #{newJobWizard.jobBean.jobContactLastName}" styleClass="outputLabel"/>
  
-                        <h:outputText value="Email: " />
-                        <h:outputText value="#{newJobWizard.jobBean.jobContactEmail}" styleClass="outputLabel"/>
-                        
-                        <h:outputText value="Phone: " />
-                        <h:outputText value="#{newJobWizard.jobBean.jobContactPhoneNumber}" styleClass="outputLabel"/>
-                    </p:panelGrid>
-                    
-                    <p:panelGrid columns="2" columnClasses="label, value">
-                   		<f:facet name="header">
-							Job Info
-						</f:facet>                    
-                        <h:outputText value="Job Type: " />
-                        <h:outputText value="#{newJobWizard.jobBean.jobType}" styleClass="outputLabel"/>
-
-                        <h:outputText value="Job Make: " />
-                        <h:outputText value="#{newJobWizard.jobBean.jobMake}" styleClass="outputLabel"/>
- 
-                        <h:outputText value="Call-In Date: " />
-                        <h:outputText value="#{newJobWizard.jobBean.getSimpleCallInDate()}" styleClass="outputLabel"/>
-                        
-                        <h:outputText value="Target Date: " />
-                        <h:outputText value="#{newJobWizard.jobBean.getSimpleTargetDate()}" styleClass="outputLabel"/>
-                        
-                        <h:outputText value="Rush Job: " />
-                        <h:outputText value="Yes" rendered="#{newJobWizard.jobBean.rushJobFlag}" />
-                        <h:outputText value="No" rendered="#{not newJobWizard.jobBean.rushJobFlag}" />
-                    </p:panelGrid>
-                    
-                    <p:panelGrid columns="2" columnClasses="label, value">
-                   		<f:facet name="header">
-							Job Location
-						</f:facet>                    
-                        <h:outputText value="Job Subdivision (Lot): " rendered="#{newJobWizard.jobBean.jobLocationType == 'Subdiv_Lot'}" />
-                        <h:outputText value="#{newJobWizard.jobBean.jobAddrSubdivisionLot}" rendered="#{newJobWizard.jobBean.jobLocationType == 'Subdiv_Lot'}" styleClass="outputLabel"/>
-
-                        <h:outputText value="Job Address: " rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}"/>
-                        <h:outputText value="#{newJobWizard.jobBean.jobAddr_Line1}" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
- 
-                        <h:outputText value=" " rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}"/>
-                        <h:outputText value="#{newJobWizard.jobBean.jobAddr_Line2}" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
-                        
-                        <h:outputText value=" " rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}"/>
-                        <h:outputText value="#{newJobWizard.jobBean.jobAddr_City}" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
-                        
-                        <h:outputText value=" " rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}"/>
-                        <h:outputText value="#{newJobWizard.jobBean.jobAddr_State}" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
-                        
-                        <h:outputText value=" " rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}"/>
-                        <h:outputText value="#{newJobWizard.jobBean.jobAddr_Zip}" rendered="#{newJobWizard.jobBean.jobLocationType == 'StreetAddress'}" styleClass="outputLabel"/>
-                        
-                    </p:panelGrid>
-                    
-               	   </p:panelGrid>
-                
-                <p:commandButton value="Create Job" validateClient="true" ajax="false" style="width:auto" action="dashboard">
-                	<f:actionListener binding="#{newJobWizard.jobBean.initialSaveToJobTable()}"/>
-                    <f:actionListener binding="#{dataBean.refreshJobLists()}"/>
-                </p:commandButton>
-                </p:panel>
- 	
-        		
-        		
-        		
-        		
-        	</p:tab>            
-		</p:tabView> 
-</ui:remove>
                     
 					<br />
                     <br />

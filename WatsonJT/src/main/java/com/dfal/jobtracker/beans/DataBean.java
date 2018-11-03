@@ -104,7 +104,7 @@ public class DataBean implements Serializable {
         customerBeans = dataService.getCustomerBeans();
         
         jobNames = dataService.getJobNames();
-        jobBeans = dataService.getJobBeans();
+        jobBeans = dataService.getJobBeans(); 
     }
     
     
@@ -135,7 +135,7 @@ public class DataBean implements Serializable {
     	} else {
     		this.selectedCustomerBean = selectedCustomerBean;
     		System.out.println(" XX DataBean^^setSelectedCustomerBean XX Selected: " + this.selectedCustomerBean.getRowKey());
-    	}
+    	} 
     }
 
     public void setSelectedJobBean(JobBean selectedJobBean) {
@@ -145,7 +145,7 @@ public class DataBean implements Serializable {
     	} else {
     		this.selectedJobBean = selectedJobBean;
     		System.out.println(" XX DataBean^^setSelectedJobBean XX Selected: " + this.selectedJobBean.getJobName());
-    	}
+    	} 
     }
     
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

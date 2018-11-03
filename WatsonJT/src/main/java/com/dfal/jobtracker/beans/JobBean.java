@@ -114,14 +114,17 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// "global" properties
-	
+	//@Setter(AccessLevel.NONE)	//special setter below
 	@ManagedProperty(value="#{JobBean.jobStatus}")
 	private String jobStatus;		//tracks the job's lifecycle
+	
+	
 	
 	@ManagedProperty(value="#{JobBean.jobStatusShort}")
 	private String jobStatusShort;	//shortened version of each status, shown where full jobStatus takes too much room
 	
-	@Getter(AccessLevel.NONE)	//special getter below
+	//@Getter(AccessLevel.NONE)	//special getter below
+	//@Setter(AccessLevel.NONE)	//special setter below
 	@ManagedProperty(value="#{JobBean.jobProgress}")
 	private String jobProgress;		//like jobStatus, but is a percentage of completion
 	
@@ -227,9 +230,48 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	//	jobForm.xhtml
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	
-
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Assign Measurer
 	
+	@ManagedProperty(value="#{JobBean.measurer}")	
+	private String measurer;
+	
+	@ManagedProperty(value="#{JobBean.dateReadyToMeasure}")
+	private Date dateReadyToMeasure;		//date marked 'Ready To Measure's
+	
+	
+	
+	
+	
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Measure
 
+	@ManagedProperty(value="#{JobBean.measureScheduleMeetOptions}")
+	private String measureScheduleMeetOptions;
+	
+	@ManagedProperty(value="#{JobBean.dateToMeasure}")
+	private Date dateToMeasure;		//date scheduled to go measure
+	
+	@ManagedProperty(value="#{JobBean.measureScheduleJobsiteVisitHistory}")	
+	private String measureScheduleJobsiteVisitHistory;
+	
+	@ManagedProperty(value="#{JobBean.measurementNotesGeneral}")	
+	private String measureNotesGeneral;
+	
+	@ManagedProperty(value="#{JobBean.measurementNotesForEstimator}")
+	private String measureNotesForEstimator;
+	
+	@ManagedProperty(value="#{JobBean.measurementNotesForFabricator}")
+	private String measureNotesForFabricator;
+	
+	@ManagedProperty(value="#{JobBean.measurementNotesForInsaller}")
+	private String measureNotesForInstaller;
+	
+	@ManagedProperty(value="#{JobBean.dateReadyToEstimate}")
+	private Date dateReadyToEstimate;		//date marked 'Ready To Estimate'
+	
+	
 	
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -384,6 +426,36 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//special date functions
+	
+	public void setDateFieldToNow(String fieldName) {
+		//looks for the property of type date and sets its value to current date/time
+		
+		switch(fieldName) 
+		{ 
+        	case "callInDate": 
+        		this.callInDate = new Date();
+        		break;
+        	case "targetDate": 
+        		this.targetDate = new Date();
+        		break;
+        	case "targetDateEnd": 
+        		this.targetDateEnd = new Date(); 
+        		break;
+        	case "dateReadyToMeasure": 
+        		this.dateReadyToMeasure = new Date();
+        		break;
+        	case "dateReadyToEstimate": 
+        		this.dateReadyToEstimate = new Date();
+        		break;
+        	case "dateToMeasure": 
+        		this.dateToMeasure = new Date();
+        		break;
+        	default: 
+        			
+		} 
+		
+	}
+	
 	public String convertSimpleDateWithDashes(Date dateToConvert) {
 		//takes java Date and returns simple version
 		
@@ -425,8 +497,18 @@ public class JobBean extends TableServiceEntity implements Serializable {
 			this.jobAddr_State = jobAddr_State.toUpperCase();
 		}
 	}
-
-
+/*
+	public void setJobStatus(String status) {
+		this.jobStatus = status;
+		System.out.println(" XX JobBean^^setJobStatus XX Call to setJobStatus" );
+	}
+	
+	
+	public void setJobProgress(String progress) {
+		this.jobProgress = progress;
+		System.out.println(" XX JobBean^^setJobProgress XX Call to setJobProgress" );
+	}
+	
 	public String getJobProgress() {
 		//don't allow null return value. (Crashes job progress barchart on dashboard) Send 5% if null
 		if(jobProgress == null) {
@@ -435,7 +517,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 			return jobProgress;
 		}
 	}
-	
+*/
     public void setJobProgressRandom() {
     	System.out.println(" XX JobBean^^setJobProgressRandom XX Call to setJobProgressRandom" );
  		//this.jobProgress = percentage;	//disabled for debug, see below
