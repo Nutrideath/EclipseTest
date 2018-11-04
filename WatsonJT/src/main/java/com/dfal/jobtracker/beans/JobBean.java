@@ -69,6 +69,9 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		this.rushJobFlag = false;
 		//this.rushJobFlag = true;
 		
+		//set default for ableToInstallFlag (indicates if unable to install on first installation visit)
+		this.ableToInstallFlag = true;
+		
 		//Set targetDate default to 3 weeks in future from call date (or in other words, from now)
 		cal.add(Calendar.DAY_OF_YEAR, 21);
 		
@@ -237,7 +240,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	private String measurer;
 	
 	@ManagedProperty(value="#{JobBean.dateReadyToMeasure}")
-	private Date dateReadyToMeasure;		//date marked 'Ready To Measure's
+	private Date dateReadyToMeasure;		//date marked 'Ready To Measure'
 	
 	
 	
@@ -272,10 +275,36 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	private Date dateReadyToEstimate;		//date marked 'Ready To Estimate'
 	
 	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Assign Installer
+	
+	@ManagedProperty(value="#{JobBean.installer}")	
+	private String installer;
+	
+	@ManagedProperty(value="#{JobBean.dateAssignedForInstallation}")
+	private Date dateAssignedForInstallation;		//date marked 'Assigned for Installation'
+
+	
+	
 	
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Install	
 	
+	@ManagedProperty(value="#{JobBean.ableToInstallFlag}")
+	private boolean ableToInstallFlag = true;
+	
+	@ManagedProperty(value="#{JobBean.installTroubleReason}")	
+	private String installTroubleReason;
+	
+	@ManagedProperty(value="#{JobBean.installVisitHistory}")	
+	private String installVisitHistory;
+	
+	@ManagedProperty(value="#{JobBean.dateInstalled}")
+	private Date dateInstalled;		//date installed
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	
 
 	//function stuff	
 	public void saveToJobTable() {

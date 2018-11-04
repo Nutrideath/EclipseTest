@@ -45,7 +45,10 @@
                         <h:outputText value="Email: " />
                         <h:outputText value="#{dataBean.selectedJobBean.jobContactEmail}" styleClass="outputLabel" style="font-weight:bold"/>     
 	
-
+						<p:outputLabel for="rushJobFlag" value="Rush Job" />
+                   		 <h:panelGroup styleClass="md-inputfield">                   		 	
+                   		 	<p:selectBooleanCheckbox id="rushJobFlag" value="#{dataBean.selectedJobBean.rushJobFlag}"  />
+                   		 </h:panelGroup>
 	
 	</p:panelGrid>
 	       
@@ -289,16 +292,199 @@
 		</p:tab>
 		
 		<p:tab id="assignInstaller" title="Assign Installer">
-			Select Installer:
-		</p:tab>
-		
-		<p:tab id="scheduleInstallation" title="Schedule Installation">
-			Schedule for installation
+			<div class="ui-g ui-fluid">
+            	<div class="ui-g-12 ui-lg-6">
+                	<!-- Left Side -->
+					<div class="card">
+					<p:panel id="assignInstallerSelection" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Installer</f:facet>
+					
+						<p:selectOneMenu id="selectInstaller" value="#{dataBean.selectedJobBean.installer}" style="margin-bottom:10px;">
+							<f:selectItem itemLabel="Select One" itemValue="" />
+                            <f:selectItem itemLabel="Benjamin Blando" itemValue="Benjamin Blando" />
+                            <f:selectItem itemLabel="Joseph Kramer" itemValue="Joseph Kramer" />
+                            <f:selectItem itemLabel="Leo Tolstoy" itemValue="Leo Tolstoy" />
+                            <f:selectItem itemLabel="Patrick Woods" itemValue="Patrick Woods" />
+                        </p:selectOneMenu>
+                    </p:panel>    
+					</div>
+				</div>
+			
+				<div class="ui-g-12 ui-lg-6">
+                	<!-- Right Side -->
+                	<div class="card">
+                	<p:panel id="assignInstallerActions" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Actions</f:facet>
+                		
+                		<p:commandButton value="Save" style="width:auto" icon="ui-icon-save" actionListener="#{dataBean.selectedJobBean.saveToJobTable()}" />
+                		
+                		<p:commandButton value="Mark 'Pending Installer Assignment'" style="width:auto" icon="ui-icon-arrow-back"  update=":mainForm:showJobStatus" >
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Pending Installer Assignment')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PndInstAssg')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('80')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        </p:commandButton>
+                		
+                		<p:commandButton value="Mark 'Assigned for Installation'" style="width:auto" icon="ui-icon-arrow-forward"  update=":mainForm:showJobStatus" >
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Assigned for Installation')}" />
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('AssgInst')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('90')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNow('dateAssignedForInstallation')}"/>           
+                			<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                		</p:commandButton>
+                	</p:panel>	
+					</div>
+                
+                </div>
+			</div>			
+	
 		</p:tab>
 		
 		<p:tab id="install" title="Install">
-			Installation notes/pictures:
+					
+			<div class="ui-g ui-fluid">
+			
+            	<div class="ui-g-12 ui-lg-6">
+                <!-- Left Side -->
+					<div class="card">
+					
+				
+					<p:panel id="installScheduleInstallation" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Schedule Installation</f:facet>
+                		
+                		
+						<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+							<label><b>Date to Install</b></label>         			
+     						<h:panelGroup styleClass="md-inputfield">
+								<p:calendar id="dateToInstallFrom" value="#{dataBean.selectedJobBean.targetDate}" required="false" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
+										stepMinute="15" showOn="button" effect="slide" showButtonPanel="true" title="Start time" timeZone="GMT-4"/>	
+            					<label>from</label> 
+            				</h:panelGroup>
+
+            				<h:panelGroup />
+            				<h:panelGroup styleClass="md-inputfield">  
+            					<p:calendar id="dateToInstallTo" value="#{dataBean.selectedJobBean.targetDateEnd}" required="false" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
+										stepMinute="15" showOn="button" effect="slide" showButtonPanel="true" title="Finish time" timeZone="GMT-4"/>	
+            					<label>to</label>          					        				 
+            		 		</h:panelGroup>  
+						</p:panelGrid>
+						
+					</p:panel>
+				 	
+					<p:panel id="installJobPacket" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Print Job Packet</f:facet>
+						Print Job Packet
+					</p:panel>
+
+
+					<p:panel id="installTrouble" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Installation Trouble</f:facet>
+                		
+                		<p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-2" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+						<p:outputLabel for="ableToInstallFlag" value="Unable to install on first visit?" />
+                   		<h:panelGroup styleClass="md-inputfield">                   		 	
+                   			<p:selectBooleanCheckbox id="ableToInstallFlag" value="#{dataBean.selectedJobBean.ableToInstallFlag}" label="Unable to install on first visit?" >
+                   		 		<p:ajax event="change" update="installUnableToInstall" />
+                   		 	</p:selectBooleanCheckbox>
+                   		</h:panelGroup>
+                   		</p:panelGrid>
+
+						<h:panelGroup id="installUnableToInstall" >              		
+                			<p:panel columns="1" columnClasses="ui-grid-col-8" layout="grid" 
+								styleClass="form-group" style="border:2px none; background-color:transparent;" rendered="#{dataBean.selectedJobBean.ableToInstallFlag}">
+							<f:facet name="header">Unable to Install</f:facet>	
+							
+							
+							<p:commandButton value="Mark 'Pending Installer Assignment'" style="width:auto" icon="ui-icon-arrow-back"  update=":mainForm:showJobStatus" >
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Pending Installer Assignment')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PndInstAssg')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('80')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        	</p:commandButton>
+							
+							<br/><br/><label><b>Reason unable to install</b></label> 
+							<p:inputTextarea rows="4" value="#{dataBean.selectedJobBean.installTroubleReason}" placeholder="reason" autoResize="true"/>
+					
+							<label><b>Install visit history</b></label> 
+							<p:inputTextarea rows="4" value="#{dataBean.selectedJobBean.installVisitHistory}" placeholder="visit history" autoResize="true"/>
+						
+							</p:panel>
+						</h:panelGroup>
+
+					
+					</p:panel>	
+					
+					
+
+					<p:panel id="installJobInstalled" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Job Installed</f:facet>
+						
+						<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+							<label><b>Date of Installation</b></label>         			
+     						<h:panelGroup styleClass="md-inputfield">
+								<p:calendar id="dateInstalled" value="#{dataBean.selectedJobBean.dateInstalled}" required="false" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
+										stepMinute="15" showOn="button" effect="slide" showButtonPanel="true" title="Date Installed" timeZone="GMT-4"/>	
+            					<label>installed</label> 
+            				</h:panelGroup>
+					
+            				
+						</p:panelGrid>						
+					
+				
+				<p:panel id="installPictures" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">						
+					<f:facet name="header">Installation Pictures and Related Attachments</f:facet>	
+					
+					<p:commandButton value="Upload pictures of installation" style="width:auto" icon="ui-icon-camera"  />
+					
+					
+					<br/><br/>Upload other attachments:<br/>
+					<p:fileUpload fileUploadListener="#{fileUploadView.handleFileUpload}" mode="advanced" dragDropSupport="false"
+                                          multiple="true" update="installPicturesMessages" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" style="width:100%" />
+        
+                            <p:growl id="installPicturesMessages" showDetail="true" />
+				</p:panel>
+			
+						
+					</p:panel>
+					
+					</div>
+					
+					
+			    </div>
+			   
+			    <div class="ui-g-12 ui-lg-6">
+                <!-- Right Side -->
+                	<div class="card">
+                	<p:panel id="scheduleInstallationActions" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Actions</f:facet>
+                		
+                		<p:commandButton value="Save" style="width:auto" icon="ui-icon-save" actionListener="#{dataBean.selectedJobBean.saveToJobTable()}" />
+                		
+                		<p:commandButton value="Mark 'Assigned for Installation'" style="width:auto" icon="ui-icon-arrow-back"  update=":mainForm:showJobStatus" >
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Assigned for Installation')}" />
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('AssgInst')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('90')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNow('dateAssignedForInstallation')}"/>           
+                			<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                		</p:commandButton>
+                		
+                		<p:commandButton value="Mark 'Job Complete'" style="width:auto" icon="ui-icon-arrow-forward"  update=":mainForm:showJobStatus" >
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Job Complete')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Done')}"/> 
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('100')}"/>            
+                					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                        </p:commandButton>
+                		
+                		
+                	</p:panel>	
+					</div>
+                
+                </div>
+                
+			</div>	
+			
 		</p:tab>
+		
 		
 		<p:tab id="spacer" title="Spacer">
 			Remove this tab later.
