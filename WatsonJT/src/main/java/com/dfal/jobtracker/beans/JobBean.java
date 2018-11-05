@@ -233,6 +233,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	//	jobForm.xhtml
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	
+	//Tabs
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//Assign Measurer
 	
@@ -244,17 +245,11 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	
 	
 	
-	
-	
-	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//Measure
 
 	@ManagedProperty(value="#{JobBean.measureScheduleMeetOptions}")
 	private String measureScheduleMeetOptions;
-	
-	@ManagedProperty(value="#{JobBean.dateToMeasure}")
-	private Date dateToMeasure;		//date scheduled to go measure
 	
 	@ManagedProperty(value="#{JobBean.measureScheduleJobsiteVisitHistory}")	
 	private String measureScheduleJobsiteVisitHistory;
@@ -271,8 +266,73 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	@ManagedProperty(value="#{JobBean.measurementNotesForInsaller}")
 	private String measureNotesForInstaller;
 	
+	@ManagedProperty(value="#{JobBean.dateToMeasure}")
+	private Date dateToMeasure;		//date scheduled to go measure
+	
+	@ManagedProperty(value="#{JobBean.dateToMeasureEnd}") 
+	private Date dateToMeasureEnd;		//date scheduled to go measure
+	
+	@ManagedProperty(value="#{JobBean.dateMeasured}")
+	private Date dateMeasured;		//date measurements completed
+	
 	@ManagedProperty(value="#{JobBean.dateReadyToEstimate}")
 	private Date dateReadyToEstimate;		//date marked 'Ready To Estimate'
+	
+	
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Estimate
+	
+	@ManagedProperty(value="#{JobBean.dateEstimated}")
+	private Date dateEstimated;		//date estimation completed
+	
+	@ManagedProperty(value="#{JobBean.datePendingApproval}")
+	private Date datePendingApproval;		//date marked 'Pending Approval'
+	
+	
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Approve
+	
+	@ManagedProperty(value="#{JobBean.dateApproved}")
+	private Date dateApproved;		//date approved
+	
+	@ManagedProperty(value="#{JobBean.dateFabricationStart}")
+	private Date dateFabricationStart;		//date fabrication begun
+	
+	
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Fabricate
+	
+	@ManagedProperty(value="#{JobBean.dateFabricationEnd}")
+	private Date dateFabricationEnd;		//date fabrication finished
+	
+	@ManagedProperty(value="#{JobBean.dateGrindingStart}")
+	private Date dateGrindingStart;		//date grinding begun
+	
+	
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Grind
+	
+	@ManagedProperty(value="#{JobBean.dateGrindingEnd}")
+	private Date dateGrindingEnd;		//date grinding finished
+	
+	@ManagedProperty(value="#{JobBean.datePaintingStart}")
+	private Date datePaintingStart;		//date painting begun
+	
+	
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Paint
+	
+	@ManagedProperty(value="#{JobBean.datePaintingEnd}")
+	private Date datePaintingEnd;		//date painting finished
+	
+	@ManagedProperty(value="#{JobBean.datePendingInstallerAssg}")
+	private Date datePendingInstallerAssg;		//date marked 'Pending Installer Assignment'
+	
 	
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -284,8 +344,6 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	@ManagedProperty(value="#{JobBean.dateAssignedForInstallation}")
 	private Date dateAssignedForInstallation;		//date marked 'Assigned for Installation'
 
-	
-	
 	
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -458,9 +516,11 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	
 	public void setDateFieldToNow(String fieldName) {
 		//looks for the property of type date and sets its value to current date/time
-		
+	
+		 
 		switch(fieldName) 
 		{ 
+		//createNewJob
         	case "callInDate": 
         		this.callInDate = new Date();
         		break;
@@ -470,15 +530,160 @@ public class JobBean extends TableServiceEntity implements Serializable {
         	case "targetDateEnd": 
         		this.targetDateEnd = new Date(); 
         		break;
+        //jobForm
+        	//Assign Measurer tab
         	case "dateReadyToMeasure": 
-        		this.dateReadyToMeasure = new Date();
+        		this.dateReadyToMeasure = new Date(); 
+        		break;
+        		
+        	//Measure tab	
+        	case "dateToMeasure": 
+        		this.dateToMeasure = new Date();
+        		break;
+        	case "dateMeasured": 
+        		this.dateMeasured = new Date();
         		break;
         	case "dateReadyToEstimate": 
         		this.dateReadyToEstimate = new Date();
         		break;
-        	case "dateToMeasure": 
-        		this.dateToMeasure = new Date();
+        		
+        	//Estimate tab
+        	case "dateEstimated": 
+        		this.dateEstimated = new Date();
         		break;
+        	case "datePendingApproval": 
+        		this.datePendingApproval = new Date();
+        		break;
+        	
+        	//Approve tab	
+        	case "dateApproved": 
+        		this.dateApproved = new Date();
+        		break;
+        	case "dateFabricationStart": 
+        		this.dateFabricationStart = new Date();
+        		break;
+        		
+        	//Fabricate tab	
+        	case "dateFabricationEnd": 
+        		this.dateFabricationEnd = new Date();
+        		break;	
+        	case "dateGrindingStart": 
+        		this.dateGrindingStart = new Date();
+        		break;	
+        	
+        	//Grind tab	
+        	case "dateGrindingEnd": 
+        		this.dateGrindingEnd = new Date();
+        		break;	
+        	case "datePaintingStart": 
+        		this.datePaintingStart = new Date();
+        		break;	   
+        	
+        	//Paint tab
+        	case "datePaintingEnd": 
+        		this.datePaintingEnd = new Date();
+        		break;
+        	case "datePendingInstallerAssg": 
+        		this.datePendingInstallerAssg = new Date();
+        		break;	
+        		
+        	//Assign Installer tab	
+        	case "dateAssignedForInstallation": 
+        		this.dateAssignedForInstallation = new Date();
+        		break;	
+        		
+        	//Install tab	
+        	case "dateInstalled": 
+        		this.dateInstalled = new Date();
+        		break;	
+        	default: 
+        			
+		} 
+		
+	}
+	
+	public void setDateFieldToNull(String fieldName) {
+		//looks for the property of type date and sets its value to current date/time
+	
+		 
+		switch(fieldName) 
+		{ 
+		//createNewJob
+        	case "callInDate": 
+        		this.callInDate = null;
+        		break;
+        	case "targetDate": 
+        		this.targetDate = null;
+        		break;
+        	case "targetDateEnd": 
+        		this.targetDateEnd = null; 
+        		break;
+        //jobForm
+        	//Assign Measurer tab
+        	case "dateReadyToMeasure": 
+        		this.dateReadyToMeasure = null; 
+        		break;
+        		
+        	//Measure tab	
+        	case "dateToMeasure": 
+        		this.dateToMeasure = null;
+        		break;
+        	case "dateMeasured": 
+        		this.dateMeasured = null;
+        		break;
+        	case "dateReadyToEstimate": 
+        		this.dateReadyToEstimate = null;
+        		break;
+        		
+        	//Estimate tab
+        	case "dateEstimated": 
+        		this.dateEstimated = null;
+        		break;
+        	case "datePendingApproval": 
+        		this.datePendingApproval = null;
+        		break;
+        	
+        	//Approve tab	
+        	case "dateApproved": 
+        		this.dateApproved = null;
+        		break;
+        	case "dateFabricationStart": 
+        		this.dateFabricationStart = null;
+        		break;
+        		
+        	//Fabricate tab	
+        	case "dateFabricationEnd": 
+        		this.dateFabricationEnd = null;
+        		break;	
+        	case "dateGrindingStart": 
+        		this.dateGrindingStart = null;
+        		break;	
+        	
+        	//Grind tab	
+        	case "dateGrindingEnd": 
+        		this.dateGrindingEnd = null;
+        		break;	
+        	case "datePaintingStart": 
+        		this.datePaintingStart = null;
+        		break;	   
+        	
+        	//Paint tab
+        	case "datePaintingEnd": 
+        		this.datePaintingEnd = null;
+        		break;
+        	case "datePendingInstallerAssg": 
+        		this.datePendingInstallerAssg = null;
+        		break;	
+        		
+        	//Assign Installer tab	
+        	case "dateAssignedForInstallation": 
+        		this.dateAssignedForInstallation = null;
+        		break;	
+        		
+        	//Install tab	
+        	case "dateInstalled": 
+        		this.dateInstalled = null;
+        		break;	
         	default: 
         			
 		} 

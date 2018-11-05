@@ -43,7 +43,7 @@
     <ui:define name="breadcrumb">
         <li><p:link outcome="/jobView">Manage Jobs</p:link></li>
         <li>/</li>
-        <li><p:link outcome="/jobScheduleView">Manage Target Date Schedules</p:link></li>
+        <li><p:link outcome="/jobScheduleView">Target Date Schedule Manager</p:link></li>
     </ui:define>
 
     <ui:define name="content">
@@ -53,7 +53,7 @@
                 <div class="ui-g-12">
                    
                     <div class="card card-w-title">
-                        <h1>Job Target Date Schedule</h1>
+                        <h1>Target Date Schedule Manager</h1>
                         <h:panelGrid columnClasses="value">
                         <p:schedule id="schedule" value="#{jobScheduleView.eventModel}" widgetVar="myschedule" timeZone="GMT-5">
  
