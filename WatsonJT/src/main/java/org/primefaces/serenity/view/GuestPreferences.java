@@ -26,9 +26,9 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class GuestPreferences implements Serializable {
 
-    private String layout = "moody";
+    private String layout = "flatiron";
         
-    private String theme = "bluegrey";
+    private String theme = "lightblue";
     
     private boolean darkMenu;
 
