@@ -282,7 +282,7 @@
 					<p:panel id="measureStatus" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
                 		<f:facet name="header">Status</f:facet>
 						<b>Set Status</b><br/>
-                		<p:commandButton value="Ready to Measure" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus dateReadyToEstimate dateMeasured" >
+                		<p:commandButton value="Ready to Measure" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus dateReadyToEstimate dateReadyToEstimate2 dateMeasured" >
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Ready to Measure')}" />
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('R2M')}"/> 
                         	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('20')}"/> 
@@ -369,7 +369,7 @@
                 		<f:facet name="header">Status</f:facet>
 						<b>Set Status</b><br/>
                 		
-                		<p:commandButton value="Ready to Estimate" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus dateEstimated datePendingApproval" >
+                		<p:commandButton value="Ready to Estimate" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus dateEstimated datePendingApproval datePendingApproval2" >
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Ready to Estimate')}" />
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('R2E')}"/> 
                         	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('30')}"/> 
@@ -453,7 +453,7 @@
                 		<f:facet name="header">Status</f:facet>
 						<b>Set Status</b><br/>
                 		
-                		<p:commandButton value="Pending Approval" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus dateApproved dateFabricationStart" >
+                		<p:commandButton value="Pending Approval" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus dateApproved dateFabricationStart dateFabricationStart2" >
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Pending Approval')}" />
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PndAppr')}"/> 
                         	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('40')}"/> 
@@ -539,7 +539,7 @@
                 		<f:facet name="header">Status</f:facet>
 						<b>Set Status</b><br/>
                 		
-                		<p:commandButton value="Fabrication" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus dateGrindingStart dateFabricationEnd" >
+                		<p:commandButton value="Fabrication" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus dateGrindingStart dateGrindingStart2 dateFabricationEnd" >
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Fabrication')}" />
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Fab')}"/> 
                         	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('50')}"/> 
@@ -548,7 +548,7 @@
                 			<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                 		</p:commandButton>
                 		
-                		<p:commandButton value="Grinding" style="width:auto" icon="ui-icon-redo"  update=":mainForm:showJobStatus dateGrindingStart dateFabricationEnd" >
+                		<p:commandButton value="Grinding" style="width:auto" icon="ui-icon-redo"  update=":mainForm:showJobStatus dateGrindingStart dateGrindingStart2 dateFabricationEnd" >
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Grinding')}" />
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Grind')}"/> 
                         	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('60')}"/> 
@@ -621,6 +621,63 @@
                 	</p:panel>
                 	</div>
 					
+					<div class="card">
+					<p:panel id="grindStatus" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Status</f:facet>
+						<b>Set Status</b><br/>
+                		
+                		<p:commandButton value="Grinding" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus datePaintingStart dateGrindingEnd datePaintingStart2" >
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Grinding')}" />
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Grind')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('60')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNull('datePaintingStart')}"/>  
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNull('dateGrindingEnd')}"/>         
+                			<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                		</p:commandButton>
+                		
+                		<p:commandButton value="Painting" style="width:auto" icon="ui-icon-redo"  update=":mainForm:showJobStatus datePaintingStart dateGrindingEnd datePaintingStart2" >
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Painting')}" />
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Paint')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('70')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNow('datePaintingStart')}"/>  
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNow('dateGrindingEnd')}"/>         
+                			<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                		</p:commandButton>
+                		
+                		<br/><br/><b>Dates</b><br/>
+
+                		<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+						<label><b>Date Grinding Start</b></label>         			
+     					<h:panelGroup styleClass="md-inputfield">
+							<p:calendar id="dateGrindingStart2" value="#{dataBean.selectedJobBean.dateGrindingStart}" required="false" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
+										stepMinute="15" showOn="button" effect="slide" showButtonPanel="true" title="Date Grinding Start" timeZone="GMT-5"/>	
+            				<label>date grinding start</label>   
+            			          				 
+            		 	</h:panelGroup>  
+						</p:panelGrid>
+
+						<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+						<label><b>Date Grinding End</b></label>         			
+     					<h:panelGroup styleClass="md-inputfield">
+							<p:calendar id="dateGrindingEnd" value="#{dataBean.selectedJobBean.dateGrindingEnd}" required="false" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
+										stepMinute="15" showOn="button" effect="slide" showButtonPanel="true" title="Date Grinding End" timeZone="GMT-5"/>	
+            				<label>date grinding end</label>   
+            			          				 
+            		 	</h:panelGroup>  
+						</p:panelGrid>
+                		
+						<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+						<label><b>Date Painting Start</b></label>         			
+     					<h:panelGroup styleClass="md-inputfield">
+							<p:calendar id="datePaintingStart" value="#{dataBean.selectedJobBean.datePaintingStart}" required="false" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
+										stepMinute="15" showOn="button" effect="slide" showButtonPanel="true" title="Date Painting Start" timeZone="GMT-5"/>	
+            				<label>date painting start</label>   
+            			          				 
+            		 	</h:panelGroup>  
+						</p:panelGrid>                		
+	
+                	</p:panel>	
+					</div>
 
 				</div>		
 			</div>	
@@ -650,6 +707,63 @@
                 	</p:panel>
                 	</div>
 					
+					<div class="card">
+					<p:panel id="paintStatus" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Status</f:facet>
+						<b>Set Status</b><br/>
+                		
+                		<p:commandButton value="Painting" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus datePendingInstallerAssignment datePendingInstallerAssignment2 datePaintingEnd" >
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Painting')}" />
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('Paint')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('70')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNull('datePendingInstallerAssg')}"/>  
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNull('datePaintingEnd')}"/>         
+                			<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                		</p:commandButton>
+                		
+                		<p:commandButton value="Pending Installer Assignment" style="width:auto" icon="ui-icon-redo"  update=":mainForm:showJobStatus datePendingInstallerAssignment datePendingInstallerAssignment2 datePaintingEnd" >
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Pending Installer Assignment')}" />
+                			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PndInstAssg')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('80')}"/> 
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNow('datePendingInstallerAssg')}"/>  
+                        	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNow('datePaintingEnd')}"/>         
+                			<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
+                		</p:commandButton>
+                		
+                		<br/><br/><b>Dates</b><br/>
+
+						<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+						<label><b>Date Painting Start</b></label>         			
+     					<h:panelGroup styleClass="md-inputfield">
+							<p:calendar id="datePaintingStart2" value="#{dataBean.selectedJobBean.datePaintingStart}" required="false" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
+										stepMinute="15" showOn="button" effect="slide" showButtonPanel="true" title="Date Painting Start" timeZone="GMT-5"/>	
+            				<label>date painting start</label>   
+            			          				 
+            		 	</h:panelGroup>  
+						</p:panelGrid> 
+
+						<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+						<label><b>Date Painting End</b></label>         			
+     					<h:panelGroup styleClass="md-inputfield">
+							<p:calendar id="datePaintingEnd" value="#{dataBean.selectedJobBean.datePaintingEnd}" required="false" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
+										stepMinute="15" showOn="button" effect="slide" showButtonPanel="true" title="Date Painting End" timeZone="GMT-5"/>	
+            				<label>date painting end</label>   
+            			          				 
+            		 	</h:panelGroup>  
+						</p:panelGrid>
+
+                		<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+						<label><b>Date Pending Installer Assignment</b></label>         			
+     					<h:panelGroup styleClass="md-inputfield">
+							<p:calendar id="datePendingInstallerAssignment" value="#{dataBean.selectedJobBean.datePendingInstallerAssg}" required="false" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
+										stepMinute="15" showOn="button" effect="slide" showButtonPanel="true" title="Date Pending Installer Assignment" timeZone="GMT-5"/>	
+            				<label>date pending installer assignment</label>   
+            			          				 
+            		 	</h:panelGroup>  
+						</p:panelGrid>
+
+                	</p:panel>	
+					</div>
 
 				</div>		
 			</div>	
@@ -681,22 +795,51 @@
                 		<f:facet name="header">Actions</f:facet>
                 		
                 		<p:commandButton value="Save" style="width:auto" icon="ui-icon-save" actionListener="#{dataBean.selectedJobBean.saveToJobTable()}" />
-                		
-                		<br/><br/><b>Set Status</b><br/>
-                		<p:commandButton value="Mark 'Pending Installer Assignment'" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus" >
+                	</p:panel>
+                	</div>
+					
+					<div class="card">
+					<p:panel id="assignInstallerStatus" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Status</f:facet>
+						<b>Set Status</b><br/>
+                		<p:commandButton value="Pending Installer Assignment" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus dateAssignedForInstallation" >
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Pending Installer Assignment')}"/> 
                         			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('PndInstAssg')}"/> 
-                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('80')}"/>            
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('80')}"/>
+                        			<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNull('dateAssignedForInstallation')}"/>             
                 					<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                         </p:commandButton>
                 		
-                		<p:commandButton value="Mark 'Assigned for Installation'" style="width:auto" icon="ui-icon-redo"  update=":mainForm:showJobStatus" >
+                		<p:commandButton value="Assigned for Installation" style="width:auto" icon="ui-icon-redo"  update=":mainForm:showJobStatus dateAssignedForInstallation" >
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Assigned for Installation')}" />
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('AssgInst')}"/> 
                         	<f:actionListener binding="#{dataBean.selectedJobBean.setJobProgress('90')}"/> 
                         	<f:actionListener binding="#{dataBean.selectedJobBean.setDateFieldToNow('dateAssignedForInstallation')}"/>           
                 			<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
                 		</p:commandButton>
+                		
+                		<br/><br/><b>Dates</b><br/>
+
+                		<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+						<label><b>Date Pending Installer Assignment</b></label>         			
+     					<h:panelGroup styleClass="md-inputfield">
+							<p:calendar id="datePendingInstallerAssignment2" value="#{dataBean.selectedJobBean.datePendingInstallerAssg}" required="false" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
+										stepMinute="15" showOn="button" effect="slide" showButtonPanel="true" title="Date Pending Installer Assignment" timeZone="GMT-5"/>	
+            				<label>date pending installer assignment</label>   
+            			          				 
+            		 	</h:panelGroup>  
+						</p:panelGrid>
+
+						<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+						<label><b>Date Assigned for Installation</b></label>         			
+     					<h:panelGroup styleClass="md-inputfield">
+							<p:calendar id="dateAssignedForInstallation" value="#{dataBean.selectedJobBean.dateAssignedForInstallation}" required="false" mode="popup" pattern="MM/dd/yyyy hh:mm a" 
+										stepMinute="15" showOn="button" effect="slide" showButtonPanel="true" title="Date Assigned for Installation" timeZone="GMT-5"/>	
+            				<label>date assigned for installation</label>   
+            			          				 
+            		 	</h:panelGroup>  
+						</p:panelGrid> 
+	
                 	</p:panel>	
 					</div>
                 
@@ -825,8 +968,13 @@
                 		
                 		<p:commandButton value="Save" style="width:auto" icon="ui-icon-save" actionListener="#{dataBean.selectedJobBean.saveToJobTable()}" />
                 		<p:commandButton value="Open Target Date Schedule Manager" style="width:auto" icon="ui-icon-event" action="jobScheduleView" actionListener="#{dataBean.selectedJobBean.saveToJobTable()}" ajax="false"/>
-                		
-                		<br/><br/><b>Set Status</b><br/>
+                	</p:panel>
+                	</div>
+					
+					<div class="card">
+					<p:panel id="scheduleInstallationStatus" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Status</f:facet>
+						<b>Set Status</b><br/>
                 		<p:commandButton value="Mark 'Assigned for Installation'" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus" >
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Assigned for Installation')}" />
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('AssgInst')}"/> 
