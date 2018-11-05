@@ -92,10 +92,6 @@
 					<p:menuButton value="Actions">
 						<p:menuitem value="Refresh List" icon="ui-icon-refresh" actionListener="#{dataBean.refreshJobLists()}" update="jobTable"/>
                         <p:menuitem value="Target Date Schedule Manager" icon="ui-icon-event" action="jobScheduleView" ajax="false"/>                                                          
-                        <p:menuitem value="Set Job Progress to Random Percentage" icon="ui-icon-all-out">
-                                <f:actionListener binding="#{dataBean.selectedJobBean.setJobProgressRandom()}"/>             
-                				<f:actionListener binding="#{dataBean.selectedJobBean.saveToJobTable()}"/>  
-                        </p:menuitem>
 					</p:menuButton>
 					<p:commandButton value="Edit Selected" style="width:auto" icon="ui-icon-edit" action="jobForm" ajax="false" />
 					<p:commandButton value="Create New" style="width:auto" icon="ui-icon-send" action="createNewJob" ajax="false" />

@@ -348,8 +348,14 @@
                 		<f:facet name="header">Actions</f:facet>
                 		
                 		<p:commandButton value="Save" style="width:auto" icon="ui-icon-save" actionListener="#{dataBean.selectedJobBean.saveToJobTable()}" />
+                	</p:panel>
+                	</div>
+                	
+                	<div class="card">
+					<p:panel id="estimateStatus" columns="1" columnClasses="ui-grid-col-8" layout="grid" styleClass="form-group" style="border:2px none; background-color:transparent;">
+                		<f:facet name="header">Status</f:facet>
+						<b>Set Status</b><br/>
                 		
-                		<br/><br/><b>Set Status</b><br/>
                 		<p:commandButton value="Ready to Estimate" style="width:auto" icon="ui-icon-undo"  update=":mainForm:showJobStatus" >
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatus('Ready to Estimate')}" />
                 			<f:actionListener binding="#{dataBean.selectedJobBean.setJobStatusShort('R2E')}"/> 
