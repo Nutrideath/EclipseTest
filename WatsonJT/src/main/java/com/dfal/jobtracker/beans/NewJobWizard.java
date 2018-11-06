@@ -47,6 +47,8 @@ public class NewJobWizard implements Serializable {
     @PostConstruct
     public void init(){
     	jobBean.setJobStatus("Awaiting Measurer Assignment"); //This is a new job, so set initial status
+    	jobBean.setJobStatusShort("AMA");
+    	jobBean.setJobProgress("10");
     }
     
     

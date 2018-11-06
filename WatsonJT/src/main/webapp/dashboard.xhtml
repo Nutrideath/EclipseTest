@@ -104,9 +104,9 @@
 								<h:outputText value="Job Progress" />
 							</f:facet>
         					<p:column>
-        					 					
-        						<h:outputText value="#{job.rowKey} [#{job.getSimpleTargetDateNoTime()}]" />  
-
+        					 	<p:commandLink actionListener="#{dataBean.setSelectedJobBean(job)}" action="jobForm">				
+        							<h:outputText value="#{job.rowKey} [#{job.getSimpleTargetDateNoTime()}]" />  
+								</p:commandLink>
         						<div class="status-bar status-bar-5">
                                     <div class="status-bar-value" style="width:#{job.getJobProgress()}%">#{job.getJobStatus()}</div>
                                 </div>

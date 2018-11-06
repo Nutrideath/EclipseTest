@@ -72,10 +72,15 @@
             					<h:outputText id="title" value="#{jobScheduleView.event.title}" required="true" />
  
             					<p:outputLabel for="from" value="From:" />
-            					<p:calendar id="from" value="#{jobScheduleView.event.startDate}" timeZone="GMT-5" pattern="MM/dd/yyyy hh:mm" stepMinute="15"/>
+            					<p:calendar id="from" value="#{jobScheduleView.event.startDate}" timeZone="GMT-5" pattern="MM/dd/yyyy hh:mm a" stepMinute="15" showButtonPanel="true"/>
  
             					<p:outputLabel for="to" value="To:" />
-            					<p:calendar id="to" value="#{jobScheduleView.event.endDate}" timeZone="GMT-5" pattern="MM/dd/yyyy hh:mm" stepMinute="15"/>
+            					<p:calendar id="to" value="#{jobScheduleView.event.endDate}" timeZone="GMT-5" pattern="MM/dd/yyyy hh:mm a" stepMinute="15" showButtonPanel="true"/>
+            					
+            					
+            			
+            					
+            					
  
             					<p:outputLabel for="allDay" value="All Day:" />
             					<h:selectBooleanCheckbox id="allDay" value="#{jobScheduleView.event.allDay}" />

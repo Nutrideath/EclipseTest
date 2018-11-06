@@ -144,6 +144,10 @@ public class JobScheduleView implements Serializable {
 		Calendar cal = Calendar.getInstance();
 		JobBean movedJob = (JobBean) event.getScheduleEvent().getData();	//get the jobBean from the event
 		
+		//TODO: Fix problem with timezone difference
+		//	When cal uses setTime(movedJob.getTargetDate()) to set itself, the time there is saved in UTC, 
+		//	so is off by 5 hours (depending on daylight saving time...)
+		
 		//change targetDate
 		cal.setTime(movedJob.getTargetDate());		//get the targetDate
 		cal.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
