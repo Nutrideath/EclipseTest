@@ -99,16 +99,18 @@
            <div class="ui-g-12 ui-lg-12 ui-g-nopad">
                 <div class="ui-g-12 status-bars">
                     <div class="card">
-						<p:dataTable value="#{dataBean.jobBeans}" var="job">
+						<p:dataTable value="#{dataBean.jobBeans}" var="job" sortBy="#{job.getSimpleTargetDate()}">
 							<f:facet name="header">
 								<h:outputText value="Job Progress" />
 							</f:facet>
         					<p:column>
-        						<h:outputText value="#{job.rowKey}" />        						
-                                
+        					 					
+        						<h:outputText value="#{job.rowKey} [#{job.getSimpleTargetDateNoTime()}]" />  
+
         						<div class="status-bar status-bar-5">
                                     <div class="status-bar-value" style="width:#{job.getJobProgress()}%">#{job.getJobStatus()}</div>
                                 </div>
+
         					</p:column>  					
     					</p:dataTable>
 					</div>

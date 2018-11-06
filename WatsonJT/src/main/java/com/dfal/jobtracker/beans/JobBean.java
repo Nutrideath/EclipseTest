@@ -709,18 +709,38 @@ public class JobBean extends TableServiceEntity implements Serializable {
     	SimpleDateFormat ymdDateFormat = new SimpleDateFormat(pattern);
     	return ymdDateFormat.format(dateToConvert); 
 	}
+	
+	public String convertSimpleDateNoTime(Date dateToConvert) {
+		//takes java Date and returns simple version
+		
+    	//set up format of date
+    	//String pattern = "yyyy-MM-dd";
+    	//String pattern = "MM/dd/yyyy hh:mm a";
+    	String pattern = "MM/dd/yyyy";
+    	SimpleDateFormat ymdDateFormat = new SimpleDateFormat(pattern);
+    	return ymdDateFormat.format(dateToConvert); 
+	}
 
 	public String getSimpleCallInDate() {
-		return convertSimpleDate(callInDate);
+		return convertSimpleDate(callInDate);	//pattern "MM/dd/yyyy hh:mm a"
 	}
 	
 	public String getSimpleTargetDate() {
-		return convertSimpleDate(targetDate);
+		return convertSimpleDate(targetDate);	//pattern "MM/dd/yyyy hh:mm a"
 	}
 
 	public String getSimpleTargetDateEnd() {
-		return convertSimpleDate(targetDateEnd);
+		return convertSimpleDate(targetDateEnd);//pattern "MM/dd/yyyy hh:mm a"
 	}	
+	
+	public String getSimpleTargetDateWithDashes() {
+		return convertSimpleDateWithDashes(targetDate);	//pattern "yyyy-MM-dd"
+	}
+	
+	public String getSimpleTargetDateNoTime() {
+		return convertSimpleDateNoTime(targetDate);	//pattern "MM/dd/yyyy"
+	}
+	
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//special getters and setters
