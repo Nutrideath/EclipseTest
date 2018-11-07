@@ -57,7 +57,7 @@
                     <div class="card card-w-title">
                         <h1>Target Date Schedule Manager</h1>
                         <h:panelGrid columnClasses="value">
-                        <p:schedule id="schedule" value="#{jobScheduleView.eventModel}" widgetVar="myschedule" timeZone="GMT-5">
+                        <p:schedule id="schedule" value="#{jobScheduleView.eventModel}" widgetVar="myschedule" timeZone="GMT-5" ignoreTimezone="false">
  
             				<ui:remove><p:ajax event="dateSelect" listener="#{jobScheduleView.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" /></ui:remove>
             				<p:ajax event="eventSelect" listener="#{jobScheduleView.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
