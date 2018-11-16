@@ -65,9 +65,16 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		
 		this.callInDate = cal.getTime();//use cal to avoid differences in EDT and EST
 		
-		//set default for rushJobFlag
-		this.rushJobFlag = false;
+	//set default for boolean flags
+		this.rushJobFlag = false;	//is this a rush job?
 		//this.rushJobFlag = true;
+		
+		this.promisedFlag = false;	//has target date been promised?
+		//this.promisedFlag = true;
+		
+		this.lockedFlag = false;	//has target date been locked?
+		//this.lockedFlag = true;
+		
 		
 		//set default for ableToInstallFlag (indicates if unable to install on first installation visit)
 		this.ableToInstallFlag = true;
@@ -196,7 +203,12 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	@ManagedProperty(value="#{JobBean.rushJobFlag}")
 	private boolean rushJobFlag = false; 
 	
+	//@Setter(AccessLevel.NONE)	//special setter below, to make sure if set true, lockedFlag is also set to true
+	@ManagedProperty(value="#{JobBean.promisedFlag}")	//is target date promised
+	private boolean promisedFlag = false;
 	
+	@ManagedProperty(value="#{JobBean.lockedFlag}")		//is target date locked
+	private boolean lockedFlag = false;
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//Job Location
@@ -744,6 +756,15 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//special getters and setters
+	
+	public void checkPromisedFlag() {
+		if(promisedFlag) {
+			//if promisedFlag is true, need to also set lockedFlag to true
+			
+			this.lockedFlag = true;
+		}
+	}
+	
 	public void setJobAddr_State(String jobAddr_State) {	//Make sure to capitalize. But can't capitalize null, so check for it
 		if(jobAddr_State == null) {
 			this.jobAddr_State = jobAddr_State;

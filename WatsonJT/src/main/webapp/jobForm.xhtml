@@ -45,11 +45,22 @@
         <h:outputText value="Email" />
         <h:outputText value="#{dataBean.selectedJobBean.jobContactEmail}" styleClass="outputLabel" style="font-weight:bold"/>     
 	
+		<p:outputLabel for="promisedFlag" value="Promised" />
+        <h:panelGroup styleClass="md-inputfield">                   		 	
+        	<p:selectBooleanCheckbox id="promisedFlag" value="#{dataBean.selectedJobBean.promisedFlag}"  >
+        		<p:ajax update="lockedFlag" listener="#{dataBean.selectedJobBean.checkPromisedFlag}"/>
+        	</p:selectBooleanCheckbox>
+        </h:panelGroup>
+	
 		<p:outputLabel for="rushJobFlag" value="Rush Job" />
         <h:panelGroup styleClass="md-inputfield">                   		 	
         	<p:selectBooleanCheckbox id="rushJobFlag" value="#{dataBean.selectedJobBean.rushJobFlag}"  />
         </h:panelGroup>
 	
+		<p:outputLabel for="lockedFlag" value="Locked" />
+        <h:panelGroup styleClass="md-inputfield">                   		 	
+        	<p:selectBooleanCheckbox id="lockedFlag" value="#{dataBean.selectedJobBean.lockedFlag}"  />
+        </h:panelGroup>
 		
 	</p:panelGrid>
 	       

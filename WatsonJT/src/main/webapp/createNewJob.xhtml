@@ -149,11 +149,28 @@
             				<p:message for="targetDate" />          				
             			</h:panelGroup>
             			
-            			<h:panelGroup /><h:panelGroup /><h:panelGroup /><h:panelGroup />
+            			<h:panelGroup />
+            			<p:outputLabel for="promisedFlag" value="Promised" />
+                   		 <h:panelGroup styleClass="md-inputfield">                   		 	
+                   		 	<p:selectBooleanCheckbox id="promisedFlag" value="#{newJobWizard.jobBean.promisedFlag}" >
+                   		 		<p:ajax update="lockedFlag" listener="#{newJobWizard.jobBean.checkPromisedFlag}"/>
+                   		 	</p:selectBooleanCheckbox>
+                   		 </h:panelGroup>
+            			
+            			<h:panelGroup />
+            			
             			<p:outputLabel for="rushJobFlag" value="Rush Job" />
                    		 <h:panelGroup styleClass="md-inputfield">                   		 	
                    		 	<p:selectBooleanCheckbox id="rushJobFlag" value="#{newJobWizard.jobBean.rushJobFlag}"  />
                    		 </h:panelGroup>
+ 
+                   		 <h:panelGroup />
+            			
+            			<p:outputLabel for="lockedFlag" value="Locked" />
+                   		 <h:panelGroup styleClass="md-inputfield">                   		 	
+                   		 	<p:selectBooleanCheckbox id="lockedFlag" value="#{newJobWizard.jobBean.lockedFlag}"  />
+                   		 </h:panelGroup>
+            			
             			
                     </p:panelGrid>
 			</p:tab>   

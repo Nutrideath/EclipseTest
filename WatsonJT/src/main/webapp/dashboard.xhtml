@@ -110,7 +110,11 @@
         					<p:column>
         					 	<p:commandLink actionListener="#{dataBean.setSelectedJobBean(job)}" action="jobForm">				
         							<h:outputText value="#{job.rowKey} [#{job.getSimpleTargetDateNoTime()}]" />  
-        							<h:outputText styleClass="ui-icon ui-icon-lock" style="float:right" />
+        							<h:outputText styleClass="ui-icon ui-icon-lock" style="float:left" rendered="#{job.lockedFlag}" title="Target Date is locked"/>
+        							<h:outputText styleClass="ui-icon ui-icon-lock-open" style="float:left" rendered="#{not job.lockedFlag}" title="Target Date is editable"/>
+        							<h:outputText styleClass="ui-icon ui-icon-favorite" style="float:left" rendered="#{job.promisedFlag}" title="Target Date has been promised"/>
+        							<h:outputText styleClass="ui-icon ui-icon-favorite-border" style="float:left" rendered="#{not job.promisedFlag}" title="Target Date has not been promised"/>
+        							<h:outputText styleClass="ui-icon ui-icon-directions-run" style="float:left" rendered="#{job.rushJobFlag}" title="Rush Job!!"/>
 								</p:commandLink>
         						<div class="status-bar status-bar-5">
                                     <div class="status-bar-value" style="width:#{job.getJobProgress()}%">#{job.getJobStatus()}</div>
