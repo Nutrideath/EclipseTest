@@ -5,6 +5,10 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
 
+	<ui:define name="breadcrumb">
+    	<li><p:link outcome="/dashboard">Dashboard</p:link></li>
+    </ui:define>
+
     <ui:define name="title">Dashboard</ui:define>
 
     <ui:define name="head">
@@ -106,6 +110,7 @@
         					<p:column>
         					 	<p:commandLink actionListener="#{dataBean.setSelectedJobBean(job)}" action="jobForm">				
         							<h:outputText value="#{job.rowKey} [#{job.getSimpleTargetDateNoTime()}]" />  
+        							<h:outputText styleClass="ui-icon ui-icon-lock" style="float:right" />
 								</p:commandLink>
         						<div class="status-bar status-bar-5">
                                     <div class="status-bar-value" style="width:#{job.getJobProgress()}%">#{job.getJobStatus()}</div>

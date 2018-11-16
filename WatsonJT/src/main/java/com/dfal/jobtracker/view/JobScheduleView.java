@@ -141,30 +141,36 @@ public class JobScheduleView implements Serializable {
 	
 	public void onEventMove(ScheduleEntryMoveEvent event) {
 		//this is a move, so change start date and time, plus end date and time (move both times equally)
+		int dayDelta = event.getDayDelta();
+		int minuteDelta = event.getMinuteDelta();
+		System.out.println(" XX JobScheduleView^^onEventMove XX  Called with Day delta: " + dayDelta + ", Minute delta: " + minuteDelta);
+		
 		Calendar cal = Calendar.getInstance();
+		Calendar cal2 = Calendar.getInstance();
 		JobBean movedJob = (JobBean) event.getScheduleEvent().getData();	//get the jobBean from the event
 		
-		//TODO: Fix problem with timezone difference
-		//	When cal uses setTime(movedJob.getTargetDate()) to set itself, the time there is saved in UTC, 
-		//	so is off by 5 hours (depending on daylight saving time...)
+		//TODO: Fix problem with doubling delta values.  Just cutting them in half for quick fix
+
 		
 		//change targetDate
 		cal.setTime(movedJob.getTargetDate());		//get the targetDate
-		cal.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
-		cal.add(Calendar.MINUTE, event.getMinuteDelta()); 			//change by minute delta
+		cal.add(Calendar.HOUR_OF_DAY, dayDelta); 		// change by day delta
+		cal.add(Calendar.MINUTE, minuteDelta); 			//change by minute delta
 		movedJob.setTargetDate(cal.getTime());		//set targetDate to new value
 		
 		//change targetDateEnd by same amounts, since entire job was moved
-		cal.setTime(movedJob.getTargetDateEnd());		//get the targetDateEnd
-		cal.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
-		cal.add(Calendar.MINUTE, event.getMinuteDelta()); 			//change by minute delta
-		movedJob.setTargetDateEnd(cal.getTime());		//set targetDateEnd to new value
+		cal2.setTime(movedJob.getTargetDateEnd());		//get the targetDateEnd
+		cal2.add(Calendar.HOUR_OF_DAY, event.getDayDelta()); 		// change by day delta
+		cal2.add(Calendar.MINUTE, event.getMinuteDelta()); 			//change by minute delta
+		movedJob.setTargetDateEnd(cal2.getTime());		//set targetDateEnd to new value
 		
 		//save the jobBean with new values
 		movedJob.saveToJobTable();
 		
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());		
 		addMessage(message);
+		
+		System.out.println(" XX JobScheduleView^^onEventMove XX  Finished with Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
 	}
 	
 	public void onEventResize(ScheduleEntryResizeEvent event) {
@@ -184,6 +190,8 @@ public class JobScheduleView implements Serializable {
 		
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());		
 		addMessage(message);
+		
+		System.out.println(" XX JobScheduleView XX onEventResize called. Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
 	}
 	
 	private void addMessage(FacesMessage message) {
