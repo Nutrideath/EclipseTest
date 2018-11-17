@@ -12,13 +12,13 @@ public class DataManagerAzure {
      * 
      * There are two below - one for use online at Azure, and the other for development (local, uses Azure Storage Emulator)
      */
-	 
+	 /* 
 	//This is the actual, online Azure account
     public static final String storageConnectionString = "DefaultEndpointsProtocol=https;"
             + "AccountName=dfalstoragetest;"
             + "AccountKey=GKPPduvRKUCV8h7ik7q9BsOlf8DPS8k/6J2VFl5mrCpGOQqTC7qJ4oRaokrBlWfMPwkszTJCPaG3L+HiGJWyiQ==";
-	  
-    /*
+	 */ 
+   
     //This is the local Development account using the Azure Storage Emulator
     public static final String storageConnectionString = "DefaultEndpointsProtocol=http;"
     + "AccountName=devstoreaccount1;"
@@ -26,7 +26,7 @@ public class DataManagerAzure {
     + "BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;"
     + "TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;"
     + "QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;";
-   */
+   
   
     /**
      * MODIFY THIS TOO!

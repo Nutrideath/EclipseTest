@@ -200,13 +200,15 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	@ManagedProperty(value="#{JobBean.targetDateEnd}")
 	private Date targetDateEnd;		//used during scheduling to show installation appt has length
 	
+	@Getter(AccessLevel.NONE)	//special getter below; Azure ignores "is" prefix (as in, isPromisedFlag() )
 	@ManagedProperty(value="#{JobBean.rushJobFlag}")
 	private boolean rushJobFlag = false; 
 	
-	//@Setter(AccessLevel.NONE)	//special setter below, to make sure if set true, lockedFlag is also set to true
+	@Getter(AccessLevel.NONE)	//special getter below; Azure ignores "is" prefix (as in, isPromisedFlag() )
 	@ManagedProperty(value="#{JobBean.promisedFlag}")	//is target date promised
 	private boolean promisedFlag = false;
 	
+	@Getter(AccessLevel.NONE)	//special getter below; Azure ignores "is" prefix (as in, isPromisedFlag() )
 	@ManagedProperty(value="#{JobBean.lockedFlag}")		//is target date locked
 	private boolean lockedFlag = false;
 	
@@ -522,6 +524,13 @@ public class JobBean extends TableServiceEntity implements Serializable {
         } 
     }
 	
+	public void checkPromisedFlag() {
+		if(promisedFlag) {
+			//if promisedFlag is true, need to also set lockedFlag to true
+			
+			this.lockedFlag = true;
+		}
+	}
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//special date functions
@@ -757,12 +766,29 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//special getters and setters
 	
-	public void checkPromisedFlag() {
-		if(promisedFlag) {
-			//if promisedFlag is true, need to also set lockedFlag to true
-			
-			this.lockedFlag = true;
-		}
+	//BOOLEAN Values: Azure doesn't like lombok's replacement of "is" for "get" on boolean values.
+	// must disable lombok on these (above) and create them here.  May as well also
+	// create the "is" versions as well
+	
+	public boolean getRushJobFlag() {
+		return this.rushJobFlag;
+	}
+	public boolean isRushJobFlag() {
+		return this.rushJobFlag;
+	}
+	
+	public boolean getPromisedFlag() {
+		return this.promisedFlag;
+	}
+	public boolean isPromisedFlag() {
+		return this.promisedFlag;
+	}
+	
+	public boolean getLockedFlag() {
+		return this.lockedFlag;
+	}
+	public boolean isLockedFlag() {
+		return this.lockedFlag;
 	}
 	
 	public void setJobAddr_State(String jobAddr_State) {	//Make sure to capitalize. But can't capitalize null, so check for it
