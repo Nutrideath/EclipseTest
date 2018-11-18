@@ -55,16 +55,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	//if this is a new empty job, need to set up a few basic properties.  Otherwise, leave them alone.	
 	if(jobStatus == null) {
 		
-		
-		Calendar cal = Calendar.getInstance();	//cal will be used to calculate target date info
-		
-		//this.callInDate = new Date();	//set default to today's date
-		//this.targetDate = new Date();
-		//this.targetDateEnd = new Date();
-	
-		
-		this.callInDate = cal.getTime();//use cal to avoid differences in EDT and EST
-		
+
 	//set default for boolean flags
 		this.rushJobFlag = false;	//is this a rush job?
 		//this.rushJobFlag = true;
@@ -75,6 +66,15 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		this.lockedFlag = false;	//has target date been locked?
 		//this.lockedFlag = true;
 		
+		
+		
+		Calendar cal = Calendar.getInstance();	//cal will be used to calculate target date info
+		
+		//this.callInDate = new Date();	//set default to today's date
+		//this.targetDate = new Date();
+		//this.targetDateEnd = new Date();
+		
+		this.callInDate = cal.getTime();//use cal to avoid differences in EDT and EST
 		
 		//set default for ableToInstallFlag (indicates if unable to install on first installation visit)
 		this.ableToInstallFlag = true;
@@ -116,7 +116,9 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		
 		System.out.println(" XX JobBean.init() XX targetDateEnd set to: " + targetDateEnd);
 		
-		System.out.println(" XX JobBean.init() XX  Call to init()");
+		System.out.println(" XX JobBean.init() XX  Call to init() - jobStatus was null");
+	} else {
+		System.out.println(" XX JobBean.init() XX  Call to init() - jobStatus is not null");
 	}
 	
     }
@@ -127,8 +129,6 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	//@Setter(AccessLevel.NONE)	//special setter below
 	@ManagedProperty(value="#{JobBean.jobStatus}")
 	private String jobStatus;		//tracks the job's lifecycle
-	
-	
 	
 	@ManagedProperty(value="#{JobBean.jobStatusShort}")
 	private String jobStatusShort;	//shortened version of each status, shown where full jobStatus takes too much room
@@ -363,6 +363,7 @@ public class JobBean extends TableServiceEntity implements Serializable {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//Install	
 	
+	@Getter(AccessLevel.NONE)	//special getter below; Azure ignores "is" prefix (as in, isPromisedFlag() )
 	@ManagedProperty(value="#{JobBean.ableToInstallFlag}")
 	private boolean ableToInstallFlag = true;
 	
@@ -791,6 +792,15 @@ public class JobBean extends TableServiceEntity implements Serializable {
 		return this.lockedFlag;
 	}
 	
+	public boolean getAbleToInstallFlag() {
+		return this.ableToInstallFlag;
+	}
+	public boolean isAbleToInstallFlag() {
+		return this.ableToInstallFlag;
+	}	
+	
+	
+	
 	public void setJobAddr_State(String jobAddr_State) {	//Make sure to capitalize. But can't capitalize null, so check for it
 		if(jobAddr_State == null) {
 			this.jobAddr_State = jobAddr_State;
@@ -798,6 +808,80 @@ public class JobBean extends TableServiceEntity implements Serializable {
 			this.jobAddr_State = jobAddr_State.toUpperCase();
 		}
 	}
+	
+	public String getAlertLevel() {
+		//called by view to display differently based on jobStatus and targetDate
+		//  basically, if job is close to target date and not progressed far enough,
+		//  return a different value (used for colors)
+		//  returns String of a numeral, which correspond to colors
+		
+		Calendar calNow = Calendar.getInstance();	//set to current date/time
+		//set time to default of 6:30 am
+		calNow.set(Calendar.HOUR_OF_DAY,6);
+		calNow.set(Calendar.MINUTE,30);
+		calNow.set(Calendar.SECOND,0);
+		calNow.set(Calendar.MILLISECOND,0);
+		
+		Calendar cal3DaysFromNow = (Calendar) calNow.clone();	//create new calendar with same date/time	
+		cal3DaysFromNow.add(Calendar.DAY_OF_YEAR, 3);			//add three days to it
+		
+		Calendar cal7DaysFromNow = (Calendar) calNow.clone();	//create new calendar with same date/time	
+		cal7DaysFromNow.add(Calendar.DAY_OF_YEAR, 7);			//add seven days to it
+		
+		//put target date into a Calendar object for comparison
+		Calendar compareTargetDate = Calendar.getInstance();
+		compareTargetDate.setTime(this.targetDate);
+		
+
+		//System.out.println(" XX JobBean^^getAlertLevel() XX jobStatus: " + this.jobStatus);
+		
+		if(compareTargetDate.before(calNow)) {	//if missed target date entirely
+			 return "1";	//red (high alert)
+			 
+		} else if(compareTargetDate.before(cal3DaysFromNow)			//if due w/in 3 days and not progressed to at least one of these
+				
+			&& 	(  !this.jobStatus.equals("Pending Installer Assignment")	
+				&& !this.jobStatus.equals("Assigned for Installation")
+				&& !this.jobStatus.equals("Job Complete")	
+				)
+				
+														){		
+	        return "1";	//red (high alert)
+	        
+	      }else if(compareTargetDate.before(cal7DaysFromNow) 		//if due w/in 7 days and not progressed to at least one of these
+	    		  
+	    	&&	(  !this.jobStatus.equals("Painting") 	
+	    		&& !this.jobStatus.equals("Pending Installer Assignment")	
+	    		&& !this.jobStatus.equals("Assigned for Installation")	    		
+	    		&& !this.jobStatus.equals("Job Complete")
+	    		)
+	    	
+	    												){		  
+
+	        return "3";	//yellow (med alert)
+	        
+	      }else {
+	    	  return "4";	//green (normal)
+	      }
+		
+
+		/*
+		 * if((dogList.get(i).getStatus()!= dogStatus.SLEEPING 
+   || dogList.get(i).getStatus()!= dogStatus.WALKING
+   ||dogList.get(i).getStatus()!= dogStatus.EATING  )){
+
+//do something 
+
+}
+		 */
+		
+		
+		
+		
+	}
+	
+	
+	
 /*
 	public void setJobStatus(String status) {
 		this.jobStatus = status;
