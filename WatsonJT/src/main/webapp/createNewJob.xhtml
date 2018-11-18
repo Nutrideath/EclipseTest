@@ -296,6 +296,14 @@
                         <h:outputText value="Rush Job: " />
                         <h:outputText value="Yes" rendered="#{newJobWizard.jobBean.rushJobFlag}" />
                         <h:outputText value="No" rendered="#{not newJobWizard.jobBean.rushJobFlag}" />
+                        
+                        <h:outputText value="Promised: " />
+                        <h:outputText value="Yes" rendered="#{newJobWizard.jobBean.promisedFlag}" />
+                        <h:outputText value="No" rendered="#{not newJobWizard.jobBean.promisedFlag}" />
+                        
+                        <h:outputText value="Locked: " />
+                        <h:outputText value="Yes" rendered="#{newJobWizard.jobBean.lockedFlag}" />
+                        <h:outputText value="No" rendered="#{not newJobWizard.jobBean.lockedFlag}" />
                     </p:panelGrid>
                     
                     <p:panelGrid columns="2" columnClasses="label, value">
